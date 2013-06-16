@@ -1,0 +1,55 @@
+BUGSSSSSSS
+
+
+
+For dept page, make sortable, add ratings info, add more to prof tab. Or eliminate prof tab?
+
+there is something wrong with the way we handle courses like GER 1025...
+
+add to regis parser ability to not add cancelled classes
+
+use CDN first for jquery? <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery-1.7.2.min.js"><\/script>')</script>
+
+serach results page on mozilla firefox borken can't scroll
+
+we need to adjust adding favorites, currently too wasteful...ie I have cos 126 favorited "three" times
+
+do brackets around slashed-out crap
+
+do we really need'home' on the nav  bar/ 'what's up'? cat it not just be depts and 'jlwhelch's favoites?
+
+verify registrar links
+
+do we want no-cache on every page?
+
+make a better system then just saying failure when not going through CAs
+
+one question in writing sem exceeds size of SVG..
+
+we aren't differentiating between professors and preceptors??? how??
+might be a little slow on department page (especially on large depts like WWS and POL for example)
+-1 for department view is hacked to get rid of python bug
+
+MAKE ALL CSS AND JS FILE LOCAL
+
+search magic. click on a few courses. names don't match. Using old names. Should sort by semester
+in search results page for pringitng title.
+
+Dropdowns for Department/Favorites at top?
+
+can writing courses say "sorry no adivce for writing courses" Plz
+
+
+Add distribution areas and more from registrar_parser
+
+Other things to add:
+      to coursenum, add professor with highest overall (can be Num), update in save function
+
+
+
+
+some strange behavior in professors:
+
+     any netid with unicode from name will break; update manually? (457, 250)
+     id=1724, "Course Head" guy needs to be fixed manually

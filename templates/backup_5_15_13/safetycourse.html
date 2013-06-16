@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<title>{% if course %} {{course.0}} {% endif %}</title>
+<head>
+<!-- Le Javascript -->
+    {% load staticfiles %}
+
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/main.css" media="screen" />
+    <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+    <script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
+
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/subnav.css" media="screen"/>
+	<script type="text/javascript" src="/{{ STATIC_URL }}js/subnav.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/application.js"></script>
+
+	<script type="text/javascript" src="/{{STATIC_URL }}d3/d3.v3.min.js" charset="utf-8" charset="utf-8"></script>
+
+	<script type="text/javascript" src="/{{STATIC_URL}}d3/graph.js" title="BarGraph"> </script>
+
+</head>
+<div class="Headercontainer">
+<body data-spy="scroll" data-target=".subnav" data-offset="10" class="gradient">
+{% autoescape off %}
+ <div class="navbar navbar-fixed-top navbar-inverse">
+    <div class="navbar-inner">
+		<a class="brand" href="/"> <span class="title1 title3">Princeton </span> <span class="title2"> Course </span> <span class="title1"> Evaluation </span> <span class="title2"> Engine </span></a>
+        <div class="container">
+        <ul class="nav menubar">
+             <li> <a href="/index">Home</a> </li>
+             <li> <a href="#">Departments </a> </li>
+             <li> <a href="/favorites"> My Favorites </a> </li>
+        </ul>
+        <ul class="nav pull-right">
+        <form class="navbar-search" action="/search/" method="get">
+            <input type="text" name="q" class="search-query" placeholder="Search" style="height:20px"/>
+            </form>               
+        </ul> 
+  </div>
+  </div>
+  </div>
+<div class="row-fluid">
+<div class="span8">
+<h1 class="header" style="padding-top: 20px;">                                                           
+
+{% if course %}                                                                                    
+{%for num in coursenums%} {{num}} {%if not forloop.last%}/{% endif %} {% endfor %}
+{% else %}                                                                                          
+No course {{sub}} {{coursenum}} exists
+{% endif %}                                                                                          
+
+</h1>
+
+<h2 class="header">{{course.0}}</h2>
+<p class="header"> <strong> Description: </strong>{{course.0.description}} </p>
+</div>
+<div class="span4">
+{% if best %}
+<p class="description" style="padding-top:20px"> <strong> Best Professor(s) </strong> (Overall rating):{% for p in best %}
+{% if forloop.first %}<a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a>{% else %}<a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a>{% endif %}{% endfor %} </p>
+{% endif %}
+<p class="description"> <strong> Overall rating</strong> (average):<span class="average"><br><br>{% if cn.avg %} {{cn.avg}} {% else %} NA {% endif %}</span></p>
+</div>
+</div>
+</div>
+<hr class="divider" />
+
+    <script type="text/javascript">  
+            $(document).ready(function () {  
+                        $('.dropdown-toggle').dropdown();  
+                                });  
+                                   </script>  
+
+
+{% if course %}
+<div class="tabbable">
+     <ul class="nav nav-tabs" style="margin-left:20px;margin-right:20px">
+     {% for i, evs, advice, ps in list %}
+     	{% if forloop.first %}
+     	<li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{i.semester}}: {{i.year}}</a></li>
+     	
+        {% else %}
+           <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{i.semester}}: {{i.year}}</a></li>
+ 		{% endif %}
+	 {% endfor %}    
+	<li class="dropdown" >
+	    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+	        <ul class="dropdown-menu">
+	              <li><a href="#">Secondary link</a></li>
+	                    <li><a href="#">Something else here</a></li>
+	                          <li class="divider"></li>
+	                                <li><a href="#">Another link</a></li>
+	                                    </ul>
+	                                      </li>
+     </ul>
+     <div class="tab-content">       
+
+
+
+     {% for i, evs, advice, ps in list %}
+    	{% if forloop.first %}
+
+     <div id="tab{{ forloop.counter }}" class="tab-pane active">
+       <div class="container">
+       <div class="row">
+	 <div class="span2 graphLeft">
+	   <ul>
+	    {% if profs %}
+	    <h5> Taught by: </h5>
+	    {% for p in ps %}
+	    {% if forloop.first %}
+            <p><a href="../../profs/{{p.netid}}/">{{p}}</a></p>
+	    {% else %}<p> <a href="../../profs/{{p.netid}}/">{{p}}</a></p>
+	    {% endif %}
+            {% empty %} <p> Unknown professor </p>
+	    {% endfor %}
+	    {% endif %}
+<!--	 <p> <strong> Registrar: </strong><a href="http://registrar.princeton.edu/course-offerings/course_details.xml?courseid={{i.regNum}}&term={{term}}">{{course.0}}</a>-->
+	  </ul>
+	</div>
+	<div class="span10">
+       
+       <div id="viz{{ forloop.counter }}" style="text-align:left;"></div>
+	   <script type="text/javascript">
+	     {% if evals %}
+	 var means = [];
+	 var qtext = [];
+	     {% for e in evs %}
+	         means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+             {% endfor %}
+	 graph(means, qtext, "#viz{{ forloop.counter }}")
+	 {% else %} <ul><p> Sorry, no evaluation data for this semester!</p></ul>
+	 {% endif %}
+       </script>
+	   </div>
+	</div>
+       </div>
+       <ul>
+	 <h5>Student Advice:</h5>
+	      {% for a in advice %}
+	     <li>{{ a.text }}</li><br>
+	 	{% empty %}
+	 	<p> Sorry, no advice for this semester! </p>
+	      {% endfor %}
+	  </ul>
+       </div>
+       {% else %}
+
+
+	  <div id="tab{{ forloop.counter }}" class="tab-pane">
+	    <div class="container">
+	    <div class="row">
+              <div class="span2">
+		<ul>
+	        {% if profs %}
+		<h5> Taught by: </h5>
+	          {% for p in ps %}
+	           {% if forloop.first %}
+                <a href="../../profs/{{p.netid}}/">{{p}}</a>
+	           {% else %} <a href="../../profs/{{prof.netid}}/">{{p}}</a>
+	           {% endif %}
+	          {% empty %} <p> Unknown professor </p>
+	         {% endfor %}
+	        {% endif %}
+		</ul>
+		</div>
+	      <div class="span10">
+
+       <div id="viz{{ forloop.counter }}" style="text-align:left;"></div>
+           <script type="text/javascript">
+	     {% if evals %}
+         var means = [];
+         var qtext = [];
+             {% for e in evs %}
+                 means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+             {% endfor %}
+         graph(means, qtext, "#viz{{ forloop.counter }}")
+         {% else %} <ul><p> Sorry, no evaluation data for this semester!</p></ul>
+	     {% endif %}
+       </script>
+           </div>
+	    </div>
+	    </div>
+	  <ul>
+	    <h5>Student Advice:</h5>
+       	      {% for a in advice %}
+	           <li>{{ a.text }}</li><br>
+	      {% empty %}
+	     <p> Sorry, no advice for this semester! </p>
+	    {% endfor %}
+	  </ul>
+	  </div>
+
+	  {% endif %}             
+      
+     {% endfor %}
+
+
+</div>
+</div>
+{% endif %}
+{% endautoescape %}
+
+</body>
+
+
+</html>

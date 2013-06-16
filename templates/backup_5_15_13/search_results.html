@@ -1,0 +1,136 @@
+<html style="overflow:auto !important;">
+<head profile="http://www.w3.org/2005/10/profile">
+	<title>PCE: Search Results</title>
+	<link rel="icon" type="image/ico"href="/{{ STATIC_URL }}favicon/favicon.ico">
+	{% include "importfiles.html"%}
+	<style>
+		@-moz-document url-prefix() {
+            body { 
+                min-height: 100%
+            } 
+        }
+		#box {
+			width: -moz-calc(100% - 80px);
+			width: -webkit-calc(100% - 80px);
+			width: calc(100% - 80px);
+			margin-left: auto;
+			margin-right: auto;
+			border-radius: 11px;
+			-moz-border-radius: 11px;
+			-webkit-border-radius: 11px;
+			-o-border-radius: 11px;
+			background-color: white;
+			padding: 11px;
+			font-size: 16px;
+		}
+		#back {
+            min-height: calc(100% - 50px);
+            min-height: -webkit-calc(100% - 50px);
+            height: -moz-calc(100% - 50px);
+			background: linear-gradient(#FD8A45, #FCCAAB);
+			background: o-linear-gradient(#FD8A45, #FCCAAB);
+			background: -webkit-linear-gradient(#FD8A45, #FCCAAB);
+			background: -moz-linear-gradient(#FD8A45, #FCCAAB);
+			background: -ms-linear-gradient(#FD8A45, #FCCAAB);
+			padding-bottom: 25px;
+			margin-top: -15px;
+		}
+		.ex {
+			font-weight: bold;
+		}
+		#box p {
+			margin: 0px;
+			padding: 0px;
+		}
+		#box hr {
+			margin: 2px 0px;
+			padding: 0px;
+		}
+		#left {
+			background-color:blue;
+			width:120px;
+			float: left;
+			display: inline;
+			margin: 0;
+			padding: 0;
+		}
+		#links {
+			position: fixed;
+			left: 50px;
+			text-align: right;
+			padding: 0px;
+			margin: 0px;
+		}
+			#links li {
+				margin: 5px 0px;
+			}
+		#results {
+			margin-left: 115px;
+			border-left:thin solid #ccc;
+		}
+			#results ul p {
+				margin-left: 25px;
+				margin-bottom: 15px;
+			}
+		.secHead {
+			margin: 0px;
+			margin-left: 3px;
+			padding-top: 40px; 
+			margin-top: -40px;
+		}
+	</style>
+</head>
+
+<body class="gradient">
+	{% include "navbar.html" %}
+
+	<div id="back" class="Headercontainer gradient" style="margin-top:-15px;"> 
+		<div id="box">
+			<div id="left">
+				<ul id="links">
+					<li><a href="#courses">Courses ></a></li>
+					<hr />
+					<li><a href="#profs">Professors ></a></li>
+					<hr />
+					<li><a href="#depts">Departments ></a></li>
+				</ul>
+			</div>
+			<div id="results">
+			<p style="text-align: center">Search results for: <strong>{{query}}</strong></p>
+			<hr />
+			{% if courses %}
+				<h3 id="courses" class="secHead">Courses</h3>
+				<ul>
+				{% for c, link in courses %}
+					<li>{{link|safe}}</li>
+					<p>{{c.description|truncatechars:325}}</p>
+				{% endfor %}
+				</ul>
+				{% if profs or depts %}
+					<hr />
+				{% endif %}
+			{% endif %}
+			{% if profs %}
+				<h3 id="profs" class="secHead"> Professors </h3>
+				<ul>
+				{% for p, link in profs %}
+					<li>{{link|safe}}</li>
+				{% endfor %}
+				</ul>
+				{% if depts %}
+					<hr />
+				{% endif %}
+			{% endif %}
+			{% if depts %}
+				<h3 id="depts" class="secHead"> Departments </h3>
+				<ul>
+				{% for d, link in depts %}
+					<li>{{link|safe}}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+		</div>
+	</div>
+</body>
+</html>

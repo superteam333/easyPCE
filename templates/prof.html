@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<title>PCE: {% if prof %} {{prof}} {% else %} No professor {% endif %}</title>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon"
+      type="image/ico"
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+<!-- Le Javascript -->
+     {%include "importfiles.html"%}
+
+	<script type="text/javascript" src="/{{STATIC_URL }}d3/d3.v3.min.js" charset="utf-8" charset="utf-8"></script>
+
+	<script type="text/javascript" src="/{{STATIC_URL }}d3/tipsy.js"></script>
+        <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}d3/tipsy.css" media="screen">
+
+
+	<script type="text/javascript" src="/{{STATIC_URL}}d3/graph.js" title="BarGraph"> </script>
+	
+</head>
+<div class="Headercontainer">
+<body data-spy="scroll" data-target=".subnav" data-offset="10" class="gradient">
+{% autoescape off %}
+{% include "navbar.html" %}
+<div class="row-fluid">
+<div class="span8">
+<h1 class="header" style="padding-top: 20px;">                                                           
+
+{% if prof %}                                                                                    
+{{prof}}
+{% else %}                                                                                          
+<span style="font-size:100%">No professor exists with that name</span>
+{% endif %}                                                                                          
+
+</h1>
+
+<h2 class="header">Professor in {% for d in depts %} {% if forloop.first %}<a href="../../depts/{{d}}/" style="color:#2554C7">{{d}}</a>{% else %}, <a href="../../depts/{{d}}/" style="color:#2554C7">{{d}}</a> {% endif %} {% endfor %} department{% if depts|length > 1 %}s{% endif %}</h2>
+</div>
+<div class="span4">
+{% if best %}
+<div class="well">
+  <p class="description" style="margin:0px;text-align:center;" style="padding-top:20px"> <strong> Top class(es): </strong>(Overall rating)</br>
+    {% for b in best %}
+      {% for p in b %}
+        {% if forloop.first %}<a href="/courses/{{p|cut:" "}}/" style="color:#2554C7">{{p|cut:" "}}</a>
+        {% else %} / <a href="/courses/{{p|cut:" "}}/" style="color:#2554C7">{{p|cut:" "}}</a>
+        {% endif %}
+      {% endfor %}
+    <br/>
+    {% endfor %}
+  </p></div>
+{% else %}<p class="description" style="padding-top:20px"> <strong> Top class(es)</br> NA </strong></p>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+
+<hr class="divider" />
+
+
+{% if unique %}
+<div class="tabbable">
+     <ul class="nav nav-tabs" style="margin-left:20px;margin-right:20px">
+     {% for u in unique %}
+     	{% if forloop.first %} 
+     	<li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{% for i in u %}{% if forloop.first %}{{i.dept}} {{i.number}} {% else %}/ {{i.dept}} {{i.number}}{% endif %}{% endfor %}</a></li>
+
+        {% else %} 
+           <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{% for i in u %}{% if forloop.first %}{{i.dept}} {{i.number}} {% else %}/ {{i.dept}} {{i.number}}{% endif %}{% endfor %}</a></li>
+ 		{% endif %}
+	 {% endfor %}    
+     </ul>
+     <div class="tab-content">       
+
+
+     {% for us, rec, advice, evs in list %}
+    	{% if forloop.first %}
+
+     <div id="tab{{ forloop.counter }}" class="tab-pane active">
+       <div class="container" style="margin-left:50px;margin-right:25px;">
+       <div class="row-fluid">
+	 <div class="span2 graphLeft">
+	   <ul>
+	    {% if rec %} {% ifequal rec.year "2013-2014" %} <h5> {{prof}} is teaching <a href="../../courses/{{us.0.dept.dept.upper}}{{us.0.number}}/" style="color:#2554C7">this course</a> for the first time next semester! </h5> {% else %}
+	    <p><h5 style="margin:0px;"> {{prof}}'s most recent semester</h5> of <a href="../../courses/{{us.0.dept.dept.upper}}{{us.0.number}}/" style="color:#2554C7">{{us.0}}</a> was <br/> {{rec.semester}} {{rec.year}}</p> {% endifequal %} {% endif %}
+	  </ul>
+	</div>
+	 <div class="span8">
+	   
+       <div id="viz{{ forloop.counter }}" style="text-align:center;"></div>
+	   <script type="text/javascript">
+	     {% if evs.0 %}
+	 var means = [];
+	 var qtext = [];
+	 var ttext = [];
+	     {% for e in evs %}
+	         means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+	         ttext.push("{{e}}");
+             {% endfor %}
+	 graph(means, qtext, ttext, "#viz{{ forloop.counter }}")
+	 $(document).ready($('svg rect.graphbar').tipsy({gravity: 'w', html: true, title: function () {var t = this.__data__; return t; }}));
+	 {% else %} <ul><p> No evaluation data available for this semester.</p></ul>
+	 {% endif %}
+       </script>
+	   </div>
+       <div class="span2 graphRight">
+	 <h5 style="text-align:center;"> Average overall score:</h5><p class="average"><br/>{% if us.0.avg %} {{us.0.avg}}<span style="font-size:40%;">/5</span> {% else %} NA {% endif %}</p>  
+	 </div>
+       </div>
+       </div>
+       <ul>
+	 <h5>Student Advice:</h5>
+	      {% for a in advice %}
+	     <li>{{ a.text }}</li><br>
+	 	{% empty %}
+	 	<p> No advice available for this semester. </p>
+	      {% endfor %}
+	  </ul>
+       </div>
+       {% else %}
+
+
+	  <div id="tab{{ forloop.counter }}" class="tab-pane">
+	    <div class="container" style="margin-left:50px;margin-right:25px;">
+	      <div class="row-fluid">
+		<div class="span2 graphLeft">
+		  <ul>
+            {% if rec %} {% ifequal rec.year "2013-2014" %} <h5> {{prof}} is teaching <a href="../../courses/{{us.0.dept.dept.upper}}{{us.0.number}}/" style="color:#2554C7">this course</a>  for the first time next semester! </h5> {% else %}
+            <p><h5 style="margin:0px"> {{prof}}'s most recent semester</h5> of <a href="../../courses/{{us.0.dept.dept.upper}}{{us.0.number}}/" style="color:#2554C7">{{us.0}}</a> was <br/>{{rec.semester}} {{rec.year}}<p> {% endifequal %} {% endif %}
+          </ul>
+        </div>
+        <div class="span8">
+
+       <div id="viz{{ forloop.counter }}" style="text-align:left;"></div>
+           <script type="text/javascript">
+             {% if evs.0 %}
+         var means = [];
+         var qtext = [];
+         var ttext = [];
+             {% for e in evs %}
+                 means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+                 ttext.push("{{e}}");
+             {% endfor %}
+         graph(means, qtext, ttext, "#viz{{ forloop.counter }}")
+         $(document).ready($('svg rect.graphbar').tipsy({gravity: 'w', html: true, title: function () {var t = this.__data__; return t; }}));
+         {% else %} <ul><p>No evaluation data available for this semester.</p></ul>
+         {% endif %}
+       </script>
+           </div>
+       <div class="span2 graphRight">
+         <h5> Average overall score:</h5><p class="average"><br/>{% if us.0.avg %} {{us.0.avg}}<span style="font-size:40%;">/5</span> {% else %} NA {% endif %}</p>
+         </div>
+       </div>
+       </div>
+       <ul>
+         <h5>Student Advice:</h5>
+              {% for a in advice %}
+             <li>{{ a.text }}</li><br>
+                {% empty %}
+                <p>No advice available for this semester. </p>
+              {% endfor %}
+          </ul>
+       </div>
+	  {% endif %}             
+     {% endfor %}
+
+
+</div>
+</div>
+{% endif %}
+{% endautoescape %}
+<script>
+
+
+</script>
+
+</body>
+
+
+</html>
