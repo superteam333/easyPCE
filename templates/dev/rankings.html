@@ -1,0 +1,76 @@
+<html style="overflow:auto !important;">
+<title>{{poop}} PCE: Rankings </title>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon"
+      type="image/ico"
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+
+        {% include "importfiles.html" %}
+<script type="text/javascript" src="/{{ STATIC_URL}}js/sorttable.js"></script>
+
+</head>
+<body data-target=".subnav" data-offset="10" class="gradient" >  <!-- style="min-width:1305px !impor\
+tant; overflow:hidden !important;"-->
+
+
+<div class="Headercontainer gradient" style="margin-top:-15px;">
+
+{% include "navbar.html" %}
+
+{% autoescape off %}
+
+<h1 id="header">
+Course Rankings
+</h1>
+</div>
+<hr />
+
+{% if bayes %}
+<div id="mytable">
+
+<table class="table table-striped sortable" id="filtertable" style="table-layout:fixed; width:100%;">
+  <thead>
+    <tr>
+      <th style="width:6%" filter="false"> <strong> Rank </strong> </th>
+      <th class="sorttable_nosort" style="width:6%" filter="false"> <strong> Favorite </strong> </th>
+      <th style="width:5%"> <strong> Dept </strong> </th>
+      <th style="width:5%"> <strong> Course </strong> </th>
+      <th style="width:55%"> <strong> Title </strong> </th>
+      <th style="width:9%"> <strong> Rating </strong> </th>
+      <th style="width:6%" filter-type="ddl"> <strong> Area </strong> </th>
+      <th style="width:8%" filter-type="ddl"> <strong> PDF </strong> </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for cn, instance in bayes %}
+
+  
+  <tr>
+    <td class="rank" style="text-align:center">{{forloop.counter}}</td>
+    {% if instance.regNum in regNums %}
+    <td class="favorite" style="text-align:center">
+      <a class="btn btn-inFavorites favButton" href="#"><i class="icon-star starInFav"></i></a>
+      {% else %}
+      <td class="favorite" style="text-align:center">
+      <a class="btn btn-notInFavorites favButton" href="#"><i class="icon-star starNotInFav"></i></a>
+      {% endif %}
+    </td>
+    <td class="dept" style="text-align:center"><a href='/depts/{{cn.dept.dept}}'>{{cn.dept}}</a></td>
+    <td class="course" style="text-align:center"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'><!--{{cn.dept.dept}}--> {{cn.number}}</a></td>
+    <td class="title"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'>{{instance.title}}</a></td>
+    <td class="rating" style="text-align:center">{{cn.avg}}</td>
+    <td class="da" style="text-align:center">{{instance.da}}</td>
+    <td class="pdf" style="text-align:center">{% if instance.nopdf %}No PDF{% else %}{% if instance.pdf %}PDF only{% endif %}{% endif %}</td>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% endautoescape %}
+<script type="text/javascript">
+$(window).load(function() {
+    var options = { selectOptionLabel: "Sel..."};
+    $('#filtertable').tableFilter(options);
+});
+</script>
+</body>

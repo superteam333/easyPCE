@@ -1,0 +1,23 @@
+
+
+{%if dept%}
+	<h1>{{ dept }}</h1>
+	<ul id="departmentstabs" class="shadetabs">
+	<li><a href="courses.html" rel="departments" class="selected"> Courses </a></li>
+	<li><a href="professors.html" rel="departments">Professors</a></li>
+	</ul>
+
+	<div id="departmentcontainer" style="border:1px solid gray; width:450px; margin-bottom: 1em; padding: 10px">
+	</div>
+
+	<script type="text/javascript">
+
+	var depts=new ddajaxtabs("departmenttabs", "departmentcontainer")
+	depts.setpersist(true)
+	depts.setselectedClassTarget("link") //"link" or "linkparent"
+	depts.init()
+
+	</script>
+{%else%}
+	<p> {{name}}:This department does not exist </p>
+{% endif %}

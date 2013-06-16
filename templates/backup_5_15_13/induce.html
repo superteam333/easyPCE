@@ -1,0 +1,149 @@
+<html style="overflow:auto !important;">
+<title>PCE: COS333 Final Project</title>
+<head profile="http://www.w3.org/2005/10/profile">
+  <link rel="icon"
+	type="image/ico"
+	href="/{{ STATIC_URL }}favicon/favicon.ico">
+
+  <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" media="screen"/>
+  <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+
+
+  <script type="text/javascript" src="/{{ STATIC_URL }}js/jquery.dropdown.js"></script>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/jquery.dropdown.css" />
+
+
+    
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <script src="/autosearch.js"></script>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/main.css" media="screen" />
+        <script src="/{{ STATIC_URL }}js/favdropdown.js"> </script>
+
+
+</head>
+<body style="background-color:black;" data-target=".subnav" data-offset="10" class="gradient" >  <!-- style="min-width:1305px !impor\
+tant; overflow:hidden !important;"-->
+
+
+<div class="gradient" style="margin-top:-50px;">
+
+<a href="/" style="color:silver"><h1 style="font-size:400%;text-align:center;font-family: 'Special Elite', cursive;">easy<span style="color:orange">PCE</span> </h1></a>
+</div>
+{% autoescape off %}
+<div class="container" style="-moz-box-shadow: 10px 10px 5px #333; -webkit-box-shadow: 10px 10px 5px #333;box-shadow: 10px 10px 5px #333;background-color:white;opacity:1;border-radius:5px;border:4px solid;border-color:orange;">
+  <div id="induceCarousel" class="carousel slide" style="margin-bottom:0px;">
+
+    <ol class="carousel-indicators">
+      <li data-target="#induceCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#induceCarousel" data-slide-to="1"></li>
+      <li data-target="#induceCarousel" data-slide-to="2"></li>
+      <li data-target="#induceCarousel" data-slide-to="3"></li>
+      <li data-target="#induceCarousel" data-slide-to="4"></li>
+      <li data-target="#induceCarousel" data-slide-to="5"></li>
+      <li data-target="#induceCarousel" data-slide-to="6"></li>
+    </ol>
+    
+    <!-- Items -->
+    <div style="font-size:110%" class="carousel-inner">
+      
+      <div class="active item"><!-- content goes here -->
+	<img src="{{STATIC_FILES}}ourImages/applyWeb.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4 style="color:red"> The Problem: </h4>
+	  
+	  <p> Princeton has a system set up for course evaluations, but it leaves a lot to be desired for the average student. A clunky interface with limited meta-data, strange hours of availability, and numerous page-reloads required to get to any sort of content, the terrible features of this part of Princeton's academic life were ripe for improvement.<br/><br/><strong> We set out to make it better.</strong> </p>
+
+	</div>
+      </div>
+      
+      
+      <div class="item"><!-- content goes here -->
+	<img src="{{STATIC_FILES}}ourImages/frontPage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>Our Solution: </h4>
+	  
+	  <p> Our goal was to create a simple, easy, and intuitive way for students to access these evaluations. At a glance, they should be able to find exactly the course they want, compare it with other courses, semesters, and professors, and see all the data in a friendly, informative format. We wanted our website to be tight and integrated as well: from one course page a user should be able to access every related department and teacher, and vice versa. Our clean, minimalist front-page belies the depth of functionality beneath what we call, "easyPCE".</p>
+	</div>
+      </div>
+      
+      
+      <div class="item"><!-- content goes here -->
+	<img src="{{STATIC_FILES}}ourImages/coursePage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>The Course Page: </h4>
+	  
+	  <p> The bread and butter of easyPCE, the course page gives users at a glance everything they could want to know about a course and what previous students thought, along with direct links to the registrar page. Animated graphs give an overall picture of each tabbed semester, while detailed data is available through tooltips by hovering over each bar. Advice from student is available beneath the graphs, and a quick report card in the upper right hand corner sums up a course succintly.</p>  
+	</div>
+      </div>
+      
+      
+      <div class="item"><!-- content goes here -->
+	<img src="{{STATIC_FILES}}ourImages/profPage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>The Professor Page: </h4>
+	  <p> Each professor page gives detailed information on a teacher's courses and departments, highlighting their strongest ones while giving you access to reviews of their most recent semester for each class they teach.</p>
+	</div>
+      </div>
+
+      
+      <div class="item"><!-- content goes here -->
+	<img src="{{STATIC_FILES}}ourImages/favPage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>Favorites:</h4>
+	  <p> When planning easyPCE, we knew we wanted a way to quickly navigate between disparate courses, a task that was impossible with 6 non-Javascript drop downs in the way of switching even bewteen semesters on the old system. In comes Favorites, our system of keeping track of courses you want to take or might just be interested in. In the top toolbar of every page is a dropdown with every Favorite class you have, but there is also a Manage Favorites page which gives you access to every class you've favorited, along with a detailed description and metadata. </p>
+	</div>
+      </div>
+      
+      
+      <div class="item">
+	<img src="{{STATIC_FILES}}ourImages/bayesianPage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>Bayesian Ranking:</h4>
+	  <p> Comparing courses internally is easy, but externally is a little trickier. Is a 4.5 in COS comparable to a 4.5 in ELE? Is a class with a rating of 4.0, yet taken by hundreds of students really worse than a 4.8 taken by ten? We asked ourselves these questions, striving to give Princeton students a way of seeing once and for all what THE best courses were at Princeton on avereage. Bayesian rankings accound for these numberic disparities, allowing us to give students from all majors insight into the hidden gems in other departments</p>
+	</div>
+      </div>
+      
+      
+      <div class="item">
+	<img src="{{STATIC_FILES}}ourImages/searchPage.jpg" alt="" />
+	<div class="carousel-caption">
+	  <h4>Advanced Search:</h4>
+	  <p> Once again, ease of access was paramount for us. With our advanced search, including smart auto-complete, any course, professor, or department is only a few keystrokes away. Not only can you quickly get what you came for, but you can even filter courses based on student advice. English major looking for a QR to get those pesky distribution requirements out of the way? Try searching ' "easy" in QR. ' Alternatively, physics whiz looking for a challenge? Try ' "hard" in MAT '. The possibilites are endless for sorting the wheat from the chaff.</p>
+	</div>
+      </div>
+      
+      <div class="item">
+	<a href="."><img src="{{STATIC_FILES}}ourImages/logo.jpg" alt="" /></a>
+	<div class="carousel-caption">
+	  <a href="/" class="induceLink"><h3 style="text-align:center">Seen enough? Check it out!</h3></a>
+	</div>
+      </div>
+    </div>
+
+      
+      
+      <!-- Nav -->
+      <a class="carousel-control left" href="#induceCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="carousel-control right" href="#induceCarousel" data-slide="next">&rsaquo;</a>
+      
+    </div>
+  
+    {% endautoescape %}
+  </div>
+</div>
+<h4 style="text-align:center"> A project by Matt Haake, Yacob Yonas, and John Whelchel for Princeton COS 333, Spring 2013 </h4>  
+<script type="text/javascript">
+$(document).ready(function(){
+     $('.carousel').carousel({interval:6000, pause:"hover"});
+});
+</script>
+
+</body>
+</html>

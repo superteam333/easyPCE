@@ -1,0 +1,91 @@
+from django.http import HttpResponse
+import CASClient
+import os
+from django.template import Context, loader, RequestContext
+import re
+from pce.models import *
+
+def login_page(request):
+	C = CASClient.CASClient()
+	netid = C.Authenticate()
+
+	#a =  "Content-Type: text/html"
+	#b =  ""
+	#c = "Hello from the other side, %s\n" % netid
+	#d = a + b + c
+	#return HttpResponse(d)
+	return HttpResponse("Login")
+
+def hello(request):
+	return HttpResponse("hello world")
+
+def index(request):
+	template = loader.get_template("index.html")
+	depts = Department.objects.all().order_by('dept')
+	c = Context({'depts':depts})
+	return HttpResponse(template.render(c))
+	
+def search(request):
+	if 'q' in request.GET and request.GET['q']:
+		q = request.GET['q']
+		words = q.split()
+		errors = ""
+		# regexp for course dept and num
+		if len(words) == 1 and re.search("^[a-zA-Z]{3}$", words[0]) is not None:
+			try:
+				depts = Department.objects.get(dept=words[0])
+				#if successful, display a department view
+				return HttpResponse(d)
+			except:
+				errors = errors + "\nDepartment exception"
+						
+		if (len(words) == 1 and re.search("^[a-zA-Z]{3}[0-9]+.*$", words[0]) is not None):
+			dept = re.search("^[a-zA-Z]{3}", words[0]).group(0)
+			num = re.search("[0-9]+.*$", words[0]).group(0)
+			#return HttpResponse("%s %s" % (dept, num))
+			try:
+				courseNum = CourseNum.objects.get(
+					dept=Department.objects.get(dept=dept),
+					number=num)
+				course = courseNum.course
+				return HttpResponse(course)
+			except CourseNum.DoesNotExist:
+				weeoea=
+				pass
+
+		if (len(words) == 2 and re.search("^[a-zA-Z]{3}$", words[0]) is not None
+			and re.search("[0-9]+.*", words[1]) is not None):
+			#return HttpResponse(q)
+			try:
+				courseNum = CouseNum.objects.get(
+					dept=Department.objects.get(dept=words[0]), 
+					number=words[1])
+				course = courseNum.course
+				return HttpResponse(course)
+			except:
+				pass
+		
+		if (len(words) == 1):
+			try:
+				p = Professor.objects.get(netid=words[0])
+				return HttpResponse(p)
+			except:
+				pass
+		
+		# not sure exactly what to do with professor. firstname lastname scheme doesn't work too well
+		#try:
+		#	p = Professor.objects.get(
+
+		try:
+			d = Department.objects.get(name=q)
+			return HttpResponse(d.dept)
+		except:
+			pass
+		
+		try:
+			c = Course.objects.get(title=q)
+			return HttpResponse(c)
+		except Course.DoesNotExist:
+			return HttpResponse("Why not")
+			pass
+

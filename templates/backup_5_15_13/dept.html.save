@@ -1,0 +1,156 @@
+<html>
+<head>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" media="screen"/>
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/main.css" media="screen" />
+
+	<script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="/{{ STATIC_URL }}js/csrf.js"></script>
+
+
+	<script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+	
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top navbar-inverse">
+   <div class="navbar-inner">
+    <a class="brand" href="/"/> <span class="title1">Princeton </span> <span class="title2"> Course </span> <span class="title1"> Evaluation </span> <span class="title2"> Engine </span></a>
+    
+<div class="container">
+<ul class="nav">
+<li class="nav"> <a href="/">Home</a> </li>
+<li class="nav"> <a href="#">Departments </a> </li>
+<li class="nav"> <a href="/favorites"> My Favorites </a> </li>
+</ul>
+<ul class="nav pull-right">
+<!--li class="nav pull-right" style="color:yellow;"> <a href="#"> What's going on? </a> </li-->
+<form class="navbar-search" action="/search/" method="get">
+	<input type="text" name="q" class="search-query" placeholder="Search" style="height:25px; margin-top:3px"/>
+</form>
+</ul>
+
+</div>
+   </div>
+</div>
+
+{% autoescape off %}
+<h1 id="header">
+{% if dept %}
+{{url.upper}}: {{dept.name}}
+{%else%}
+{{url.upper}}
+{%endif%}
+</h1>
+<br/><hr />
+
+
+<div class="tabbable">
+	<ul class="nav nav-tabs">
+		<li class="active span6" style="font-size:150%;"><a href="#courses" data-toggle="tab"> Courses </a></li>
+		<li class="span6" style="font-size:150%;"> <a href="#professors" data-toggle="tab"> Professors</a></li>
+	</ul>
+	<div class="tab-content">
+		<div id="courses" class="tab-pane active">
+		    {% if dept %}
+		    <table class="table table-striped">
+		    	<thead>
+					<td> <strong> Favorite? </strong> </td>
+		    		<td> <strong> Course </strong> </td>
+		    		<td> <strong> Title </strong> </td>
+		    		<td> <strong> Most Recent Professor </strong> </td>
+		    		<td> <strong> Is it available next semester? </strong> </td>
+		    	</thead>
+		    	<!-- we need to pass more info including instances of most recent teachers -->
+				{% for course, instance in titles %}
+				<div id="row{{course.regNum}}">
+		    	<tr>
+		    		<td>  
+		    	
+		    		<a class="btn btn-success favButton" href="#"><i class="icon-star"></i></a>
+		    		<!--
+		    			<form action="addfav" method="post">
+		    				<input class="hidden" name="dept" value="{{url.upper}}" />
+		    				<input class="hidden" name="number" value="{{course.number}}" />
+		    				<input class="hidden" name="userid" value="{{user.netid}}" />
+		    				<input type="checkbox" checked="checked" onclick="this.form.submit();">Single Toggle</button>
+		    			</form>-->
+		    		</td>
+		    		<td> <a href='/courses/{{url.upper}}{{course.number}}'>{{url.upper}} {{course.number}}</a> </td>
+		    		<td> {{instance.title}}  </td>
+		    		<td> {% for prof in instance.profs.all %} {{prof}} {% if not forloop.last %} / {% endif %} {% endfor %}</td>
+		    		<td> 
+		    		<!-- hardcoded parameters for next semester-->
+		    			{% ifequal instance.semester "Fall"%}
+		    			 {% ifequal instance.year "2013-2014" %}
+		    			<img class="check" src="/{{ STATIC_URL }}img/check.png" media="screen" />
+		    			{% else %} 
+		    			<img class="check" src="/{{ STATIC_URL }}img/ex.png" media="screen" />
+						{% endifequal %}
+		    			{% else %}
+		    			<img class="check" src="/{{ STATIC_URL }}img/ex.png" media="screen" />
+		    			{% endifequal %}
+		    		</td>
+		    	</tr>
+		    	</div>
+		    	{% endfor %}
+		    </table>
+		    {% endif %}
+		</div>
+	<div id="professors" class="tab-pane">
+	<table class="table table-striped">
+	{% if profs %}
+	
+	
+	{% for prof in profs %}
+	<tr>
+	<td><a href="../../profs/{{prof.netid}}/">{{prof}}</a></td>
+	</tr>
+	{% endfor %}
+	
+	{% else %}
+	<p> No professors found for the {{url.upper}} department. </p>
+	{% endif %}
+	</table>
+		</div>
+	</div>
+</div>
+<div id="message">original</div> 
+{% endautoescape %}
+
+<script>
+$(function() {  
+  $(".btn").click(function() {  
+      if ($(this).hasClass("btn-success")) {
+      	var add = 0;
+      }
+      else {
+      	var add = 1;
+      }
+      var id = $(this).closest("div").attr("class");
+      var dataString= 'add='+ add + '&regNum'+ id + '&user='+'{{user.netid}}';
+      $.ajax({
+      	type:"POST",
+      	url:"../editfssavorites",
+      	data:{dataString:dataString},
+      	success:function() {
+      		$('#message').html("<h1> Favorite added! </h1>");
+      	}
+      });
+	return true;      
+  });  
+});
+$(".favButton").click(function(event_ref){
+   event_ref.preventDefault();
+});
+$(".btn").click(function () {
+   $(this).toggleClass("btn-success");
+   $(this).toggleClass("btn-danger");   
+});
+</script>
+
+</body>
+<html>
+
