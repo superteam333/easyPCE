@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<meta http-equiv="expires" content="0">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<html>
+{% autoescape off %}
+<title>{% if course %}PCE: {{course.0}} {% endif %}</title>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon" 
+      type="image/ico" 
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+<!-- Le Javascript -->
+	
+	{% include "importfiles.html" %}
+	<script type="text/javascript" src="/{{STATIC_URL }}d3/d3.v3.min.js" charset="utf-8" charset="utE f-8"></script>
+
+	<script type="text/javascript" src="/{{STATIC_URL }}d3/tipsy.js"></script>
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}d3/tipsy.css" media="screen" />
+
+	<script type="text/javascript" src="/{{STATIC_URL}}d3/graph.js" title="BarGraph"> </script>
+
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  
+	  ga('create', 'UA-40942394-1', 'easypce.com');
+	  ga('send', 'pageview');
+
+	</script>
+
+</head>
+<body class="gradient">
+{% include "navbar.html"%}
+<div class="Headercontainer">
+
+<div class="row-fluid">
+<div class="span8">
+<h1 class="header" style="padding-top:20px">   
+
+{% if course %}                                                                                    
+{%for num in coursenums%} {{num}} {%if not forloop.last%}/{% endif %} {% endfor %}
+{% else %}                                                                                          
+No course {{sub}} {{coursenum}} exists
+{% endif %}                                                                                          
+
+</h1>
+
+<h2 class="header">{{course.0}} 
+{% if inFav %} 
+  <a id="myButton" class="btn btn-inFavorites favButton courseStar" href="#"><i class="icon-star starInFav"></i></a>
+  {% else %}
+  <a id="myButton" class="btn btn-notInFavorites favButton courseStar" href="#"><i class="icon-star starNotInFav"></i></a>
+  {% endif %}
+</h2>
+<p class="header"> <strong> Description: </strong>{{course.0.description}} </p>
+{% if registrarurl %}
+<p class="header"> <a href="{{registrarurl}}" style="color:#2554C7"><strong> Registrar Page </strong></a></p>
+{% endif %}
+</div>
+<div class="span4">
+<div class="well">
+{% if best %}
+<p class="description" style="padding-top:10px"> <strong> Best Professor(s) </strong> (Overall rating): <br/>{% for p in best %}
+{% if forloop.first %}<a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a>{% else %} / <a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a>{% endif %}{% endfor %} </p>
+{% endif %}
+<p class="description"> <strong> Overall rating</strong> (average):<span class="average"><br><br>{% if cn.avg %} {{cn.avg}}<span style="font-size:40%;">/5</span> {% else %} NA {% endif %}</span></p>
+{% if course %}<p class="description"> <Strong> Available </strong>next semester?
+  {% ifequal course.0.semester "Fall"%}
+    {% ifequal course.0.year "2013-2014" %}
+    <img class="check" src="/{{ STATIC_URL }}img/check.png" style="max-height:80%; margin-bottom:13px;" media="screen" /></p>
+    <p class="description"> <strong> Will be taught by </strong><br/> {% for p in course.0.profs.all %} {% if not forloop.first %}<br/><a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a> {% else %}<a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a> {% endif %} {% empty %} TBA{% endfor %}</p>
+    {% else %}
+    <img class="check" src="/{{ STATIC_URL }}img/ex.png" style="max-height:80%;" media="screen" /></p>
+    {% endifequal %}
+  {% else %}
+  <img class="check" src="/{{ STATIC_URL }}img/ex.png" style="max-height:80%;" media="screen" /></p>
+ {% endifequal %}
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+<hr class="divider" />
+
+<!--    <script type="text/javascript">  
+            $(document).ready(function () {  
+                        $('.dropdown-toggle').dropdown();  
+                                });  
+                                   </script>  -->
+
+
+{% if course %}
+<div class="tabbable">
+     <ul class="nav nav-tabs" style="margin-left:20px;margin-right:20px">
+     {% for i, evs, advice, ps in list %}
+     	{% if forloop.first %}
+     	<li class="active"><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{i.semester}}: {{i.year}}</a></li>
+<!--     	<li class="dropdown active" >
+     	<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{i.semester}}: {{i.year}} <b class="caret"></b></a>
+     	            <ul class="dropdown-menu">
+     	                              <li><a href="#graph{{ forloop.counter }}" data-toggle="tab">Rating Graph</a></li>
+     	              <li><a href="#advice{{ forloop.counter }}" data-toggle="tab">Advice</a></li>
+     	      </ul>
+     	</li>-->
+     	         
+        {% else %}
+           <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{i.semester}}: {{i.year}}</a></li>
+<!--  <li class="dropdown" >
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{i.semester}}: {{i.year}} <b class="caret"></b></a>
+  <ul class="dropdown-menu">
+<li><a href="#graph{{ forloop.counter }}" data-toggle="tab">Rating Graph</a></li>
+  <li><a href="#advice{{ forloop.counter }}" data-toggle="tab">Advice</a></li>
+</ul>
+</li> -->
+ 		{% endif %}
+	 {% endfor %}    
+
+     </ul>
+     <div class="tab-content">       
+
+
+
+     {% for i, evs, advice, ps in list %}
+    	{% if forloop.first %}
+
+     <div id="tab{{ forloop.counter }}" class="tab-pane active">
+       <div class="container-fluid">
+       <div class="row-fluid">
+	 <div class="span2 graphLeft">
+	   <ul>
+	    {% if profs %}
+	    <h5> Taught by: </h5>
+	    {% for p in ps %}<p>
+	    {% if not forloop.first %}
+            <a href="../../profs/{{p.netid}}/">{{p}}</a><br/>
+	    {% else %}<a href="../../profs/{{p.netid}}/">{{p}}</a></p>
+	    {% endif %}
+            {% empty %} <p> Unknown professor </p>
+	    {% endfor %}
+	    {% endif %}
+<!--	 <p> <strong> Registrar: </strong><a href="http://registrar.princeton.edu/course-offerings/course_details.xml?courseid={{i.regNum}}&term={{term}}">{{course.0}}</a>-->
+	  </ul>
+	</div>
+	<div class="span10">
+       
+       <div id="viz{{ forloop.counter }}" style="text-align:left;"></div>
+       {% if evs %}
+	   <script type="text/javascript">
+	 var means = [];
+	 var qtext = [];
+	 var ttext = [];
+	     {% for e in evs %}
+	         means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+	         ttext.push("{{e}}");
+             {% endfor %}
+	 graph(means, qtext, ttext, "#viz{{ forloop.counter }}")
+	 $(document).ready($('svg rect.graphbar').tipsy({gravity: 'w', html: true, title: function () {var t = this.__data__; return t; }}));
+</script>
+	 {% else %} <ul><p class="header"> No evaluation data for this semester exists.</p></ul>
+	 {% endif %}
+	   </div>
+	</div>
+       </div>
+<!-- for dropdowwns       </div>
+       <div id="advice{{ forloop.counter }}" class="tab-pane"> -->
+       <ul>
+	 <h5>Student Advice:</h5>
+	      {% for a in advice %}
+	     <li>{{ a.text }}</li><br>
+	 	{% empty %}
+	 	<p> No advice for this semester exists. </p>
+	      {% endfor %}
+	  </ul>
+       </div>
+       {% else %}
+
+
+	  <div id="tab{{ forloop.counter }}" class="tab-pane">
+	    <div class="container-fluid">
+	    <div class="row-fluid">
+              <div class="span2 graphLeft">
+		<ul>
+	        {% if profs %}
+		<h5> Taught by: </h5>
+	          {% for p in ps %}<p>
+		  {% if not forloop.first %}
+                  <a href="../../profs/{{p.netid}}/">{{p}}</a><br/>
+                  {% else %} <a href="../../profs/{{p.netid}}/">{{p}}</a></p>
+                  {% endif %}
+	          {% empty %} <p> Unknown professor </p>
+	         {% endfor %}
+	        {% endif %}
+		</ul>
+		</div>
+	      <div class="span10">
+
+       <div id="viz{{ forloop.counter }}" style="text-align:left;"></div>
+       {% if evs %}
+           <script type="text/javascript">
+         var means = [];
+         var qtext = [];
+	 var ttext = [];
+             {% for e in evs %}
+                 means.push({{e.mean}}) ;
+                 qtext.push("{{e.questiontext}}");
+	         ttext.push("{{e}}");
+             {% endfor %}
+         graph(means, qtext, ttext, "#viz{{ forloop.counter }}")
+	 $(document).ready($('svg rect.graphbar').tipsy({gravity: 'w', html: true, title: function () {var t = this.__data__; return t; }}));</script>
+         {% else %} <ul><p class="header"> No evaluation data for this semester exists.</p></ul>
+	     {% endif %}
+           </div>
+	    </div>
+	    </div>
+<!-- fro dropbowdns	    </div>
+	    <div id="advice{{ forloop.counter }}" class="tab-pane"> -->
+	  <ul>
+	    <h5>Student Advice:</h5>
+       	      {% for a in advice %}
+	           <li>{{ a.text }}</li><br>
+	      {% empty %}
+	     <p> No advice for this semester exists.</p>
+	    {% endfor %}
+	  </ul>
+	  </div>
+
+	  {% endif %}             
+     {% endfor %}
+
+
+</div>
+</div>
+{% endif %}
+{% endautoescape %}
+
+<script>
+$("#myButton").click(function() {
+      if ($(this).hasClass("btn-notInFavorites")) {
+        var add = 1;
+      }
+      if ($(this).hasClass("btn-inFavorites")) {
+        var add = 0;
+      }
+      var id = 'row' + '{{favNum}}';
+      var dataString= 'add='+ add + '&regNum='+ id + '&user='+'{{user.netid}}';
+      $.ajax({
+        type:"POST",
+        url:"/editfavorites",
+        data:{string:dataString},
+      });
+        return true;
+});
+
+   
+   
+
+$(".favButton").click(function(event_ref){
+   event_ref.preventDefault();
+});
+$(".favorites").click(function(event_ref){
+   event_ref.preventDefault();
+});
+
+$(".btn").click(function() {
+
+   $(".icon-star").toggleClass("starNotInFav");
+   $(".icon-star").toggleClass("starInFav");
+
+   $(this).toggleClass("btn-inFavorites");
+   $(this).toggleClass("btn-notInFavorites");
+});
+</script>
+</body>
+
+
+</html>

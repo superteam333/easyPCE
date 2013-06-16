@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Le Javascript -->
+    {% load staticfiles %}
+
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/main.css" media="screen" />
+	<script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+    <script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+
+    <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js"></script>
+	<link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/subnav.css" media="screen"/>
+	<script type="text/javascript" src="/{{ STATIC_URL }}js/subnav.js"></script>
+	<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/application.js"></script>
+
+</head>
+
+<body data-spy="scroll" data-target=".subnav" data-offset="10">
+{% autoescape off %}
+ <div class="navbar navbar-fixed-top navbar-inverse">
+    <div class="navbar-inner">
+		<a class="brand" href="/"> <span class="title1">Princeton </span> <span class="title2"> Course </span> <span class="title1"> Evaluation </span> <span class="title2"> Engine </span></a>
+        <div class="container">
+        <ul class="nav menubar">
+             <li> <a href="/index">Home</a> </li>
+             <li> <a href="/index">Departments </a> </li>
+             <li> <a href="#"> My Favorites </a> </li>
+        </ul>
+        <ul class="nav pull-right">
+        <form class="navbar-search" action="/search/" method="get">
+            <input type="text" name="q" class="search-query" placeholder="Search" style="height:20px"/>
+            </form>               
+        </ul> 
+  </div>
+  </div>
+  </div>
+
+<h1 class="header">                                                           
+
+{% if prof %}
+{{prof}}
+{% else %} No professor existx with name {{prof.netid}}
+{% endif %}
+
+</h1>
+
+<p class="netid"> <strong> NetID: </strong>{{prof.netid}} </p>
+<hr />
+
+{% if unique %}
+<div class="tabbable">
+     <ul class="nav nav-tabs">
+     {% for course in unique %}
+           <li><a href="#tab{{ forloop.counter }}" data-toggle="tab">{{course.dept}}: {{course.number}}</a></li>
+
+	 {% endfor %}    
+     </ul>
+     <div class="tab-content">
+     
+     {% for course in unique %}
+    	{% if forloop.first %}
+     <div id="tab{{ forloop.counter }}" class="tab-pane active">
+     <ul>
+       <li>{{ course.instance.description }}</li>
+       <li><a href="../../courses/{{course.dept}}{{course.number}}/">{{course}}</a>
+</li>
+	  </ul>
+	  </div>
+	  {% else %}
+	  <div id="tab{{ forloop.counter }}" class="tab-pane">
+	  <ul>
+	    <li>{{ course.instance.description }}</li>
+	    <li><a href="../../courses/{{course.dept}}{{course.number}}/">{{course}}</a>
+</li>
+	  </ul>
+	  </div>
+	  {% endif %}             
+      
+	{% endfor %}
+</div>
+</div>
+{% endif %}
+{% endautoescape %}
+</body>
+
+
+</html>

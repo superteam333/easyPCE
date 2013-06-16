@@ -1,0 +1,132 @@
+<html>
+<head>
+	<style type="text/css">
+		html
+		{
+		background-color:#FF8000;
+		font-family:"Arial", Times, serif;
+		font: 62.5% "adelle-1","adelle-2", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		}
+		ul
+		{
+    		list-style-type: none;
+		}
+		#header
+		{
+		color:white;
+		text-align:center;
+		font-size:40px;
+		font-family:"Helvetica";
+		}
+		/* tab pane styling */
+		.panes div {
+    		display:none;
+    		padding:15px 10px;
+    		border:1px solid #999;
+    		border-top:0;
+    		height:100px;
+    		font-size:14px;
+    		background-color:#fff;
+		}
+.tabs {
+  position: relative;   
+  min-height: 1500px; /* This part sucks */
+  clear: both;
+overflow:auto;
+margin: 10px 0;
+}
+.ui-tabs { overflow: auto; position: relative; padding: .2em; zoom: 1; }
+.tab {
+  float: left;
+}
+.tab label {
+  background: #eee; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  margin-left: -1px; 
+  position: relative;
+  left: 1px; 
+}
+.tab [type=radio] {
+  display: none;   
+}
+a, a:hover, a:active, a:visited { color: white; }
+.content {
+	background:#ff8000;
+  color:white;
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  border: 1px solid #ccc; 
+}
+[type=radio]:checked ~ label {
+  background: white;
+  border-bottom: 1px solid white;
+  z-index: 2;
+}
+[type=radio]:checked ~ label ~ .content {
+  z-index: 1;
+}
+	</style>
+</head>
+
+<div class="back">
+	<a href="../../index"> &#8592; Back to PCE Home</a>
+</div>
+<body>
+<h1 id="header">
+{% if dept %}
+{{url.upper}}: {{dept.name}}
+{%else%}
+{{url.upper}}
+{%endif%}
+</h1>
+
+<HR SIZE="6" color="black">
+</body>
+<div class="tabs">
+    
+   <div class="tab">
+       <input type="radio" id="tab-1" name="tab-group-1" checked>
+       <label for="tab-1">Courses</body></label>
+       <div class="content">
+           {% if dept %}
+	<ul>
+	{% for course in courses %}
+	<li><a href="../../courses/{{url.lower}}{{course.number}}/">{{course}}</a></li>
+	{% endfor %}
+	</ul>
+	{% else %}
+	<p> {{url.upper}}: This department does not exist. </p>
+	{% endif %}
+
+       </div> 
+   </div>
+    
+   <div class="tab">
+       <input type="radio" id="tab-2" name="tab-group-1">
+       <label for="tab-2">Professors</label>
+       
+       <div class="content">
+           {% if profs %}
+	   <ul>
+
+	     {% for prof in profs %}
+	     <li><a href="../../profs/{{prof.netid}}/">{{prof}}</a></li>
+	     {% endfor %}
+	     </ul>
+	   {% else %}
+	   <p> No professors found for the {{url.upper}} department. </p>
+	   {% endif %}
+       </div> 
+   </div>    
+    
+</div>
+
+
+
+
+</html>

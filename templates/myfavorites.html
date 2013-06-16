@@ -1,0 +1,99 @@
+
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon"
+      type="image/ico"
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+	<title>PCE: My Favorites </title>
+	    {% include "importfiles.html"%}
+</head>
+
+<body>
+{% autoescape off%}
+ {% include "navbar.html" %}
+
+<div class="favDiv" style="margin-left:50px;margin-right:50px;padding: 5px 5px 5px 5px;">
+  <div class="Headercontainer" style="height:100px;margin-left:-75px;margin-right:-75px;position:relative;bottom:35px;">
+
+	<h2 style="position:relative;top:60px;margin-left:50px;margin-right:50px;">Manage My Favorites</h2></div>
+	<div class="data">
+	<div class="row-fluid" style="margin-bottom:-18px;text-align:left;font-weight:bold;">
+	<div class="span1" style="">
+	Description
+	</div>
+	<div class="span2"> Course </div>
+	<div class="span6"> Title  </div>
+	<div class="span1"> Avg. Rating </div>
+	<div class="span1"> Available?</div>
+	<div class="span1"> Remove</a></div>
+	</div>
+	<hr/>
+	
+	<div class="accordion">
+
+
+	{% for fav, nums, url, score, nextsem in zip %}
+	<div class="whole">
+	<div class="accordion-heading" id="row{{fav.course.regNum}}">
+	<div class="row-fluid" id="row{{fav.course.regNum}}" style="text-align:left;">
+	<div class="span1" style="margin-bottom:10px;">
+	 <button class="btn btn-small btn-info accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#description{{forloop.counter}}">
+<a onclick="togglechevron(this)"> <i class="icon-chevron-down icon-white" style="text-align:center;"></i></a>
+	</button> 
+	</div>	
+<div class="span2"> {% for num in nums %} <a href="/courses/{{url|cut:" "}}">{{num}}</a> {% if not forloop.last%} / {% endif %} {% endfor %} </div>
+	<div class="span6"> <a href="/courses/{{url|cut:" "}}">{{fav.course}}</a> </div>
+	<div class="span1"><span style="font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;"> {{score}} </span></div>
+	<div class="span1"> {% if nextsem %}<img class="check" src="/{{ STATIC_URL }}img/check.png" style="max-height:80%; margin-bottom:13px;" media="screen" /> {% else %} <img class="check" src="/{{ STATIC_URL }}img/ex.png" style="max-height:80%;" media="screen" /> {% endif %}</div>
+	<div class="span1"> <a class=""> <img src="/{{ STATIC_URL }}img/delete.png" class="delete-icon"/> </a></div>
+</div>
+<div id="description{{forloop.counter}}" class="accordion-body collapse out">
+<div class="accordion-inner">
+	<h5 style="margin:0px;">{% for p in fav.course.profs.all %}<a href="/profs/{{p.netid}}">{{p}}</a>{% if not forloop.last %} / {% endif %} {% empty %} Next professor TBA {% endfor %}</h5> <br/>{{fav.course.description}} 
+</div>
+</div>
+</div>
+	</div>
+	{% empty%}
+	<h4> You have no favorites! Go check out some courses/departments and add some classes to your favorites by
+		clicking on the star next to the course name!</h4>
+	{% endfor %}
+
+</div>
+</div>
+
+<script>
+   
+
+$(".delete-icon").click(function() {
+	var add = 0;
+	var id = $(this).closest('.accordion-heading').attr('id');
+	var dataString= 'add='+ add + '&regNum='+ id + '&user='+'{{user.netid}}';
+	$.ajax({
+		type:"POST",
+		url:"/editfavorites",
+		data:{string:dataString},
+		context: this, 
+		success:function() {
+			$(this).parents('.whole').remove();
+		}
+	});
+	return true;
+});
+
+$(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+                    });
+</script>
+<script>
+	function togglechevron(a) {
+		if (a.innerHTML === "<i class="icon-chevron-down icon-white" style="text-align:center;"></i>")
+			a.innerHTML = "<i class="icon-chevron-up icon-white" style="text-align:center;"></i>";
+		else
+			a.innerHTML = "<i class="icon-chevron-down icon-white" style="text-align:center;"></i>";
+	}
+</script>
+
+{% endautoescape %}
+</body>
+</html>

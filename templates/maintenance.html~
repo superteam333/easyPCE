@@ -1,0 +1,24 @@
+<!-- PCE Site Home Page -->
+
+<html>
+<title> PCE Home </title>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon"
+      type="image/gif"
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+
+<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+	{% include "importfiles.html" %}
+</head>
+{% autoescape off %}
+<body>
+
+<div class="hero-unit" style="margin-top:90px;">
+  <h1 style="font-size:500%;font-family: 'Special Elite', cursive;">easy<span style="color:#0A1F61">PCE</span> </h1>
+        <h2> <span style="color:#0A1F61">P</span>rinceton <span style="color:#0A1F61">C</span>ourse <span style="color:#0A1F61">E</span>valuations</h2>
+        <p> Search for a class, department, or professor to get reviews.</p>
+	<h3> Site currently down due to maintenance! Will be up later tonight, 6/7/2013. Adding evaluation data from Spring 2012-2013.</h3>
+</div>
+</body>
+{% endautoescape %}
+</html>

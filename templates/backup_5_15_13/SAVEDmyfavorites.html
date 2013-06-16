@@ -1,0 +1,111 @@
+
+<html>
+<head profile="http://www.w3.org/2005/10/profile">
+<link rel="icon"
+      type="image/ico"
+      href="/{{ STATIC_URL }}favicon/favicon.ico">
+	<title>PCE: My Favorites </title>
+	    {% include "importfiles.html"%}
+</head>
+
+<body>
+<div class="favDiv" style="margin-left:50px;margin-right:50px;">
+	{% include "navbar.html" %}
+	<h2>Manage My Favorites</h2>
+	<div class="data">
+	<div class="row-fluid" style="margin-bottom:-18px;text-align:left;font-weight:bold;">
+	<div class="span1" style="">
+	Description
+	</div>
+	<div class="span2"> Course </div>
+	<div class="span6"> Title  </div>
+	<div class="span1"> Ratings </div>
+	<div class="span1"> Available?</div>
+	<div class="span1"> Remove</a></div>
+	</div>  
+	<hr/>
+	
+	<div class="accordion">
+	{% for fav, nums, url, score, nextsem in zip %}
+	<div class="whole">
+	<div class="accordion-heading" id="row{{fav.course.regNum}}">
+	<div class="row-fluid" id="row{{fav.course.regNum}}" style="text-align:left;">
+	<div class="span1" style="margin-bottom:10px;">
+	 <button class="btn btn-small btn-info accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#description{{forloop.counter}}">
+	 <i class="icon-chevron-down icon-white" style="text-align:center;"></i> 
+	 </button> 
+	</div>	
+<div class="span2"> {% for num in nums %} {{num}} {% if not forloop.last%} / {% endif %} {% endfor %} </div>
+	<div class="span6"> {{fav.course}} </div>
+	<div class="span1"> {{score}} </div>
+	<div class="span1"> {{nextsem}}</div>
+	<div class="span1"> <a class=""> <img src="/{{ STATIC_URL }}img/delete.png" class="delete-icon"/> </a></div>
+</div>
+<div id="description{{forloop.counter}}" class="accordion-body collapse out">
+<div class="accordion-inner">
+	  	  {{fav.course.description}} 
+</div>
+</div>
+</div>
+	</div>
+
+	{% endfor %}
+
+</div>
+</div>
+
+<script>
+$(document).ready(function() {
+	$(".favButton").show();
+    $('.getFavorites').bind('click', function(){
+        $.get("../getfavorites", function(data) {
+            $('.favDropdown').html("");
+            for (var i in data) {
+                if (i == 0) {
+                    $('.favDropdown').append("<div style='margin: 5px 0px -15px 0px'> <a href= \'/courses/" + data[i][2] + "\'>"+ data[i][0] +  "</a></div><hr  /> ");
+
+                }
+                else {
+
+                        $('.favDropdown').append("<div style='margin: -15px 0px -15px 0px'> <a href= \'/courses/" + data[i][2] + "\'>"+ data[i][0] +  "</a></div><hr  /> ");
+                }
+            }
+			if (data.length == 0) {
+				$('.favDropdown').html("No favorites yet.");	
+			}
+        })
+        ;
+    });
+});
+
+$(".favorites").click(function(event_ref){
+   event_ref.preventDefault();
+});
+   
+   
+   
+
+$(".delete-icon").click(function() {
+	console.log("hahahhaa");
+	var add = 0;
+	var id = $(this).closest('.accordion-heading').attr('id');
+	var dataString= 'add='+ add + '&regNum='+ id + '&user='+'{{user.netid}}';
+	$.ajax({
+		type:"POST",
+		url:"/editfavorites",
+		data:{string:dataString},
+		context: this, 
+		success:function() {
+			$(this).parents('.whole').remove();
+		}
+	});
+	return true;
+});
+
+$(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+                    });
+</script>
+
+</body>
+</html>

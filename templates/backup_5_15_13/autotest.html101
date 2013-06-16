@@ -1,0 +1,183 @@
+<html>
+<head>
+	<style>
+		.ui-autocomplete-category {
+			font-weight: bold;
+			line-height:1.5;
+			font-size: 13px;
+			margin: 0px 0px -3px 0px;
+			padding: 0px;
+		}
+		.ui-menu-item {
+			font-size: 12px;
+		}
+		.ui-autocomplete-input {
+			width: 500px;
+		}
+		.ui-autocomplete {
+			width: 490px;
+		}
+		#search {
+			width: 490px;
+		}
+	</style>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+</head>
+
+<body>
+	<label for="search">Search: </label>
+	<input id="search" />
+	<script>
+	$.widget("custom.catcomplete", $.ui.autocomplete, {
+		_renderMenu: function( ul, items) {
+			var that = this, currentCategory = "";
+			$.each(items, function(index, item) {
+				if (item.category != currentCategory) {
+					ul.append("<li class='ui-autocomplete-category'>" + item.category + "<\li>");
+					currentCategory = item.category;
+				}
+				that._renderItemData(ul, item);
+			});
+		}
+	});
+	</script>
+	<script>
+	$(function() {
+		$.ajax({
+			url : '/test',
+			dataType: 'html',
+			type : 'GET',
+			success: function(data) {
+				var splitData = [];
+				var categories = data.split("*");
+				for (var i = 0, len = categories.length, options; i < len; i++) {
+					options = categories[i].split("\n");
+					splitData[i] = options
+				}
+				splitData.push(["Distribution Areas", "EC", "EM", "HA", "LA", "QR", "SA", "STL", "STN"])
+				//alert("done")
+				$("#search").catcomplete({
+					delay: 0,
+					source: function(request, response) {
+						var n = 0
+						var term = request.term
+						var res = []
+						var isQuote = new RegExp("^\".+\"", "i");
+						var isMore = new RegExp("^\".+\" in [a-z]+", "i");
+						var isIn = new RegExp("^\".+\" in?", "i");
+						var isDis = new RegExp("^\".+\" [a-z]{1,2}", "i");
+						if (isQuote.test(term) == true) {
+							if (isIn.test(term) == true) {
+								if (isMore.test(term) == true) {
+									var cut = isIn.exec(term)
+									var text = term.substr(term.indexOf(" in ")+4)
+									var matcher = new RegExp(text, "i")
+									for (var i = 0, len = splitData.length; i < len; i++) {
+										var cat = splitData[i][0]
+										if (cat === "Courses" || cat === "Professors")
+											continue
+										for (var j = 1, len2 = splitData[i].length,  max=5, count=0; j < len2 && count <= max; j++) {
+											var lab = splitData[i][j]
+											if (matcher.test(lab) == true) {
+												res[n] = {}
+												res[n].label = cut + " " + lab;
+												res[n].category = splitData[i][0]
+												n++;
+												count++;
+											}
+										}
+									}
+								}
+							}
+						}
+							if (!isMore.test(term) && (term.lastIndexOf("\"")==0 || isQuote.test(term) || isIn.test(term))) {
+								var append = ""
+								if (term.lastIndexOf("\"")==0) {
+									append = "...\" in "
+								}/* else if (isIn.test(term)) {
+									append = "o"
+								} 
+								else if (term.search(/\"$/)) {
+									append = " in "
+								} else if (term.search(/\"\s$/)) {
+									append = "in "
+								} else if (term.search(/i$/)) {
+									append = "n "
+								} else if (term.search(/n$/)) {
+									append = " "
+								}*/
+								for (var i =0, len = splitData.length; i < len; i++) {
+									var cat = splitData[i][0]
+									if (cat === "Courses" || cat === "Professors")
+										continue
+									res[n] = {};
+									alert(append)
+									res[n].label = term + append + " ..."
+									res[n].category = cat
+									n++;
+								}
+							}
+						//}
+						var matcher = new RegExp($.ui.autocomplete.escapeRegex( request.term ), "i" );
+						for (var i = 0, len = splitData.length; i < len; i++) {
+							var cat = splitData[i][0];
+							for (var j = 1, len2 = splitData[i].length, max=5, count=0; j < len2 && count <= max; j++) {
+								var lab = splitData[i][j];
+								if (matcher.test(lab) == true) {
+									res[n] = {};
+									res[n].label = lab;
+									res[n].category = cat;
+									n++;
+									count++;
+								}
+							}
+						}
+						response(res);
+					},
+					select: function(event, ui) {
+						//check if course
+						var t = ui.item.value
+						var cpatt = new RegExp("[A-Z]{3}\\s[0-9]+:", "i")
+						var dmpatt = new RegExp("[A-Z]{3}:", "i")
+						var dpatt = new RegExp("[A-Z]{3}", "i")
+						if (cpatt.test(t) == true) {
+							var cnd = dpatt.exec(t)
+							var cnnpatt = new RegExp("[0-9]+[a-z]*", "i")
+							var cnn = cnnpatt.exec(t)
+							window.location = "http://easypce.com/courses/" + cnd + cnn
+						}
+						else if (dmpatt.test(t) == true) {
+							d = dpatt.exec(t)
+							window.location = "http://easypce.com/depts/" + d
+						}
+						else {
+							p = t.replace(" ", "+")
+							window.location = "http://easypce.com/search/?q=" + p
+						}
+					}
+				});
+			}
+		});	
+	});
+	
+	</script>
+	<!--
+	alert("uh")
+	$(document).ready(function() {
+		alert("um")
+		$.ajax({
+			url : '/hello',
+			dataType: 'html',
+			type: 'GET',
+			success: function(data) {
+				$("#result").val(data)
+			}
+		});
+		alert("hi")
+	)};
+			
+	</script-->
+</body>
+</html>

@@ -1,0 +1,74 @@
+<html>
+<head>
+        <style type="text/css">
+                html
+                {
+                background-color:#FF8000;
+                font-family:"Arial", Times, serif;
+                }
+                #header
+                {
+                color:white;
+                text-align:center;
+                font-size:40px;
+                font-family:"Helvetica";
+                /* tab pane styling */
+                .panes div {
+                display:none;
+                padding:15px 10px;
+                border:1px solid #999;
+                border-top:0;
+                height:100px;
+                font-size:14px;
+                background-color:#fff;
+                }
+                ul, li {
+                list-style: none;
+                }
+        </style>
+</head>
+<div class="back">
+        <a href="../../index"> &#8592; Back to PCE Home</a>
+</div>
+<h1 id="header">                                                           
+
+{% if course %}                                                                                    
+{{course.0}}
+{% else %}                                                                                          
+No course {{sub}} {{coursenum}} exists
+{% endif %}                                                                                          
+
+</h1>
+
+<HR SIZE="6" color="black">
+
+{% if course %}
+	{% for i in course %}
+          <p>
+	  {{i.semester}}: {{i.year}} taught by {{i.prof}} ({{i.regNum}}) <br>
+	  DATA:
+	    {% for e in evals %}
+        <ul> 
+	      {{e.questiontext}} <br>
+	      Excellent: {{e.excellent}}    Very Good: {{e.veryGood}}    Good: {{e.good}}    Fair: {{e.fair}}    Poor: {{e.poor}}    NA: {{e.na}}    Mean: {{e.mean}} <br> (Responses: {{e.num_responses}}    Response rate: {{e.rate_responses}})
+        </ul>
+	    {% endfor %}
+	    <p>
+	    ADVICE: (data still being loaded into database)
+	    </p>
+	    {% if advices %} <p> hi </p> {% endif %}
+	    {% for a in advices %}
+            <ul>{{ a.text }}</ul>
+	    {% endfor %}
+	    
+	  </p>
+	{% endfor %}
+{% endif %}
+</body>
+
+<ul class="tabs">
+        <li><a href="#">Tab 1</a></li>
+        <li><a href="#">Tab 2</a></li>
+        <li><a href="#">Tab 3</a></li>
+</ul>
+</html>

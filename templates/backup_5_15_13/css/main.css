@@ -1,0 +1,298 @@
+html {
+	min-width:1090px;
+	overflow-x:scroll !important;
+}
+body{
+	background-color:ivory;	
+	color:black;
+	font-family:garamond;
+}
+
+.navbarLink{
+	color:orange !important;
+}
+#header {
+	text-align:center;
+	/*margin-left:60px; will this break other parts of site ? for DEPT.HTML centering
+	 based on cursory insepcing looks ok. doesn't effect course.html*/
+}
+
+.span1 {
+	text-align:center;
+}
+.hero-unit {
+        border-radius:0 !important;
+	border-radius:50px;
+/*	margin-left:60px;
+	margin-right:60px;*/
+	text-align:center;
+	background-color:orange;
+/*	box-shadow:0px 0px 10px rgba(0,0,0,.3);*/
+
+	background: linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
+        background: o-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
+        background: -webkit-linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
+	background: -moz-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
+        background: -ms-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
+} 
+
+a{ /* is this right?*/
+	color:#a64b00;
+}
+.navbar-fixed-top{
+	text-align:center;
+}
+
+body {
+  padding-top: 60px;
+}
+
+a.nav {
+	color:white !important;
+}
+.gradient {
+    padding-top:40px;
+}
+
+.row-fluid {
+	text-align:center;
+}
+.title1 {
+	font-weight:bold;
+
+	color:orange;
+}
+.title2 {
+        font-weight:bold;
+
+	color:white;
+}
+.title3 {
+        margin-left:20px;
+}
+
+ul {
+    list-style-type: none;
+}
+.header {
+	text-align: left;
+	margin-left:60px;
+}
+
+.Headercontainer {
+    background: linear-gradient(#FD8A45, rgba(253,138,69,0));
+	background: o-linear-gradient(#FD8A45, rgba(253,138,69,0));
+	background: -webkit-linear-gradient(#FD8A45, rgba(253,138,69,0));
+	background: -moz-linear-gradient(#FD8A45,rgba(253,138,69,0));
+	background: -ms-linear-gradient(#FD8A45, rgba(253,138,69,0));
+}
+
+.checkContainter {
+
+}
+
+.description {
+    	margin-left: 20px;
+        float:right;
+        display:inline-block;
+	margin-right:20px;
+	text-align:right;
+	font-size:110%;
+}
+
+.check {
+	width:20px;
+	height:20px;
+}
+table {
+
+}
+
+html body .navbar .navbar-inner .container {
+   color: #FFF !important;
+}
+
+.navbar .navbar-inner {
+	a:link {color:#FF0000;}      /* unvisited link */
+	 a:visited {color:#00FF00;}  /* visited link */
+	 a:hover {color:#FF00FF;}   /* mouse over link */
+	 a:active {color:#0000FF;}  /* selected link */
+
+}    
+
+.brand{
+}
+
+.icon-star {
+    height=200%;
+}
+
+.graphbar {
+    stroke: black;
+    fill: orange;
+    stroke-width: 2;
+}
+
+.number {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.bartext {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 100%;
+    fill: black;
+    text-anchor: middle;
+}
+
+.taughtby {
+    font-size: 120%;
+    font-weight: 600;
+}
+
+.behindbar {
+    fill: black;
+    stroke: white;
+    opacity: 25%;
+}    
+
+.average {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 500%;
+}
+
+.divider {
+    border-top: 1px solid #ccc;
+    border-bottom: 2px solid ivory;
+    padding-bottom: 20px;
+    padding-top: 0px;
+    margin: 0px;
+}
+
+.tabbable ul li.active a {
+background: linear-gradient(white 75%, ivory 100%);
+}
+
+.graphLeft {
+    text-align:left;
+}
+
+.graphRight {
+    text-align:left;
+}
+
+.btn-inFavorites {
+ background-color: hsl(201, 100%, 58%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#a3defe", endColorstr="#28b4ff");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#a3defe), to(#28b4ff));
+  background-image: -moz-linear-gradient(top, #a3defe, #28b4ff);
+  background-image: -ms-linear-gradient(top, #a3defe, #28b4ff);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #a3defe), color-stop(100%, #28b4ff));
+  background-image: -webkit-linear-gradient(top, #a3defe, #28b4ff);
+  background-image: -o-linear-gradient(top, #a3defe, #28b4ff);
+  background-image: linear-gradient(#a3defe, #28b4ff);
+  border-color: #28b4ff #28b4ff hsl(201, 100%, 52%);
+  color: #333 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.39);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-notInFavorites {
+  background-color: hsl(197, 0%, 45%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7c7c7c", endColorstr="#727272");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#7c7c7c), to(#727272));
+  background-image: -moz-linear-gradient(top, #7c7c7c, #727272);
+  background-image: -ms-linear-gradient(top, #7c7c7c, #727272);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7c7c7c), color-stop(100%, #727272));
+  background-image: -webkit-linear-gradient(top, #7c7c7c, #727272);
+  background-image: -o-linear-gradient(top, #7c7c7c, #727272);
+  background-image: linear-gradient(#7c7c7c, #727272);
+  border-color: #727272 #727272 hsl(197, 0%, 44%);
+  color: #fff !important;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
+  -webkit-font-smoothing: antialiased;
+}
+
+.courseStar {
+    position:relative;
+    bottom:5px;
+}
+
+.search-query {
+	height:27px !important;
+	border-radius:                    6px !important;
+	-webkit-border-radius:            6px !important;
+	-moz-border-radius:               6px !important;
+}
+
+.starInFav {
+background-image: url("../bootstrap/img/glyphicons-halflings-white.png");
+}
+
+.starNotInFav {
+background-image: url("../bootstrap/img/glyphicons-halflings.png");
+}
+
+.ui-autocomplete-category {
+	font-weight: bold;
+	line-height:1.5;
+	font-size: 13px;
+	margin: 0px 0px -3px 0px;
+	padding: 0px;
+}
+.ui-menu-item {
+	font-size: 12px;
+	z-index: 1000;
+}
+.ui-autocomplete-input {
+	width: 500px;
+}
+.ui-autocomplete .autosearch {
+	width: 490px;
+	z-index: 1000;
+}
+
+.autosearch{
+	width: 490px;
+}
+
+.navsearch {
+	width: 490px;
+}
+
+.ui-autocomplete.navsearch {
+	width: 400px;
+	z-index: 1000 !important;
+}
+
+.ui-menu {
+	width: 480px;
+	z-index: 10000 !important;
+}
+.delete-icon{
+	width:30px;
+	height:30px;
+}
+
+
+a.induceLink:hover { color: white; }
+a.induceLink { color:ivory;}
+
+
+.well {
+    background-color: snow;
+    box-shadow: 0 0 8px #000000;
+    -webkit-box-shadow: 0 0 8px #000000;
+    -moz-box-shadow: 0 0 8px #000000;
+    padding: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    margin-right:50px;
+    display: inline-block;
+}
+
+.search-query {
+    box-sizing: border-box;
+}

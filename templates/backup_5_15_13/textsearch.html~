@@ -1,0 +1,176 @@
+<html style="overflow:auto !important;">
+<head profile="http://www.w3.org/2005/10/profile">
+	<title>PCE Search Results</title>
+	<link rel="icon" type="image/ico"href="/{{ STATIC_URL }}favicon/favicon.ico">
+	{% include "importfiles.html"%}
+	<style>
+		#highlight {
+			background-color: yellow;
+			background: -webkit-linear-gradient(#ddeefe, #bfe0f1);
+			box-shadow: 0 0px 4px #888;
+			-webkit-box-shadow: 0 0px 2px #888;
+			-moz-box-shadow: 0 0px 0px #888;
+			border-radius: 4px;
+			padding: 1px;
+		}
+
+		#box {
+			width: -moz-calc(100% - 80px);
+			width: -webkit-calc(100% - 80px);
+			width: calc(100% - 80px);
+			margin-left: auto;
+			margin-right: auto;
+			border-radius: 11px;
+			-moz-border-radius: 11px;
+			-webkit-border-radius: 11px;
+			-o-border-radius: 11px;
+			background-color: white;
+			padding: 11px;
+			font-size: 16px;
+		}
+		#back {
+			background: linear-gradient(#FD8A45, #FCCAAB);
+			background: o-linear-gradient(#FD8A45, #FCCAAB);
+			background: -webkit-linear-gradient(#FD8A45, #FCCAAB);
+			background: -moz-linear-gradient(#FD8A45, #FCCAAB);
+			background: -ms-linear-gradient(#FD8A45, #FCCAAB);
+			padding-bottom: 30px;
+		}
+		.ex {
+			font-weight: bold;
+		}
+		#box p {
+			margin: 0px;
+			padding: 0px;
+		}
+		#box hr {
+			margin: 2px 0px;
+			padding: 0px;
+		}
+		#left {
+			background-color:blue;
+			width:120px;
+			float: left;
+			display: inline;
+			margin: 0;
+			padding: 0;
+		}
+		#links {
+			position: fixed;
+			left: 50px;
+			text-align: right;
+			padding: 0px;
+			margin: 0px;
+		}
+			#links li {
+				margin: 5px 0px;
+			}
+		#results {
+			margin-left: 115px;
+			border-left:thin solid #ccc;
+		}
+			#results ul p {
+			}
+		.secHead {
+			margin: 0px;
+			margin-left: 3px;
+			padding-top: 40px; 
+			margin-top: -40px;
+		}
+		
+		/*.advice {
+			padding: 3px 5px;
+			border: thin solid #ccc;
+			border-radius: 11px;
+		}*/
+		.advice {
+			margin-bottom: 10px;
+		}
+		.more {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body class="gradient">
+	{% include "navbar.html" %}
+
+	<div id="back" class="Headercontainer gradient" style="margin-top:-15px;"> 
+		<div id="box">
+			<div id="left">
+				<ul id="links">
+					<li><a href="#courses">Courses ></a></li>
+					<hr />
+					<li><a href="#profs">Professors ></a></li>
+					<hr />
+					<li><a href="#depts">Departments ></a></li>
+				</ul>
+			</div>
+			<div id="results">
+				<p style="text-align: center">Search results for: <strong>{{query}}</strong></p>
+				<hr />
+				{% if results %}
+					<h3 id="courses" class="secHead">Courses</h2>
+					<ul>
+<div class="accordion">
+	{% for fav, nums, url, score, nextsem in zip %}
+	<div class="whole">
+	<div class="accordion-heading" id="row{{fav.course.regNum}}">
+	<div class="row-fluid" id="row{{fav.course.regNum}}" style="text-align:left;">
+	<div class="span1" style="margin-bottom:10px;">
+	 <button class="btn btn-small btn-info accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#description{{forloop.counter}}">
+	 <i class="icon-chevron-down icon-white" style="text-align:center;"></i> 
+	 </button> 
+	</div>	
+<div class="span2"> {% for num in nums %} <a href="/courses/{{url|cut:" "}}">{{num}}</a> {% if not forloop.last%} / {% endif %} {% endfor %} </div>
+	<div class="span6"> <a href="/courses/{{url|cut:" "}}">{{fav.course}}</a> </div>
+	<div class="span1"><span style="font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;"> {{score}} </span></div>
+	<div class="span1"> {% if nextsem %}<img class="check" src="/{{ STATIC_URL }}img/check.png" style="max-height:80%; margin-bottom:13px;" media="screen" /> {% else %} <img class="check" src="/{{ STATIC_URL }}img/ex.png" style="max-height:80%;" media="screen" /> {% endif %}</div>
+	<div class="span1"> <a class=""> <img src="/{{ STATIC_URL }}img/delete.png" class="delete-icon"/> </a></div>
+</div>
+<div id="description{{forloop.counter}}" class="accordion-body collapse out">
+<div class="accordion-inner">
+	<h5 style="margin:0px;">{% for p in fav.course.profs.all %}<a href="/profs/{{p.netid}}">{{p}}</a>{% if not forloop.last %} / {% endif %} {% endfor %}</h5> <br/>{{fav.course.description}} 
+</div>
+</div>
+</div>
+	</div>
+
+	{% endfor %}
+
+</div>
+</div>
+
+					
+					{% for link, advice, c in results %}
+						<li><strong>{{link|safe}}</strong>: ({{advice|length}} matches)</li>
+						<ul class="advice">
+						{% for a in advice %}
+							{% if forloop.counter0 < 3%}
+							<li>{{a.text|safe}}</li>
+							{% endif %}
+						{% endfor %}
+						{% for a in advice %}
+							<div id="demo{{forloop.parentloop.counter0}}" class="accordian-body collapse">
+							{% if forloop.counter0 > 4%}
+							<li>{{a.text|safe}}</li>
+							{% endif %}
+							{% if forloop.last %}
+							</div>
+							{% endif %}
+						{% endfor %}
+						</ul>
+						<button class="more" data-toggle="collapse" data-target="#demo{{forloop.counter0}}">more</button>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

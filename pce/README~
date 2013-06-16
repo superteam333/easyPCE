@@ -1,0 +1,13 @@
+John Whelchel
+June 6 2013
+
+### How to update files after DB updated. ###
+
+
+The main issue here is updating the Bayesian information. I need from help from
+Matt on this one, but I think the gist is you calculate them, and then put them
+in the file ratings_final or whatever. Then, you run bayes_into_db on that FILE
+(i.e. open bayes_into_db and check the directory it's pointing to).
+
+Secondly, make sure you run professordept fixer. Read through the code to make 
+sure it's all ok.

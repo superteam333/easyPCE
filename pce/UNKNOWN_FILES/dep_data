@@ -1,0 +1,194 @@
+<input name="subject" type="checkbox" value="AAS">
+   <a href="search_results.xml?term=1142&#38;subject=AAS">AAS</a> Ctr African American Studies<br>
+<input name="subject" type="checkbox" value="AFS">
+   <a href="search_results.xml?term=1142&#38;subject=AFS">AFS</a> African Studies<br>
+<input name="subject" type="checkbox" value="AMS">
+   <a href="search_results.xml?term=1142&#38;subject=AMS">AMS</a> American Studies<br>
+<input name="subject" type="checkbox" value="ANT">
+   <a href="search_results.xml?term=1142&#38;subject=ANT">ANT</a> Anthropology<br>
+<input name="subject" type="checkbox" value="AOS">
+   <a href="search_results.xml?term=1142&#38;subject=AOS">AOS</a> Atmospheric & Oceanic Sci<br>
+<input name="subject" type="checkbox" value="APC">
+   <a href="search_results.xml?term=1142&#38;subject=APC">APC</a> Appl. & Computational Math<br>
+<input name="subject" type="checkbox" value="ARA">
+   <a href="search_results.xml?term=1142&#38;subject=ARA">ARA</a> Arabic<br>
+<input name="subject" type="checkbox" value="ARC">
+   <a href="search_results.xml?term=1142&#38;subject=ARC">ARC</a> Architecture<br>
+<input name="subject" type="checkbox" value="ART">
+   <a href="search_results.xml?term=1142&#38;subject=ART">ART</a> Art & Archaeology<br>
+<input name="subject" type="checkbox" value="AST">
+   <a href="search_results.xml?term=1142&#38;subject=AST">AST</a> Astrophysical Sciences<br>
+<input name="subject" type="checkbox" value="ATL">
+   <a href="search_results.xml?term=1142&#38;subject=ATL">ATL</a> Atelier<br>
+<input name="subject" type="checkbox" value="BCS">
+   <a href="search_results.xml?term=1142&#38;subject=BCS">BCS</a> Bosnian-Croatian-Serbian<br>
+<input name="subject" type="checkbox" value="CBE">
+   <a href="search_results.xml?term=1142&#38;subject=CBE">CBE</a> Chemical & Biological Engr<br>
+<input name="subject" type="checkbox" value="CEE">
+   <a href="search_results.xml?term=1142&#38;subject=CEE">CEE</a> Civil and Environmental Engrng<br>
+<input name="subject" type="checkbox" value="CHI">
+   <a href="search_results.xml?term=1142&#38;subject=CHI">CHI</a> Chinese<br>
+<input name="subject" type="checkbox" value="CHM">
+   <a href="search_results.xml?term=1142&#38;subject=CHM">CHM</a> Chemistry<br>
+<input name="subject" type="checkbox" value="CHV">
+   <a href="search_results.xml?term=1142&#38;subject=CHV">CHV</a> Center for Human Values<br>
+<input name="subject" type="checkbox" value="CLA">
+   <a href="search_results.xml?term=1142&#38;subject=CLA">CLA</a> Classics<br>
+<input name="subject" type="checkbox" value="CLG">
+   <a href="search_results.xml?term=1142&#38;subject=CLG">CLG</a> Classical Greek<br>
+<input name="subject" type="checkbox" value="COM">
+   <a href="search_results.xml?term=1142&#38;subject=COM">COM</a> Comparative Literature<br>
+<input name="subject" type="checkbox" value="COS">
+   <a href="search_results.xml?term=1142&#38;subject=COS">COS</a> Computer Science<br>
+<input name="subject" type="checkbox" value="CWR">
+   <a href="search_results.xml?term=1142&#38;subject=CWR">CWR</a> Creative Writing<br>
+<input name="subject" type="checkbox" value="CZE">
+   <a href="search_results.xml?term=1142&#38;subject=CZE">CZE</a> Czech<br>
+<input name="subject" type="checkbox" value="DAN">
+   <a href="search_results.xml?term=1142&#38;subject=DAN">DAN</a> Dance<br>
+<input name="subject" type="checkbox" value="EAP">
+   <a href="search_results.xml?term=1142&#38;subject=EAP">EAP</a> East Asian Program<br>
+<input name="subject" type="checkbox" value="EAS">
+   <a href="search_results.xml?term=1142&#38;subject=EAS">EAS</a> East Asian Studies<br>
+<input name="subject" type="checkbox" value="ECO">
+   <a href="search_results.xml?term=1142&#38;subject=ECO">ECO</a> Economics<br>
+<input name="subject" type="checkbox" value="ECS">
+   <a href="search_results.xml?term=1142&#38;subject=ECS">ECS</a> European Cultural Studies<br>
+<input name="subject" type="checkbox" value="EEB">
+   <a href="search_results.xml?term=1142&#38;subject=EEB">EEB</a> Ecology and Evol. Biology<br>
+<input name="subject" type="checkbox" value="EGR">
+   <a href="search_results.xml?term=1142&#38;subject=EGR">EGR</a> Engineering<br>
+<input name="subject" type="checkbox" value="ELE">
+   <a href="search_results.xml?term=1142&#38;subject=ELE">ELE</a> Electrical Engineering<br>
+<input name="subject" type="checkbox" value="ENE">
+   <a href="search_results.xml?term=1142&#38;subject=ENE">ENE</a> Energy Studies<br>
+<input name="subject" type="checkbox" value="ENG">
+   <a href="search_results.xml?term=1142&#38;subject=ENG">ENG</a> English<br>
+<input name="subject" type="checkbox" value="ENV">
+   <a href="search_results.xml?term=1142&#38;subject=ENV">ENV</a> Environmental Studies<br>
+<input name="subject" type="checkbox" value="EPS">
+   <a href="search_results.xml?term=1142&#38;subject=EPS">EPS</a> Contemporary European Politics<br>
+<input name="subject" type="checkbox" value="FIN">
+   <a href="search_results.xml?term=1142&#38;subject=FIN">FIN</a> Finance<br>
+<input name="subject" type="checkbox" value="FRE">
+   <a href="search_results.xml?term=1142&#38;subject=FRE">FRE</a> French<br>
+<input name="subject" type="checkbox" value="FRS">
+   <a href="search_results.xml?term=1142&#38;subject=FRS">FRS</a> Freshman Seminars<br>
+<input name="subject" type="checkbox" value="GEO">
+   <a href="search_results.xml?term=1142&#38;subject=GEO">GEO</a> Geosciences<br>
+<input name="subject" type="checkbox" value="GER">
+   <a href="search_results.xml?term=1142&#38;subject=GER">GER</a> German<br>
+<input name="subject" type="checkbox" value="GHP">
+   <a href="search_results.xml?term=1142&#38;subject=GHP">GHP</a> Global Health & Health Policy<br>
+<input name="subject" type="checkbox" value="GLS">
+   <a href="search_results.xml?term=1142&#38;subject=GLS">GLS</a> Global Seminar<br>
+<input name="subject" type="checkbox" value="GSS">
+   <a href="search_results.xml?term=1142&#38;subject=GSS">GSS</a> Gender and Sexuality Studies<br>
+<input name="subject" type="checkbox" value="HEB">
+   <a href="search_results.xml?term=1142&#38;subject=HEB">HEB</a> Hebrew<br>
+<input name="subject" type="checkbox" value="HIN">
+   <a href="search_results.xml?term=1142&#38;subject=HIN">HIN</a> Hindi<br>
+<input name="subject" type="checkbox" value="HIS">
+   <a href="search_results.xml?term=1142&#38;subject=HIS">HIS</a> History<br>
+<input name="subject" type="checkbox" value="HLS">
+   <a href="search_results.xml?term=1142&#38;subject=HLS">HLS</a> Hellenic Studies<br>
+<input name="subject" type="checkbox" value="HOS">
+   <a href="search_results.xml?term=1142&#38;subject=HOS">HOS</a> History of Science<br>
+<input name="subject" type="checkbox" value="HUM">
+  <a href="search_results.xml?term=1142&#38;subject=HUM">HUM</a> Humanistic Studies <br>
+<input name="subject" type="checkbox" value="ISC">
+  <a href="search_results.xml?term=1142&#38;subject=ISC">ISC</a> Integrated Science Curriculum <br>
+<input name="subject" type="checkbox" value="ITA">
+  <a href="search_results.xml?term=1142&#38;subject=ITA">ITA</a> Italian <br>
+<input name="subject" type="checkbox" value="JDS">
+  <a href="search_results.xml?term=1142&#38;subject=JDS">JDS</a> Judaic Studies <br>
+<input name="subject" type="checkbox" value="JPN">
+  <a href="search_results.xml?term=1142&#38;subject=JPN">JPN</a> Japanese <br>
+<input name="subject" type="checkbox" value="JRN">
+  <a href="search_results.xml?term=1142&#38;subject=JRN">JRN</a> Journalism <br>
+<input name="subject" type="checkbox" value="KOR">
+  <a href="search_results.xml?term=1142&#38;subject=KOR">KOR</a> Korean <br>
+<input name="subject" type="checkbox" value="LAO">
+  <a href="search_results.xml?term=1142&#38;subject=LAO">LAO</a> Latino Studies <br>
+<input name="subject" type="checkbox" value="LAS">
+  <a href="search_results.xml?term=1142&#38;subject=LAS">LAS</a> Latin American Studies <br>
+<input name="subject" type="checkbox" value="LAT">
+  <a href="search_results.xml?term=1142&#38;subject=LAT">LAT</a> Latin <br>
+<input name="subject" type="checkbox" value="LIN">
+  <a href="search_results.xml?term=1142&#38;subject=LIN">LIN</a> Linguistics <br>
+<input name="subject" type="checkbox" value="MAE">
+  <a href="search_results.xml?term=1142&#38;subject=MAE">MAE</a> Mech. and Aerospace Engr. <br>
+<input name="subject" type="checkbox" value="MAT">
+  <a href="search_results.xml?term=1142&#38;subject=MAT">MAT</a> Mathematics <br>
+<input name="subject" type="checkbox" value="MED">
+  <a href="search_results.xml?term=1142&#38;subject=MED">MED</a> Medieval Studies <br>
+<input name="subject" type="checkbox" value="MOD">
+  <a href="search_results.xml?term=1142&#38;subject=MOD">MOD</a> Media and Modernity <br>
+<input name="subject" type="checkbox" value="MOG">
+  <a href="search_results.xml?term=1142&#38;subject=MOG">MOG</a> Modern Greek <br>
+<input name="subject" type="checkbox" value="MOL">
+  <a href="search_results.xml?term=1142&#38;subject=MOL">MOL</a> Molecular Biology <br>
+<input name="subject" type="checkbox" value="MSE">
+  <a href="search_results.xml?term=1142&#38;subject=MSE">MSE</a> Materials Sci/Engingr <br>
+<input name="subject" type="checkbox" value="MUS">
+  <a href="search_results.xml?term=1142&#38;subject=MUS">MUS</a> Music <br>
+<input name="subject" type="checkbox" value="NES">
+  <a href="search_results.xml?term=1142&#38;subject=NES">NES</a> Near Eastern Studies <br>
+<input name="subject" type="checkbox" value="NEU">
+  <a href="search_results.xml?term=1142&#38;subject=NEU">NEU</a> Neuroscience <br>
+<input name="subject" type="checkbox" value="ORF">
+  <a href="search_results.xml?term=1142&#38;subject=ORF">ORF</a> Oper Res and Financial Engr <br>
+<input name="subject" type="checkbox" value="PAW">
+  <a href="search_results.xml?term=1142&#38;subject=PAW">PAW</a> Ancient World <br>
+<input name="subject" type="checkbox" value="PER">
+  <a href="search_results.xml?term=1142&#38;subject=PER">PER</a> Persian <br>
+<input name="subject" type="checkbox" value="PHI">
+  <a href="search_results.xml?term=1142&#38;subject=PHI">PHI</a> Philosophy <br>
+<input name="subject" type="checkbox" value="PHY">
+  <a href="search_results.xml?term=1142&#38;subject=PHY">PHY</a> Physics <br>
+<input name="subject" type="checkbox" value="PLS">
+  <a href="search_results.xml?term=1142&#38;subject=PLS">PLS</a> Polish <br>
+<input name="subject" type="checkbox" value="POL">
+  <a href="search_results.xml?term=1142&#38;subject=POL">POL</a> Politics <br>
+<input name="subject" type="checkbox" value="POP">
+  <a href="search_results.xml?term=1142&#38;subject=POP">POP</a> Population Studies <br>
+<input name="subject" type="checkbox" value="POR">
+  <a href="search_results.xml?term=1142&#38;subject=POR">POR</a> Portuguese <br>
+<input name="subject" type="checkbox" value="PSY">
+  <a href="search_results.xml?term=1142&#38;subject=PSY">PSY</a> Psychology <br>
+<input name="subject" type="checkbox" value="QCB">
+  <a href="search_results.xml?term=1142&#38;subject=QCB">QCB</a> Quantitative Computational Bio <br>
+<input name="subject" type="checkbox" value="REL">
+  <a href="search_results.xml?term=1142&#38;subject=REL">REL</a> Religion <br>
+<input name="subject" type="checkbox" value="RUS">
+  <a href="search_results.xml?term=1142&#38;subject=RUS">RUS</a> Russian <br>
+<input name="subject" type="checkbox" value="SAS">
+  <a href="search_results.xml?term=1142&#38;subject=SAS">SAS</a> South Asian Studies <br>
+<input name="subject" type="checkbox" value="SLA">
+  <a href="search_results.xml?term=1142&#38;subject=SLA">SLA</a> Slavic Languages and Lit <br>
+<input name="subject" type="checkbox" value="SOC">
+  <a href="search_results.xml?term=1142&#38;subject=SOC">SOC</a> Sociology <br>
+<input name="subject" type="checkbox" value="SPA">
+  <a href="search_results.xml?term=1142&#38;subject=SPA">SPA</a> Spanish <br>
+<input name="subject" type="checkbox" value="STC">
+  <a href="search_results.xml?term=1142&#38;subject=STC">STC</a> Science and Technology Council <br>
+<input name="subject" type="checkbox" value="SWA">
+  <a href="search_results.xml?term=1142&#38;subject=SWA">SWA</a> Swahili <br>
+<input name="subject" type="checkbox" value="THR">
+  <a href="search_results.xml?term=1142&#38;subject=THR">THR</a> Theater <br>
+<input name="subject" type="checkbox" value="TPP">
+  <a href="search_results.xml?term=1142&#38;subject=TPP">TPP</a> Teacher Preparation <br>
+<input name="subject" type="checkbox" value="TRA">
+  <a href="search_results.xml?term=1142&#38;subject=TRA">TRA</a> Translation, Intercultural Com <br>
+<input name="subject" type="checkbox" value="TUR">
+  <a href="search_results.xml?term=1142&#38;subject=TUR">TUR</a> Turkish <br>
+<input name="subject" type="checkbox" value="URB">
+  <a href="search_results.xml?term=1142&#38;subject=URB">URB</a> Urban Studies <br>
+<input name="subject" type="checkbox" value="URD">
+  <a href="search_results.xml?term=1142&#38;subject=URD">URD</a> Urdu <br>
+<input name="subject" type="checkbox" value="VIS">
+  <a href="search_results.xml?term=1142&#38;subject=VIS">VIS</a> Visual Arts <br>
+<input name="subject" type="checkbox" value="WRI">
+  <a href="search_results.xml?term=1142&#38;subject=WRI">WRI</a> Princeton Writing Program <br>
+<input name="subject" type="checkbox" value="WWS">
+  <a href="search_results.xml?term=1142&#38;subject=WWS">WWS</a> Woodrow Wilson School <br>
