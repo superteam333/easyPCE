@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.template import Context, loader
 from django.template.loader import get_template
 from pce.models import *
@@ -25,13 +26,16 @@ def check_login(request, redirect):
                 return HttpResponseRedirect(login_url)
 
 def ranking(request):
-    try:
-        n = request.session['netid']
-        if request.session['netid'] is None:
+    if not settings.DEBUG:
+        try:
+            n = request.session['netid']
+            if request.session['netid'] is None:
+                return check_login(request, '/')
+        except:
             return check_login(request, '/')
-    except:
-        return check_login(request, '/')
-    netid = request.session['netid']
+        netid = request.session['netid']
+    else:
+        netid = 'dev'
     try:
         user= User.objects.get(netid=netid)
     except:

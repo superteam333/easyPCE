@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.template import Context, loader
 from pce.models import *
 from sets import Set
@@ -51,13 +52,16 @@ def check_login(request, redirect):
 	
 def course(request, subj, num):
 	global termss, REGIS_PREFIX
-	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 1 of 1           
-		n = request.session['netid']  
-		if request.session['netid'] is None:
+	if not settings.DEBUG:
+		try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 1 of 1           
+			n = request.session['netid']  
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
 			return check_login(request, '/')
-	except:
-		return check_login(request, '/')
-	netid = request.session['netid']
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
 	try:
             user= User.objects.get(netid=netid)
         except:
