@@ -68,5 +68,5 @@ def ranking(request):
         regNums.append(favs[i].course.regNum)
     bayeszip = zip(cns, cs)
     c = Context({'poop':poop, 'user':user, 'alldepts':alldepts, 'favorites':favorites, 'bayes':bayeszip, 'regNums':regNums})
-    t = get_template("dev/rankings.html")
+    t = get_template("rankings.html")
     return HttpResponse(t.render(c))
