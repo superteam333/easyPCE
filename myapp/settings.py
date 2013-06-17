@@ -1,7 +1,9 @@
 # Django settings for myapp project.
 
 import os
-DEBUG = True
+import sys
+
+DEBUG = (sys.argv[1] == 'runserver')
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
