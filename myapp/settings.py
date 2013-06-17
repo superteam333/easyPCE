@@ -65,7 +65,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = '/srv/www/myapp/templates/'
+MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '../templates/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -76,7 +76,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/srv/www/myapp/myapp/static/'
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '/static/')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -84,7 +84,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (	
-    '/srv/www/myapp/templates/',
+    os.path.join(os.path.dirname(__file__), '../templates/'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -145,7 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'myapp', 
     'pce',
-    'django_evolution',
+#    'django_evolution',
     #'profiler',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
