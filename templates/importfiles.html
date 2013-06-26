@@ -3,7 +3,8 @@
     <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
 
     <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!--OLD CALL <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <script src="/{{ STATIC_URL }}jquery/1.7/jquery.min.js"></script>
 
 	<script type="text/javascript" src="/{{ STATIC_URL }}js/csrf.js"></script>
 
@@ -22,10 +23,15 @@
     <script type="text/javascript" src="/{{ STATIC_URL }}js/jquery.dropdown.js"></script>
     <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/jquery.dropdown.css" />
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <!-- OLD CALL <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>-->
+	<script src="/{{ STATIC_URL }}jquery/1.9/jquery.js"></script>
 
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+    <!-- <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
+    <script src="/{{ STATIC_URL }}jquery/ui/jquery-ui.js"></script>
+
+    <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />-->
+    <link rel="stylesheet" href="{{ STATIC_URL}}jquery/ui/jquery-ui.css" /> <!-- newwest change here-->
 
     <script src="/autosearch.js"></script>
     <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}css/main.css" media="screen" />
