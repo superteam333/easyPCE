@@ -1,14 +1,22 @@
 <html style="overflow:auto !important;">
-<title>{{poop}} PCE: Rankings </title>
+<title>PCE: Rankings </title>
 <head profile="http://www.w3.org/2005/10/profile">
 <link rel="icon"
       type="image/ico"
       href="/{{ STATIC_URL }}favicon/favicon.ico">
 
         {% include "importfiles.html" %}
+<!-- Table sorting, filtering, and javascript modals, respectively. -->
 <script type="text/javascript" src="/{{ STATIC_URL}}js/sorttable.js"></script>
 
+<script type="text/javascript" src="/{{ STATIC_URL }}js/picnet.table.filter.min.js"></script>
+
+<script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+
 </head>
+
+
 <body data-target=".subnav" data-offset="10" class="gradient" >  <!-- style="min-width:1305px !impor\
 tant; overflow:hidden !important;"-->
 
@@ -22,9 +30,24 @@ tant; overflow:hidden !important;"-->
 <h1 id="header">
 Course Rankings
 </h1>
+  <div class="helptext">
+    <a href="#helpModal" data-toggle="modal" class="btn" aria-labelledby="Help" aria-hidden="true">Help</a>
+  </div>
 </div>
+
 <hr />
 
+<div id="helpModal" class="modal hide fade" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 style="text-align:center" id="myModalLabel">Help</h3>
+  </div>
+  <div class="modal-body">
+    <h4>About Rankings</h4><p class="tab">Our rankings might seem strange, considering courses with higher average course ratings
+    appear lower in the list than other courses. This is because we weight rankings based on the number of students taking each course. <p class="tab">This helps compare obscure, small classes with few students to the likes of ECO 100. If 500 students give a class an average 4.2 ranking compared to 10 students rating their class 4.5, we can say with confidence that the former is an excellent course, while the latter might not be quite as strong as it appears.</p>
+    <h4>Course rankings are both filterable and sortable.</h4><p class="tab"> To sort, click on any column title, such as <span style="font-weight:bold">Dept</span> or <span style="font-weight:bold">Area</span>.</p><br><p class="tab"> To filter, simply type into each box the keywords by which you want to filter each column. For advanced filtering, use words like 'or' and 'and'. For example, typing 'ENG or HUM' will only show English and Humanities courses. It doesn't care about case, so feel free to use lowercase if you like. You can also use 'not' if you want to get rid of all history classes ('not HIS'), or set a cutoff by rating using <, >, >= etc.</p>
+  </div>
+</div>
 {% if bayes %}
 <div id="mytable">
 

@@ -54,16 +54,14 @@ def ranking(request):
         pass
 
     cns = cache.get("BAYES_CNS")
-    poop = "lol"
     if not cns:
-	    poop = "poop"
-	    cns = CourseNum.objects.exclude(bayes__isnull=True).order_by('-bayes')
+	    cns = CourseNum.objects.exclude(bayes__isnull=True).order_by('-bayes')[:500]
 	    cache.set("BAYES_CNS", cns)
     cs = cache.get("BAYES_COURSES")
     if not cs:
 	    cs = []
 	    for cn in cns:
-		    c = Course.objects.filter(coursenum=cn).order_by('-year', '-semester').only("regNum", "pdf", "nopdf", "da", "title")
+		    c = Course.objects.filter(coursenum=cn).order_by('-year', '-semester').only("regNum", "pdf", "nopdf", "da", "title")[:500]
 		    cs.append(c[0])
 	    cache.set("BAYES_COURSES", cs)
     regNums=[]
@@ -71,6 +69,6 @@ def ranking(request):
     for i in range(len(favs)):
         regNums.append(favs[i].course.regNum)
     bayeszip = zip(cns, cs)
-    c = Context({'poop':poop, 'user':user, 'alldepts':alldepts, 'favorites':favorites, 'bayes':bayeszip, 'regNums':regNums})
+    c = Context({'user':user, 'alldepts':alldepts, 'favorites':favorites, 'bayes':bayeszip, 'regNums':regNums})
     t = get_template("rankings.html")
     return HttpResponse(t.render(c))

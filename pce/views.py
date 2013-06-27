@@ -257,7 +257,7 @@ def timeline(request):
 	con = Context({})
 	return HttpResponse(c.render(con))
 
-
+# Use this view with the accompanying URL to take the site down for maintenance.
 def maintenance(request):
 	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2                                                                                                                 
 		n = request.session['netid']
