@@ -9,6 +9,9 @@
 
 <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 	{% include "importfiles.html" %}
+
+  <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
 </head>
 {% autoescape off %}
 <body>
@@ -22,6 +25,20 @@
 	  <button type="submit" class="btn">Search</button>
 	</form>
 <!--	<p> How to Search: Type your query in one of the following ways </p>-->
+  <div class="helptext">
+    <a href="#helpModal" data-toggle="modal" aria-labelledby="About" aria-hidden="true">About</a>
+  </div>
+  <div id="helpModal" class="modal hide fade" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 style="text-align:center" id="myModalLabel">About</h3>
+  </div>
+  <div style="text-align:left" class="modal-body">
+    <h4>How to search</h4><p class="tab"> Our smart search bar is very powerful and allows you to search for varying combinations of courses. Typing in any text will prompt it to immediately try and auto-correct, filling in whatever Professor, Course, or Department it thinks you are looking for. Begin your search with a quotation mark, <span style="font-weight:bold">"...</span>, to begin the keyword search, allowing you to look for words or phrases within the advice students gave for different courses. For example, the phrase<span style="font-weight:bold">"easy" in QR</span> will look for classes that students somehow marked as "easy" in the QR distribution area. This also works for all departments.</p><br>
+    <h4>About easyPCE</h4><p class="tab">easyPCE was originally a project for COS 333 (Spring 2013) that morphed into a more serious project to help the Princeton community. It was written and developed by Matt Haake, Yacob Yonas, and John Whelchel, and we hope you find better courses for the rest of your Princeton experience with the help of our tool!</p> 
+  </div>
+</div>
+
       </div>
 </body>
 
