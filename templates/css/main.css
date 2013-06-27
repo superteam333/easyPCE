@@ -39,6 +39,15 @@ body{
 a{ /* is this right?*/
 	color:#a64b00;
 }
+
+div.helptext {
+  text-align: center;
+}
+
+div.modal-body {
+  font-size:115%;
+}
+
 .navbar-fixed-top{
 	text-align:center;
 }
@@ -292,6 +301,8 @@ a.induceLink { color:ivory;}
     margin-right:50px;
     display: inline-block;
 }
+
+.tab { text-indent: 2.0em; }
 
 .search-query {
     box-sizing: border-box;
