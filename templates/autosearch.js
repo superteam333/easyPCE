@@ -44,7 +44,7 @@ $(function() {
 									var cat = splitData[i][0]
 									if (cat === "Courses" || cat === "Professors")
 										continue
-									for (var j = 1, len2 = splitData[i].length,  max=5, count=0; j < len2 && count <= max; j++) {
+									for (var j = 1, len2 = splitData[i].length,  max=2, count=0; j < len2 && count <= max; j++) {
 										var lab = splitData[i][j]
 										if (matcher.test(lab) == true) {
 											res[n] = {}
@@ -92,7 +92,7 @@ $(function() {
 						if (cat === "Distribution Areas") {
 							continue
 						}
-						for (var j = 1, len2 = splitData[i].length, max=5, count=0; j < len2 && count <= max; j++) {
+						for (var j = 1, len2 = splitData[i].length, max=2, count=0; j < len2 && count <= max; j++) {
 							var lab = splitData[i][j];
 							if (matcher.test(lab) == true) {
 								res[n] = {};
