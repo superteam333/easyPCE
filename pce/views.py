@@ -596,7 +596,7 @@ def search(request):
 			
 			if len(dzipped) == 1:
 				d = dzipped[0][0]
-				return HttpResonseRedirect("/depts/%s" % (d.dept))
+				return HttpResponseRedirect("/depts/%s" % (d.dept))
 		
 		all_depts = Department.objects.all().order_by('dept')
 
