@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 import pce.views
 import bayesian.views
+import search.views
 from django.conf import settings
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -12,7 +13,7 @@ urlpatterns = patterns('',
                        url(r'^/?$', pce.views.index),
                        url(r'^index/?$', pce.views.index),
                        url(r'^logout/?$', pce.views.logout),
-                       url(r'^search', pce.views.search),
+                       url(r'^search', search.views.search),
                        url(r'^profs/', include('prof.urls')),
                        url(r'^courses/', include('course.urls')),
                        url(r'^depts/', include('dept.urls')),
