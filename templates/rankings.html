@@ -1,99 +1,190 @@
-<html style="overflow:auto !important;">
-<title>PCE: Rankings </title>
-<head profile="http://www.w3.org/2005/10/profile">
-<link rel="icon"
-      type="image/ico"
-      href="/{{ STATIC_URL }}favicon/favicon.ico">
+  <html style="overflow:auto !important;">
+  <title>PCE: Rankings </title>
+  <head profile="http://www.w3.org/2005/10/profile">
+  <link rel="icon"
+        type="image/ico"
+        href="/{{ STATIC_URL }}favicon/favicon.ico">
 
-        {% include "importfiles.html" %}
-<!-- Table sorting, filtering, and javascript modals, respectively. -->
-<script type="text/javascript" src="/{{ STATIC_URL}}js/sorttable.js"></script>
+          {% include "importfiles.html" %}
+  <!-- Table sorting, filtering, and javascript modals, respectively. -->
+  <script type="text/javascript" src="/{{ STATIC_URL}}js/sorttable.js"></script>
 
-<script type="text/javascript" src="/{{ STATIC_URL }}js/picnet.table.filter.min.js"></script>
+  <script type="text/javascript" src="/{{ STATIC_URL }}js/picnet.table.filter.min.js"></script>
 
-<script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
-<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+  <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+  <script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+  <style>
 
-</head>
+  .scrollToTop{
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin-bottom: 0px;
+  text-align:center;
+  font-weight: bold;
+  color: #444;
+  text-decoration: none;
+  position:fixed;
+  color: #ff7f14;
+  background-color: #f9f8f6;
+  bottom:10%;
+  right:0px;
+  display:none;
+  /*background: black url('/{{STATIC_URL}}img/old_go_top.ico') no-repeat center center;*/
+  /*background-color: #f9f8f6;*/
+  font: 600 18px/1.4;
+  text-align: center;
+  vertical-align: middle;
+    /* rounded corners */
+  -webkit-border-radius: 5px 0px 0px 5px;
+  -moz-border-radius: 5px 0px 0px 5px;
+  border-radius: 5px 0px 0px 5px;
+  -webkit-box-shadow: -1px -1px 2px 2px #bbbbbb;
+  box-shadow: -1px -1px 2px 2px #bbbbbb;
+
+  /* transition */
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  transition: 1s;
+}
+.scrollToTop:hover{
+/*background-color: #A4A4A4;*/
+  color: #ff7f14;
+  background-color: #f9f8f6;
+
+}
+  </style>
+  </head>
 
 
-<body data-target=".subnav" data-offset="10" class="gradient" >  <!-- style="min-width:1305px !impor\
-tant; overflow:hidden !important;"-->
+  <body data-target=".subnav" data-offset="10" class="gradient" >  <!-- style="min-width:1305px !impor\
+  tant; overflow:hidden !important;"-->
 
+<a href="#" class="scrollToTop" style="text-decoration:none;"><p style="margin-top:11px;"> Scroll to Top</p></a>
+  <div class="Headercontainer gradient" style="margin-top:-15px;">
 
-<div class="Headercontainer gradient" style="margin-top:-15px;">
+  {% include "navbar.html" %}
 
-{% include "navbar.html" %}
+  {% autoescape off %}
 
-{% autoescape off %}
+  <h1 id="header">
+  Course Rankings    <a href="#helpModal" data-toggle="modal" aria-hidden="true"> <img src="/{{ STATIC_URL}}img/help.ico" style="align:middle;" class="question"> </a>
+  </h1>
 
-<h1 id="header">
-Course Rankings
-</h1>
-  <div class="helptext">
-    <a href="#helpModal" data-toggle="modal" class="btn" aria-labelledby="Help" aria-hidden="true">Help</a>
   </div>
-</div>
 
-<hr />
+  <hr style="margin-bottom:-2px;"/>
 
-<div id="helpModal" class="modal hide fade" role="dialog">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 style="text-align:center" id="myModalLabel">Help</h3>
+  <div id="helpModal" class="modal hide fade" role="dialog">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 style="text-align:center" id="myModalLabel">Help</h3>
+    </div>
+    <div class="modal-body">
+      <h4>About Rankings</h4><p class="tab">Our rankings might seem strange, considering courses with higher average course ratings
+      appear lower in the list than other courses. This is because we weight rankings based on the number of students taking each course. <p class="tab">This helps compare obscure, small classes with few students to the likes of ECO 100. If 500 students give a class an average 4.2 ranking compared to 10 students rating their class 4.5, we can say with confidence that the former is an excellent course, while the latter might not be quite as strong as it appears.</p>
+      <h4>Course rankings are both filterable and sortable.</h4><p class="tab"> To sort, click on any column title, such as <span style="font-weight:bold">Dept</span> or <span style="font-weight:bold">Area</span>.</p><br><p class="tab"> To filter, simply type into each box the keywords by which you want to filter each column. For advanced filtering, use words like 'or' and 'and'. For example, typing 'ENG or HUM' will only show English and Humanities courses. It doesn't care about case, so feel free to use lowercase if you like. You can also use 'not' if you want to get rid of all history classes ('not HIS'), or set a cutoff by rating using <, >, >= etc.</p>
+    </div>
   </div>
-  <div class="modal-body">
-    <h4>About Rankings</h4><p class="tab">Our rankings might seem strange, considering courses with higher average course ratings
-    appear lower in the list than other courses. This is because we weight rankings based on the number of students taking each course. <p class="tab">This helps compare obscure, small classes with few students to the likes of ECO 100. If 500 students give a class an average 4.2 ranking compared to 10 students rating their class 4.5, we can say with confidence that the former is an excellent course, while the latter might not be quite as strong as it appears.</p>
-    <h4>Course rankings are both filterable and sortable.</h4><p class="tab"> To sort, click on any column title, such as <span style="font-weight:bold">Dept</span> or <span style="font-weight:bold">Area</span>.</p><br><p class="tab"> To filter, simply type into each box the keywords by which you want to filter each column. For advanced filtering, use words like 'or' and 'and'. For example, typing 'ENG or HUM' will only show English and Humanities courses. It doesn't care about case, so feel free to use lowercase if you like. You can also use 'not' if you want to get rid of all history classes ('not HIS'), or set a cutoff by rating using <, >, >= etc.</p>
-  </div>
-</div>
-{% if bayes %}
-<div id="mytable">
+  {% if bayes %}
+  <div id="mytable">
 
-<table class="table table-striped sortable" id="filtertable" style="table-layout:fixed; width:100%;">
-  <thead>
-    <tr>
-      <th style="width:6%" filter="false"> <strong> Rank </strong> </th>
-      <th class="sorttable_nosort" style="width:6%" filter="false"> <strong> Favorite </strong> </th>
-      <th style="width:5%"> <strong> Dept </strong> </th>
-      <th style="width:5%"> <strong> Course </strong> </th>
-      <th style="width:55%"> <strong> Title </strong> </th>
-      <th style="width:9%"> <strong> Rating </strong> </th>
-      <th style="width:6%" filter-type="ddl"> <strong> Area </strong> </th>
-      <th style="width:8%" filter-type="ddl"> <strong> PDF </strong> </th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for cn, instance in bayes %}
+  <!--<table class="table table-striped sortable" id="filtertable" style="table-layout:fixed; width:100%;">-->
+  <table class="table table-striped sortable" id="filtertable" style="  width:92% !important; margin-left:auto; margin-right:auto;">
+    <thead>
+      <tr>
+        <th style="width:6%" filter="false"> <strong> Rank </strong> </th>
+        <th class="sorttable_nosort" style="width:6%" filter="false"> <strong> Favorite </strong> </th>
+        <th style="width:5%"> <strong> Dept </strong> </th>
+        <th style="width:5%"> <strong> Course </strong> </th>
+        <th style="width:50%"> <strong> Title </strong> </th>
+        <th style="width:9%; text-align:center"> <strong> Rating </strong> </th>
+        <th style="width:9%; text-align:center" filter-type="ddl"> <strong> Area </strong> </th>
+        <th style="width:10%; text-align:center" filter-type="ddl"> <strong> PDF </strong> </th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for cn, instance in bayes %}
 
-  
-  <tr>
-    <td class="rank" style="text-align:center">{{forloop.counter}}</td>
-    {% if instance.regNum in regNums %}
-    <td class="favorite" style="text-align:center">
-      <a class="btn btn-inFavorites favButton" href="#"><i class="icon-star starInFav"></i></a>
-      {% else %}
+    
+    <tr id="{{cn.dept.dept}}{{cn.number}}">
+      <td class="rank" style="text-align:center">{{forloop.counter}}</td>
+      {% if instance.regNum in regNums %}
       <td class="favorite" style="text-align:center">
-      <a class="btn btn-notInFavorites favButton" href="#"><i class="icon-star starNotInFav"></i></a>
-      {% endif %}
-    </td>
-    <td class="dept" style="text-align:center"><a href='/depts/{{cn.dept.dept}}'>{{cn.dept}}</a></td>
-    <td class="course" style="text-align:center"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'><!--{{cn.dept.dept}}--> {{cn.number}}</a></td>
-    <td class="title"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'>{{instance.title}}</a></td>
-    <td class="rating" style="text-align:center">{{cn.avg}}</td>
-    <td class="da" style="text-align:center">{{instance.da}}</td>
-    <td class="pdf" style="text-align:center">{% if instance.nopdf %}No PDF{% else %}{% if instance.pdf %}PDF only{% endif %}{% endif %}</td>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-{% endif %}
-{% endautoescape %}
-<script type="text/javascript">
-$(window).load(function() {
-    var options = { selectOptionLabel: "Sel..."};
-    $('#filtertable').tableFilter(options);
+        <a class="btn btn-inFavorites favButton" href="#"><i class="icon-star starInFav"></i></a>
+        {% else %}
+        <td class="favorite" style="text-align:center">
+        <a class="btn btn-notInFavorites favButton" href="#"><i class="icon-star starNotInFav"></i></a>
+        {% endif %}
+      </td>
+      <td class="dept" style="text-align:center"><a href='/depts/{{cn.dept.dept}}'>{{cn.dept}}</a></td>
+      <td class="course" style="text-align:center"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'><!--{{cn.dept.dept}}--> {{cn.number}}</a></td>
+      <td class="title"><a href='/courses/{{cn.dept.dept}}{{cn.number}}'>{{instance.title}}</a></td>
+      <td class="rating" style="text-align:center">{{cn.avg}}</td>
+      <td class="da" style="text-align:center">{{instance.da}}</td>
+      <td class="pdf" style="text-align:center">{% if instance.nopdf %}No PDF{% else %}{% if instance.pdf %}PDF only{% endif %}{% endif %}</td>
+      {% endfor %}
+      </tbody>
+  </table>
+  </div>
+  {% endif %}
+  {% endautoescape %}
+
+
+  <script type="text/javascript">
+  $(window).load(function() {
+      var options = { selectOptionLabel: "Select"};
+      $('#filtertable').tableFilter(options);
+  });
+  $(document).ready(function(){
+  //Check to see if the window is top if not then display button
+  $(window).scroll(function(){
+    if ($(this).scrollTop() > 100) {
+      $('.scrollToTop').fadeIn();
+    } else {
+      $('.scrollToTop').fadeOut();
+    }
+  });
+  //Click event to scroll to top
+  $('.scrollToTop').click(function(){
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+  });
+});
+  </script>
+  <script>
+$(function() {  
+  $(".btn").click(function() {  
+      if ($(this).hasClass("btn-inFavorites")) {
+        var add = 1;
+      }
+      if ($(this).hasClass("btn-notInFavorites")) {
+        var add = 0;
+      }
+      var id = $(this).closest('tr').attr('id');
+      var dataString= 'add='+ add + '&regNum='+ id + '&user='+'{{user.netid}}';
+      $.ajax({
+        type:"POST",
+        url:"../editfavorites",
+        data:{string:dataString},
+        success:function() {
+          
+        }
+      });
+  return true;      
+  });  
+});
+$(".favButton").click(function(event_ref){
+   event_ref.preventDefault();
+});
+
+   
+
+$(".btn").click(function() {
+   $(this).children().toggleClass("starNotInFav");
+   $(this).children().toggleClass("starInFav");
+   $(this).toggleClass("btn-inFavorites");
+   $(this).toggleClass("btn-notInFavorites");   
 });
 </script>
-</body>
+  </body>

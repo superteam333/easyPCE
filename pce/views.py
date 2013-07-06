@@ -105,7 +105,22 @@ def editfavorites(request):
 	except:
 		user=User(netid=query['user'])
 		user.save()
-	nums=Course.objects.filter(regNum=regNum).order_by('-year', '-semester')
+
+	"""
+	here we made a messy fix. basically in some palces the row ids weren't the registrar
+	number and I didn't pass an extra thing to the contexts. So instead in those cases, for regnum, 
+	I put in the title of the class. if the query with that regnum comes up empty then 
+	I search for the first course with that the course dept and number
+	"""
+	try:
+		nums=Course.objects.filter(regNum=regNum).order_by('-year', '-semester')
+	except:
+		##course num parsing
+		department = regNum[:3]
+		number = int(regNum[3:])
+		num = CourseNum.objects.get(dept__dept=department, number=number)
+		nums=Course.objects.filter(coursenum__id=num.id).order_by('-year', '-semester')
+
 	add=int(query['add'])
 	#favorite a coursenum not a course
 	if add is 1:
@@ -131,14 +146,24 @@ def editfavorites(request):
 	return HttpResponse("haha")
 		
 def getfavorites(request):
-	if request.method == 'GET':
-		netid=request.session['netid']
-	
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
 	try:
 	    user= User.objects.get(netid=netid)
 	except:
-	    user=User(netid=netid)
-	    user.save()
+		user=User(netid=netid)
+		user.save()
+
+
 	try:
 		favorites=Favorite.objects.filter(user=user)
 	except:
@@ -181,13 +206,23 @@ def getfavorites(request):
 	return HttpResponse(json, mimetype='application/json')
 	 
 def favorites(request):
-	try:
-		if request.session['netid'] is None:
-			return check_login(request, '/favorites')
-	
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
 		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
+	try:
+	    user= User.objects.get(netid=netid)
 	except:
-                return check_login(request, '/')
+		user=User(netid=netid)
+		user.save()
+
 	alldepts=Department.objects.all().order_by('dept')
 	user=None
 	try:
