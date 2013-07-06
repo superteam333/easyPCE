@@ -3,9 +3,16 @@ html {
 	overflow-x:scroll !important;
 }
 body{
-	background-color:ivory;	
-	color:black;
+  color:black;
 	font-family:garamond;
+}
+
+form {
+  margin: 0px;
+}
+
+.cloud {
+  background-image: url('../img/test2.png');
 }
 
 .navbarLink{
@@ -20,28 +27,157 @@ body{
 .span1 {
 	text-align:center;
 }
-.hero-unit {
-        border-radius:0 !important;
-	border-radius:50px;
-/*	margin-left:60px;
-	margin-right:60px;*/
-	text-align:center;
-	background-color:orange;
-/*	box-shadow:0px 0px 10px rgba(0,0,0,.3);*/
 
-	background: linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
-        background: o-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
-        background: -webkit-linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
-	background: -moz-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
-        background: -ms-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
+.homesearch {
+  font-size:18px;
+	border-radius:18px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 680px;
+	text-align:center;
+	background-color: white;
+  box-shadow:0px 0px 20px rgba(0,0,0,.7);
+  padding: 40px 0px 20px 0px;
+  margin-top:90px;
+  margin-bottom:90px;
 } 
+
+  .homesearch a {
+    color: #3399CC;
+  }
+
+  .homesearch h1 {
+    font-size:500%;
+    font-family: 'Special Elite', cursive;
+    color: orange;
+  }
+
+    .homesearch h1 span {
+       color: #3399CC;
+    }
+
+  .homesearch h2 {
+    margin-top: 15px;
+    color: #444;
+    /*border-bottom: solid 1px #ddd;*/
+  }
+
+    .homesearch h2 span {
+      color: #3399CC;
+    }
+
+.form-search {
+  margin-bottom: 20px;
+}
+
+#advancedWrapper {
+  background-color: white;
+  display: none;
+  padding: 0px;
+  margin: 0px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+#advancedSearch {
+  margin-top: 20px;
+  padding: 0px 20px;
+}
+
+  #advancedSubmit  {
+    margin-bottom: 10px;
+    width: 225px;
+  }
+
+.searchOption {
+  margin-top: 10px;
+  /*border: solid 1px orange;
+  border-radius: 8px;*/
+  padding: 0px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+  .searchOption h3 {
+    font-size:18px;
+    margin: -20px 0px 0px 20px;
+    padding: 0;
+    background: white;
+    color: #444;
+  }
+
+    .searchOption h3 .toggleInclude {
+      color: #3399CC;
+    }
+
+  .searchOption .optionHeader {
+    text-align: left;
+  }
+
+    .searchOption .optionHeader h3 {
+      font-size:18px;
+      margin: -20px 0px 0px 20px;
+      padding: 0px 10px;
+      background: white;
+      display:inline-block;
+    }
+
+  .searchOption select {
+    padding: 0px;
+    margin: 0px;
+    margin-top: -10px;
+    width: 225px;
+  }
+
+  .searchOption .del {
+    height: 30px;
+    margin-top: -10px;
+    margin-left: 10px;
+    display: none;
+  } 
+
+  .searchOption .btn-info {
+    display:block;
+    margin: 10px auto 0px auto;
+    width: 225px;
+  }
+
+  .searchOption .timeRow {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+    .searchOption .timeRow select {
+      width: 100px;
+    }
+
+    .searchOption .timeRow .startTime {
+      float: left;
+      margin-left: 120px;
+      width: 200px;
+    }
+
+    .searchOption .timeRow .endTime {
+      float: left;
+      margin-left: 0px;
+      width: 200px;
+    }
+
+  .searchOption input {
+    height: 30px;
+    width: 500px;
+    margin-bottom: 0px;
+  }
 
 a{ /* is this right?*/
 	color:#a64b00;
+  cursor: pointer;
+  cursor: hand;
 }
 
 div.helptext {
   text-align: center;
+  margin-top: 20px;
 }
 
 div.modal-body {

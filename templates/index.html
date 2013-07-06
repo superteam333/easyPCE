@@ -1,48 +1,162 @@
 <!-- PCE Site Home Page -->
-
 <html>
 <title> PCE Home </title>
 <head profile="http://www.w3.org/2005/10/profile">
-<link rel="icon"
-      type="image/gif"
-      href="/{{ STATIC_URL }}favicon/favicon.ico">
-
+<link rel="icon" type="image/gif" href="/{{ STATIC_URL }}favicon/favicon.ico">
 <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
-	{% include "importfiles.html" %}
-
-  <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+ {% include "importfiles.html" %}
+<script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
 <script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
-</head>
-{% autoescape off %}
-<body>
-{% include "navbar.html" %}
-<div class="mainbody" style="height:auto">
-<div class="hero-unit" style="margin-top:90px;">
-  <h1 style="font-size:500%;font-family: 'Special Elite', cursive;">easy<span style="color:#0A1F61">PCE</span> </h1>
-        <h2> <span style="color:#0A1F61">P</span>rinceton <span style="color:#0A1F61">C</span>ourse <span style="color:#0A1F61">E</span>valuations</h2>
-        <p> Search for a class, department, or professor to get reviews.</p>
-        <form class="form-search" action="/search/" method="get">
-	  <input type="text" name="q" autocomplete="off" placeholder="Ex: COS 126, Sims, WWS, &quot;easy&quot in QR, ... (quotation marks required)" class="search-query autosearch" style="border-radius:5px; height:30px;">
-	  <button type="submit" class="btn">Search</button>
-	</form>
-<!--	<p> How to Search: Type your query in one of the following ways </p>-->
-  <div class="helptext">
-    <a href="#helpModal" data-toggle="modal" aria-labelledby="About" aria-hidden="true">About</a>
-  </div>
-  <div id="helpModal" class="modal hide fade" role="dialog">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 style="text-align:center" id="myModalLabel">About</h3>
-  </div>
-  <div style="text-align:left" class="modal-body">
-    <h4>How to search</h4><p class="tab"> Our smart search bar is very powerful and allows you to search for varying combinations of courses. Typing in any text will prompt it to immediately try and auto-correct, filling in whatever Professor, Course, or Department it thinks you are looking for. Begin your search with a quotation mark, <span style="font-weight:bold">"...</span>, to begin the keyword search, allowing you to look for words or phrases within the advice students gave for different courses. For example, the phrase<span style="font-weight:bold">"easy" in QR</span> will look for classes that students somehow marked as "easy" in the QR distribution area. This also works for all departments.</p><br>
-    <h4>About easyPCE</h4><p class="tab">easyPCE was originally a project for COS 333 (Spring 2013) that morphed into a more serious project to help the Princeton community. It was written and developed by Matt Haake, Yacob Yonas, and John Whelchel, and we hope you find better courses for the rest of your Princeton experience with the help of our tool!</p> 
-  </div>
-</div>
 
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#toggleAdvanced").click(function(){
+      $("#advancedWrapper").slideToggle(300);
+
+      if ($(this).text() === "Advanced Search") {
+        $(this).text("Basic Search");
+        $(".homesearch").css("background-color", "rgba(245, 245, 245, 1)");
+
+        $(".homesearch").animate({
+        marginTop:'30px',
+        marginBottom:'40px'
+      }, 300);
+      }
+      else {
+        $(this).text("Advanced Search");
+        $(".homesearch").css("background-color", "white");
+
+        $(".homesearch").animate({
+        marginTop:'90px',
+        marginBottom:'100px'
+      }, 300);
+      }
+
+    });
+
+    $(".toggleInclude").click(function() {
+      if ($(this).text() === "Include") {
+        $(this).text("Exclude");
+      }
+      else {
+        $(this).text("Include");
+      }
+    })
+  });
+</script>
+</head>
+ {% autoescape off %}
+<body class="cloud">
+ {% include "navbar2.html" %}
+<div class="mainbody" style="height:auto">
+  <div class="homesearch">
+    <h1>easy<span>PCE</span></h1>
+    <h2><span>P</span>rinceton <span>C</span>ourse <span>E</span>valuations</h2>
+    <p>
+       Search for a class, department, or professor to get reviews.
+    </p>
+    <form class="form-search" action="/search/" method="get">
+      <input type="text" name="q" autocomplete="off" placeholder="Ex: COS 126, Sims, WWS, &quot;easy&quot in QR, ... (quotation marks required)" class="search-query autosearch" style="border-radius:5px; height:30px;">
+      <button type="submit" class="btn">Search</button>
+    </form>
+    
+    <div id="advancedWrapper">
+      <form id="advancedSearch">
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Departments:</h3></div>
+          <select>
+            <option>any</option>
+            <option value="cos">COS: Computer Science</option>
+          </select>
+          <button type="button" class="btn btn-danger del"><i class="icon-remove icon-white"></i></button>
+          <button type="button" class="btn btn-info">Add Department</button>
+        </div>
+
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Distribution Areas:</h3></div>
+          <div class="btn-group">
+            <button class="btn">EC</button>
+            <button class="btn">EM</button>
+            <button class="btn">HA</button>
+            <button class="btn">LA</button>
+            <button class="btn">QR</button>
+            <button class="btn">STL</button>
+            <button class="btn">STN</button>
+          </div>
+        </div>
+
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Days:</h3></div>
+          <div class="btn-group">
+            <button class="btn">Mon</button>
+            <button class="btn">Tues</button>
+            <button class="btn">Wed</button>
+            <button class="btn">Thur</button>
+            <button class="btn">Fri</button>
+          </div>
+        </div>
+
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Times:</h3></div>
+          <div class="timeRow">
+            <div class="startTime">
+              <label>Start:
+                <select>
+                  <option>all</option>
+                  <option>9:00 am</option>
+                </select>
+              </label>
+            </div>
+            <div class="endTime">
+              <label>End:
+                <select>
+                  <option>all</option>
+                  <option>9:00 am</option>
+                </select>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn btn-info">Add Time</button>
+        </div>
+
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Professors:</h3></div>
+          <input type="text" class="professor" />
+          <button type="button" class="btn btn-info">Add Professor</button>
+        </div>
+
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Advice:</h3></div>
+          <input type="text" class="advice" />
+          <button type="button" class="btn btn-info">Add Advice</button>
+        </div>
+
+        <input type="submit" class="btn btn-primary" id="advancedSubmit" value="Search" />
+      </form>
+    </div>
+
+    <div class="helptext">
+      <a href="#helpModal" data-toggle="modal" aria-labelledby="About" aria-hidden="true">About</a> | 
+      <a id="toggleAdvanced">Advanced Search</a>
+    </div>
+    <div id="helpModal" class="modal hide fade" role="dialog">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 style="text-align:center" id="myModalLabel">About</h3>
+      </div>
+      <div style="text-align:left" class="modal-body">
+        <h4>How to search</h4>
+        <p class="tab">
+           Our smart search bar is very powerful and allows you to search for varying combinations of courses. Typing in any text will prompt it to immediately try and auto-correct, filling in whatever Professor, Course, or Department it thinks you are looking for. Begin your search with a quotation mark, <span style="font-weight:bold">"...</span>, to begin the keyword search, allowing you to look for words or phrases within the advice students gave for different courses. For example, the phrase<span style="font-weight:bold">"easy" in QR</span> will look for classes that students somehow marked as "easy" in the QR distribution area. This also works for all departments.
+        </p>
+        <br>
+        <h4>About easyPCE</h4>
+        <p class="tab">
+          easyPCE was originally a project for COS 333 (Spring 2013) that morphed into a more serious project to help the Princeton community. It was written and developed by Matt Haake, Yacob Yonas, and John Whelchel, and we hope you find better courses for the rest of your Princeton experience with the help of our tool!
+        </p>
       </div>
     </div>
+  </div>
+</div>
 </body>
-
-{% endautoescape %}
-</html>
+ {% endautoescape %} </html>
