@@ -10,6 +10,11 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+
+    $(".btnCheck").click(function() {
+      $(this).toggleClass("active");
+    })
+
     $("#toggleAdvanced").click(function(){
       $("#advancedWrapper").slideToggle(300);
 
@@ -69,30 +74,30 @@
             <option value="cos">COS: Computer Science</option>
           </select>
           <button type="button" class="btn btn-danger del"><i class="icon-remove icon-white"></i></button>
-          <button type="button" class="btn btn-info">Add Department</button>
+          <a class="" id="test">+</a>
         </div>
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Distribution Areas:</h3></div>
           <div class="btn-group">
-            <button class="btn">EC</button>
-            <button class="btn">EM</button>
-            <button class="btn">HA</button>
-            <button class="btn">LA</button>
-            <button class="btn">QR</button>
-            <button class="btn">STL</button>
-            <button class="btn">STN</button>
+            <button type="button" class="btn btnCheck">EC</button>
+            <button type="button" class="btn btnCheck">EM</button>
+            <button type="button" class="btn btnCheck">HA</button>
+            <button type="button" class="btn btnCheck">LA</button>
+            <button type="button" class="btn btnCheck">QR</button>
+            <button type="button" class="btn btnCheck">STL</button>
+            <button type="button" class="btn btnCheck">STN</button>
           </div>
         </div>
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Days:</h3></div>
           <div class="btn-group">
-            <button class="btn">Mon</button>
-            <button class="btn">Tues</button>
-            <button class="btn">Wed</button>
-            <button class="btn">Thur</button>
-            <button class="btn">Fri</button>
+            <button type="button" class="btn btnCheck">Mon</button>
+            <button type="button" class="btn btnCheck">Tues</button>
+            <button type="button" class="btn btnCheck">Wed</button>
+            <button type="button" class="btn btnCheck">Thur</button>
+            <button type="button" class="btn btnCheck">Fri</button>
           </div>
         </div>
 

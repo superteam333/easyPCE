@@ -79,6 +79,17 @@ form {
   border-bottom: 1px solid #ddd;
 }
 
+  /*#advancedWrapper:active {
+    background-color: #eee;
+    display: none;
+    padding: 0px;
+    margin: 0px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0px 0px 20px 2px #ddd inset;
+  }*/
+
+
 #advancedSearch {
   margin-top: 20px;
   padding: 0px 20px;
@@ -90,12 +101,14 @@ form {
   }
 
 .searchOption {
+  background: white;
   margin-top: 10px;
-  /*border: solid 1px orange;
-  border-radius: 8px;*/
+  border: solid 1px rgba(220,220,220,1);
+  border-radius: 8px;
   padding: 0px;
   margin-bottom: 20px;
   padding-bottom: 10px;
+  position: relative;
 }
 
   .searchOption h3 {
@@ -140,6 +153,17 @@ form {
     display:block;
     margin: 10px auto 0px auto;
     width: 225px;
+  }
+
+  #test {
+    position: absolute;
+    bottom:5px;
+    right: 5px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    background: rgba(250,250,250,1);
+    width: 20px;
+    text-decoration: none;
   }
 
   .searchOption .timeRow {
