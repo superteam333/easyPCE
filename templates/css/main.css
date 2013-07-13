@@ -12,7 +12,7 @@ form {
 }
 
 .cloud {
-  background-image: url('../img/test2.png');
+  padding: 0;
 }
 
 .navbarLink{
@@ -28,18 +28,26 @@ form {
 	text-align:center;
 }
 
+.mainbody {
+  background-image: url('../img/test2.png');
+  overflow: auto;
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  top:41px;
+}
+
 .homesearch {
   font-size:18px;
 	border-radius:18px;
-  margin-left: auto;
-  margin-right: auto;
   width: 680px;
 	text-align:center;
 	background-color: white;
   box-shadow:0px 0px 20px rgba(0,0,0,.7);
   padding: 40px 0px 20px 0px;
-  margin-top:90px;
-  margin-bottom:90px;
+  margin: 120px auto;
 } 
 
   .homesearch a {
@@ -96,6 +104,7 @@ form {
 }
 
   #advancedSubmit  {
+    margin-top: -10px;
     margin-bottom: 10px;
     width: 225px;
   }
@@ -107,47 +116,33 @@ form {
   border-radius: 8px;
   padding: 0px;
   margin-bottom: 20px;
-  padding-bottom: 10px;
   position: relative;
 }
 
-  .searchOption h3 {
-    font-size:18px;
-    margin: -20px 0px 0px 20px;
-    padding: 0;
-    background: white;
-    color: #444;
+  .searchOption .optionHeader {
+    text-align: left;
+    padding: 0 15px;
   }
+
+    .searchOption .optionHeader h3 {
+      font-size:18px;
+      margin: -10px 0px 5px 10px;
+      padding: 0px 10px;
+      background: white;
+      display:inline-block;
+      color: #444;
+      line-height: 20px;
+    }
 
     .searchOption h3 .toggleInclude {
       color: #3399CC;
     }
 
-  .searchOption .optionHeader {
-    text-align: left;
-  }
-
-    .searchOption .optionHeader h3 {
-      font-size:18px;
-      margin: -20px 0px 0px 20px;
-      padding: 0px 10px;
-      background: white;
-      display:inline-block;
-    }
-
   .searchOption select {
     padding: 0px;
     margin: 0px;
-    margin-top: -10px;
-    width: 225px;
+    width: 400px;
   }
-
-  .searchOption .del {
-    height: 30px;
-    margin-top: -10px;
-    margin-left: 10px;
-    display: none;
-  } 
 
   .searchOption .btn-info {
     display:block;
@@ -155,20 +150,62 @@ form {
     width: 225px;
   }
 
-  #test {
+  .addButton1, .addButton1:hover, .addButton1:visited, .addButton1:link, .addButton1:active {
     position: absolute;
     bottom:5px;
     right: 5px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: rgba(245,245,245,1);
+    width: 20px;
+    text-decoration: none;
+    padding: 1px 0 0 1px;
+  }
+
+  .delButton1, .delButton1:hover, .delButton1:visited, .delButton1:link, .delButton1:active {
     border-radius: 10px;
     border: 1px solid #eee;
     background: rgba(250,250,250,1);
     width: 20px;
     text-decoration: none;
+    margin-top: -5px;
+    margin-left: 10px;
+    position: absolute;
+    padding: 1px 0 0 1px;
+  }
+
+  .addButton, .addButton:hover, .addButton:visited, .addButton:link, .addButton:active {
+    position: absolute;
+    bottom:5px;
+    right: 5px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: rgba(245,245,245,1);
+    width: 20px;
+    text-decoration: none;
+    padding: 1px 0 0 1px;
+  }
+
+  .delButton, .delButton:hover, .delButtonl:visited, .delButton:link, .delButton:active {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    background: rgba(250,250,250,1);
+    width: 20px;
+    text-decoration: none;
+    margin-top: 4px;
+    margin-left: 10px;
+    position: absolute;
+    padding: 1px 0 0 1px;
+  }
+
+  .deptRow {
+    margin-bottom:5px;
+    height: 30px;
   }
 
   .searchOption .timeRow {
-    margin-top: 10px;
-    margin-bottom: 20px;
+    height: 30px;
+    margin-bottom: 5px;
   }
 
     .searchOption .timeRow select {
@@ -190,7 +227,11 @@ form {
   .searchOption input {
     height: 30px;
     width: 500px;
-    margin-bottom: 0px;
+    margin-bottom: 5px;
+  }
+
+  .searchOption .btn-group {
+    margin-bottom: 5px;
   }
 
 a{ /* is this right?*/

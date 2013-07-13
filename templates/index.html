@@ -13,31 +13,46 @@
 
     $(".btnCheck").click(function() {
       $(this).toggleClass("active");
-    })
+    });
 
-    $("#toggleAdvanced").click(function(){
-      $("#advancedWrapper").slideToggle(300);
-
-      if ($(this).text() === "Advanced Search") {
-        $(this).text("Basic Search");
-        $(".homesearch").css("background-color", "rgba(245, 245, 245, 1)");
-
-        $(".homesearch").animate({
+    function openAdvanced() {
+      $("#advancedWrapper").slideDown(300);
+      $("#toggleAdvanced").text("Basic Search");
+      $(".homesearch").css("background-color", "rgba(245, 245, 245, 1)");
+      $(".homesearch").animate({
         marginTop:'30px',
         marginBottom:'40px'
       }, 300);
-      }
-      else {
-        $(this).text("Advanced Search");
-        $(".homesearch").css("background-color", "white");
+    }
 
-        $(".homesearch").animate({
-        marginTop:'90px',
-        marginBottom:'100px'
+    function closeAdvanced() {
+      $("#advancedWrapper").slideUp(300);
+      $("#toggleAdvanced").text("Advanced Search");
+      $(".homesearch").css("background-color", "white");
+      $(".homesearch").animate({
+        marginTop:'120px',
+        marginBottom:'120px'
       }, 300);
-      }
+    }
 
+    $("#toggleAdvanced").click(function(){
+      if ($(this).text() === "Advanced Search") 
+        openAdvanced();
+      else 
+        closeAdvanced();
     });
+
+    $("#addDept").click(function() {
+      var newDiv = '<div class="deptRow">\n\t<select>';
+      {% for d in alldepts %}
+        newDiv += '\n\t<option>{{d.dept}}: {{d.name}}</option>';
+      {% endfor %}
+      newDiv += '\n\t</select>'
+      newDiv += '\n\t<a class="delButton">&times</a>';
+      newDiv += '\n</div>';
+      $("#deptContainer").append(newDiv);
+    });
+
 
     $(".toggleInclude").click(function() {
       if ($(this).text() === "Include") {
@@ -46,14 +61,23 @@
       else {
         $(this).text("Include");
       }
+    });
+
+    $(".mainbody").click(function() {
+      closeAdvanced();
+    });
+
+    $(".homesearch").click(function(event) {
+      event.stopPropagation();
     })
+
   });
 </script>
 </head>
  {% autoescape off %}
 <body class="cloud">
  {% include "navbar2.html" %}
-<div class="mainbody" style="height:auto">
+<div class="mainbody">
   <div class="homesearch">
     <h1>easy<span>PCE</span></h1>
     <h2><span>P</span>rinceton <span>C</span>ourse <span>E</span>valuations</h2>
@@ -67,14 +91,17 @@
     
     <div id="advancedWrapper">
       <form id="advancedSearch">
-        <div class="searchOption">
+        <div class="searchOption" id="deptContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Departments:</h3></div>
-          <select>
-            <option>any</option>
-            <option value="cos">COS: Computer Science</option>
-          </select>
-          <button type="button" class="btn btn-danger del"><i class="icon-remove icon-white"></i></button>
-          <a class="" id="test">+</a>
+          <div class="deptRow">
+            <select>
+              {% for d in alldepts %}
+              <option>{{d.dept}}: {{d.name}}</option>
+              {% endfor %}
+            </select>
+            <a class="delButton">&times</a>
+          </div>
+          <a class="addButton" id="addDept">+</a>
         </div>
 
         <div class="searchOption">
@@ -121,19 +148,19 @@
               </label>
             </div>
           </div>
-          <button type="button" class="btn btn-info">Add Time</button>
+          <a class="addButton">+</a>
         </div>
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Professors:</h3></div>
           <input type="text" class="professor" />
-          <button type="button" class="btn btn-info">Add Professor</button>
+          <a class="addButton">+</a>
         </div>
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Advice:</h3></div>
           <input type="text" class="advice" />
-          <button type="button" class="btn btn-info">Add Advice</button>
+          <a class="addButton">+</a>
         </div>
 
         <input type="submit" class="btn btn-primary" id="advancedSubmit" value="Search" />
