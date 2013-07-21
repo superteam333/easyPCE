@@ -3,9 +3,17 @@ html {
 	overflow-x:scroll !important;
 }
 body{
-	background-color:ivory;	
-	color:black;
+  color:black;
 	font-family:garamond;
+}
+
+form {
+  margin: 0px;
+}
+
+.cloud {
+  padding: 0;
+  background-image: url('../img/test2.png');
 }
 
 .navbarLink{
@@ -20,28 +28,224 @@ body{
 .span1 {
 	text-align:center;
 }
-.hero-unit {
-        border-radius:0 !important;
-	border-radius:50px;
-/*	margin-left:60px;
-	margin-right:60px;*/
-	text-align:center;
-	background-color:orange;
-/*	box-shadow:0px 0px 10px rgba(0,0,0,.3);*/
 
-	background: linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
-        background: o-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
-        background: -webkit-linear-gradient(left, ivory 0%, orange 30%, orange 70%, ivory 100%);
-	background: -moz-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
-        background: -ms-linear-gradient(left, ivory 0%,  orange 30%, orange 70%, ivory 100%);
+.mainbody {
+  overflow: auto;
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  top:41px;
+}
+
+.homesearch {
+  font-size:18px;
+	border-radius:18px;
+  width: 680px;
+	text-align:center;
+	background-color: white;
+  box-shadow:0px 0px 20px rgba(0,0,0,.7);
+  padding: 40px 0px 20px 0px;
+  margin: 120px auto;
 } 
+
+  .homesearch a {
+    color: #3399CC;
+  }
+
+  .homesearch h1 {
+    font-size:500%;
+    font-family: 'Special Elite', cursive;
+    color: orange;
+  }
+
+    .homesearch h1 span {
+       color: #3399CC;
+    }
+
+  .homesearch h2 {
+    margin-top: 15px;
+    color: #444;
+    /*border-bottom: solid 1px #ddd;*/
+  }
+
+    .homesearch h2 span {
+      color: #3399CC;
+    }
+
+.form-search {
+  margin-bottom: 20px;
+}
+
+#advancedWrapper {
+  background-color: white;
+  display: none;
+  padding: 0px;
+  margin: 0px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+  /*#advancedWrapper:active {
+    background-color: #eee;
+    display: none;
+    padding: 0px;
+    margin: 0px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0px 0px 20px 2px #ddd inset;
+  }*/
+
+
+#advancedSearch {
+  margin-top: 20px;
+  padding: 0px 20px;
+}
+
+  #advancedSubmit  {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    width: 225px;
+  }
+
+.searchOption {
+  background: white;
+  margin-top: 10px;
+  border: solid 1px rgba(220,220,220,1);
+  /*border-color: #ffd280;*/
+  border-radius: 8px;
+  padding: 0px;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+  .searchOption .optionHeader {
+    text-align: left;
+    padding: 0 15px;
+  }
+
+    .searchOption .optionHeader h3 {
+      font-size:18px;
+      margin: -10px 0px 5px 10px;
+      padding: 0px 10px;
+      background: white;
+      display:inline-block;
+      color: #444;
+      line-height: 20px;
+    }
+
+    .searchOption h3 .toggleInclude {
+      color: #3399CC;
+    }
+
+  .searchOption select {
+    padding: 0px;
+    margin: 0px;
+    width: 400px;
+  }
+
+  .searchOption .btn-info {
+    display:block;
+    margin: 10px auto 0px auto;
+    width: 225px;
+  }
+
+  .addButton1, .addButton1:hover, .addButton1:visited, .addButton1:link, .addButton1:active {
+    position: absolute;
+    bottom:5px;
+    right: 5px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: rgba(245,245,245,1);
+    width: 20px;
+    text-decoration: none;
+    padding: 1px 0 0 1px;
+  }
+
+  .delButton1, .delButton1:hover, .delButton1:visited, .delButton1:link, .delButton1:active {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    background: rgba(250,250,250,1);
+    width: 20px;
+    text-decoration: none;
+    margin-top: -5px;
+    margin-left: 10px;
+    position: absolute;
+    padding: 1px 0 0 1px;
+  }
+
+  .addButton, .addButton:hover, .addButton:visited, .addButton:link, .addButton:active {
+    position: absolute;
+    bottom:5px;
+    right: 5px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: rgba(245,245,245,1);
+    width: 20px;
+    text-decoration: none;
+    padding: 1px 0 0 1px;
+  }
+
+  .delButton, .delButton:hover, .delButtonl:visited, .delButton:link, .delButton:active {
+    border-radius: 10px;
+    border: 1px solid #eee; 
+    background: rgba(250,250,250,1);
+    width: 20px;
+    text-decoration: none;
+    margin-top: 4px;
+    margin-left: 10px;
+    position: absolute;
+    padding: 1px 0 0 1px;
+    color: red;
+  }
+
+  .deptRow {
+    margin-bottom:5px;
+    height: 30px;
+  }
+
+  .searchOption .timeRow {
+    height: 30px;
+    margin-bottom: 5px;
+  }
+
+    .searchOption .timeRow select {
+      width: 100px;
+    }
+
+    .searchOption .timeRow .startTime {
+      float: left;
+      margin-left: 120px;
+      width: 200px;
+    }
+
+    .searchOption .timeRow .endTime {
+      float: left;
+      margin-left: 0px;
+      width: 200px;
+    }
+
+  .searchOption input {
+    height: 30px;
+    width: 450px;
+    margin-bottom: 5px;
+  }
+
+  .searchOption .btn-group {
+    margin-bottom: 5px;
+  }
 
 a{ /* is this right?*/
 	color:#a64b00;
+  cursor: pointer;
+  cursor: hand;
 }
 
 div.helptext {
   text-align: center;
+  margin-top: 20px;
 }
 
 div.modal-body {
