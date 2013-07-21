@@ -43,14 +43,54 @@
     });
 
     $("#addDept").click(function() {
-      var newDiv = '<div class="deptRow">\n\t<select>';
+      var newDiv = '<div class="deptRow">\n\t<select name="depts">';
       {% for d in alldepts %}
-        newDiv += '\n\t<option>{{d.dept}}: {{d.name}}</option>';
+        newDiv += '\n\t\t<option>{{d.dept}}: {{d.name}}</option>';
       {% endfor %}
       newDiv += '\n\t</select>'
       newDiv += '\n\t<a class="delButton">&times</a>';
       newDiv += '\n</div>';
-      $("#deptContainer").append(newDiv);
+
+      $container = $("#deptRowsContainer");
+      $container.append(newDiv);
+
+      if ($container.children().length == 2)
+        $container.children(":first").find(".delButton").css("display", "inline");
+    });
+
+    $("#addProf").click(function() {
+      var newDiv = '<div class="profRow">\n\t<input type="text" name="profs" />';
+      newDiv += '\n\t<a class="delButton">&times</a>';
+      newDiv += '\n</div>';
+
+      $container = $("#profRowsContainer");
+      $container.append(newDiv);
+
+      if ($container.children().length == 2)
+        $container.children(":first").find(".delButton").css("display", "inline");
+    });
+
+    $("#addAdvice").click(function() {
+      var newDiv = '<div class="adviceRow">\n\t<input type="text" name="advice" />';
+      newDiv += '\n\t<a class="delButton">&times</a>';
+      newDiv += '\n</div>';
+
+      $container = $("#adviceRowsContainer");
+      $container.append(newDiv);
+
+      if ($container.children().length == 2)
+        $container.children(":first").find(".delButton").css("display", "inline");
+    });
+
+
+    $(".searchOption").on("click", ".delButton", function() {
+      var $container = $(this).parent().parent();
+      var $row = $(this).parent();
+      if ($row.siblings().length > 0)
+        $row.remove();
+
+      if ($container.children().length == 1)
+        $container.children(":first").find(".delButton").hide();
     });
 
 
@@ -91,15 +131,18 @@
     
     <div id="advancedWrapper">
       <form id="advancedSearch">
+        
         <div class="searchOption" id="deptContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Departments:</h3></div>
-          <div class="deptRow">
-            <select>
-              {% for d in alldepts %}
-              <option>{{d.dept}}: {{d.name}}</option>
-              {% endfor %}
-            </select>
-            <a class="delButton">&times</a>
+          <div id="deptRowsContainer">
+            <div class="deptRow">
+              <select name="depts">
+                {% for d in alldepts %}
+                <option>{{d.dept}}: {{d.name}}</option>
+                {% endfor %}
+              </select>
+              <a class="delButton" style="display: none;">&times</a>
+            </div>
           </div>
           <a class="addButton" id="addDept">+</a>
         </div>
@@ -127,8 +170,8 @@
             <button type="button" class="btn btnCheck">Fri</button>
           </div>
         </div>
-
-        <div class="searchOption">
+        
+        <!-- <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Times:</h3></div>
           <div class="timeRow">
             <div class="startTime">
@@ -144,23 +187,34 @@
                 <select>
                   <option>all</option>
                   <option>9:00 am</option>
+                  <option>...</option>
                 </select>
               </label>
             </div>
           </div>
           <a class="addButton">+</a>
-        </div>
+        </div> -->
 
-        <div class="searchOption">
+        <div class="searchOption" id="profContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Professors:</h3></div>
-          <input type="text" class="professor" />
-          <a class="addButton">+</a>
+          <div id="profRowsContainer">
+            <div class="profRow">
+              <input type="text" name="profs" />
+              <a class="delButton" style="display: none;">&times</a>
+            </div>
+          </div>
+          <a class="addButton" id="addProf">+</a>
         </div>
 
-        <div class="searchOption">
+        <div class="searchOption" id="adviceContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Advice:</h3></div>
-          <input type="text" class="advice" />
-          <a class="addButton">+</a>
+          <div id="adviceRowsContainer">
+            <div class="adviceRow">
+              <input type="text" name="advice" />
+              <a class="delButton" style="display: none;">&times</a>
+            </div>
+          </div>
+          <a class="addButton" id="addAdvice">+</a>
         </div>
 
         <input type="submit" class="btn btn-primary" id="advancedSubmit" value="Search" />
