@@ -111,6 +111,33 @@
       event.stopPropagation();
     })
 
+    $("#advancedSearch").submit(function(e) {
+      // add the selected distirbution areas to the form
+      var $dist = $("#distGroup button.active")
+      for (var i = 0; i < $dist.length; i++)
+        $(this).append("<input type='hidden' name='dist' value='"+$dist[i].innerHTML+"' />")
+
+      // add the selected days to the form
+      var $days = $("#dayGroup button.active")
+      for (var i = 0; i < $days.length; i++) {
+        var day = $days[i].innerHTML;
+        var val = '';
+        if (day === "Mon") 
+          val = "M";
+        else if (day === "Tues") 
+          val = "T";
+        else if (day === "Wed") 
+          val = "W";
+        else if (day === "Thur") 
+          val = "Th";
+        else 
+          val = "F";
+
+        $(this).append("<input type='hidden' name='days' value='"+val+"' />")
+      }
+        
+    });
+
   });
 </script>
 </head>
@@ -130,13 +157,14 @@
     </form>
     
     <div id="advancedWrapper">
-      <form id="advancedSearch">
+      <form id="advancedSearch" action="/search/">
         
         <div class="searchOption" id="deptContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Departments:</h3></div>
           <div id="deptRowsContainer">
             <div class="deptRow">
               <select name="depts">
+                <option value="">All Departments</option>
                 {% for d in alldepts %}
                 <option>{{d.dept}}: {{d.name}}</option>
                 {% endfor %}
@@ -149,7 +177,7 @@
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Distribution Areas:</h3></div>
-          <div class="btn-group">
+          <div class="btn-group" id="distGroup">
             <button type="button" class="btn btnCheck">EC</button>
             <button type="button" class="btn btnCheck">EM</button>
             <button type="button" class="btn btnCheck">HA</button>
@@ -162,7 +190,7 @@
 
         <div class="searchOption">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Days:</h3></div>
-          <div class="btn-group">
+          <div class="btn-group" id="dayGroup">
             <button type="button" class="btn btnCheck">Mon</button>
             <button type="button" class="btn btnCheck">Tues</button>
             <button type="button" class="btn btnCheck">Wed</button>
