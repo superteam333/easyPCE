@@ -311,3 +311,8 @@ a.induceLink { color:ivory;}
 input.filter {
     height: 30px;
 }
+
+.question {
+  height:28px;
+  width:28px;
+}
