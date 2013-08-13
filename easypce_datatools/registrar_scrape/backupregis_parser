@@ -1,0 +1,198 @@
+# This is a parser for registar json data. John Whelchel.
+import json
+import os
+import re
+import sys
+from myapp import settings
+from django.core.management import setup_environ
+setup_environ(settings)
+from models import *
+
+DIR_PATH = '/home/ubuntu/registrar_scrape/test_parse_dir/'
+VERBOSE = True
+
+def v(data):
+    if VERBOSE:
+        print data
+
+class Parser:
+
+
+    SAVE_FILE = "state_of_parser.json"
+
+    def __init__(self):
+        self.data = {}
+        self.state = {}
+
+    def save(self):
+        f = open(Parser.SAVE_FILE, 'w')
+        if f == None:
+            v("Can't create/open file for saving state")
+            return False
+        json.dump(self.state, f)
+        f.close()
+        return True
+
+    def load(self):
+        try:
+            f = open(Parser.SAVE_FILE, 'r')
+            if f == None:
+                v("Can't open file")
+                return False
+            self.state = json.load(f)
+            f.close()
+            v("Loaded data\n")
+            return True
+        except IOError:
+            return False
+    
+
+    def saveCourse(self, filename):
+
+        # FOR MODELS< COURSE ID AND TERM CAN RECONSTRUCT LINK TO REGISTRAR
+        f = open(filename)
+        data = json.load(f)
+        info = data[0]
+        m = re.search(r'Spring', filename)
+        if m is None:
+            sem = 'Fall'
+        else:
+            sem = 'Spring'
+        m = re.search(r'....-....', filename)
+        if m is None:
+            print "We got problems son. Looks like no year in file."
+            return
+        year = m.group(0)
+
+        for listing in info['listings']:
+            # see if dept in db
+            try:
+                d = Department.objects.get(dept=listing['dept'])
+            except Department.DoesNotExist:
+                d = Department(dept=listing['dept'])
+                d.save()
+
+        cidb = []
+        cnotidb = []
+        # see if course in db
+        try:
+            course = Course.objects.get(number=listing['number'], 
+                                   semester=sem,
+                                   year=year)
+        except Course.DoesNotExist:
+            course = Course(title=info['title'],
+                            regNum=info['courseid'],
+                            description=info['descrip'],
+                            semester=sem,
+                            year=year)
+            course.save()
+        
+         cn = []   
+         for listing in info['listings']:
+             #see if coursenum in db
+             try:
+                 cn.extend(CourseNum.objects.get(course=course,
+                                            dept=Department.objects.get(dept=listing['dept']),
+                                            number=listing['number']))
+             except CourseNum.DoesNotExist:
+                 newcn = CourseNum(course=course,
+                                   dept=Department.objects.get(dept=listing['dept']),
+                                   number=listing['number']))
+                 newcn.save()
+                 cn.extend(newcn)
+
+        pidb = []
+        pnotidb = []
+        for prof in info['profs']:
+            #see if profs in database
+            try:
+                names = prof.split()
+                if len(names) > 2:
+                    for i in range(names) - 1:
+                        first = first + names[i]
+                    last = names[-1:]
+                else:
+                    first = names[0]
+                    last = names[1]
+                pidb.extend = Professor.objects.get(firstname=first,
+                                                 lastname=last)
+            except Professor.DoesNotExist:
+                pnotidb.extend([first, last])
+        
+        for prof in pnotidb:
+            #add ones not in db to db
+            names = prof.split()
+            if len(names) > 2:
+                for i in range(names) -1:
+                    first = first + names[i]
+                    last = names[-1:]
+                else:
+                    first = names[0]
+                    last = names[1]
+                p = Professor(firstname=first, lastname=last)
+                p.save()
+                for listing in info['listings']:
+                    p.add(Department.objects.get(dept=listing['dept']))
+                
+        #add depts to profs who need it
+        for prof in pidb:    
+            for listing in info['listing']:
+                if Professor.objects.filter(depts=listing['dept']):
+                    continue
+                else:
+                    prof.add(Department.objects.get(dept=listing['dept']))
+
+        #
+                
+                                       
+                                       
+        for prof in info['profs']:
+            p = Professor()
+
+        #for prof in info['profs']:
+        #    print prof['name']
+        #print info['title']
+        #print info['courseid']
+        #for listing in info['listings']:
+        #    print listing['dept'], listing['number']
+        #print info['descrip']
+        #print info['classnum'] buried on layer deeper at classes
+
+
+    def skipAhead(self, files):
+        if len(self.state) != 0:
+            foundPlace = False;
+            newfiles = []
+            for file in files:
+                if foundPlace:
+                    newfiles.extend(file)
+                if file is self.state:
+                    foundPlace = True;
+            return newfiles
+        else:
+            return files
+
+    def parse_dir(self):
+
+        path = DIR_PATH
+        files = os.listdir(path)
+        for i, file in enumerate(files):
+            files[i] = path + file
+
+        files = self.skipAhead(files)
+
+        for file in files:
+            v("Operating on file:" + file + '\n')
+            self.saveCourse(file)
+            self.state = file
+            #self.save()
+        v("Files are all parsed.")
+        return True
+
+p = Parser()
+if(not p.load()):
+    print "Unable to load file, starting from scratch"
+if(p.parse_dir()):
+    print "Hooray, we're done!"
+else:
+    print "Uh oh"

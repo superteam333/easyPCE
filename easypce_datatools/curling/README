@@ -1,0 +1,17 @@
+John Whelchel
+June 6, 2013
+
+Also, anyone know what noot is? Some RSA key thing? It has yoyo in it.
+
+Information on updating database.
+
+1st BACK UP DATABASE...
+
+This scraper is such a pain. Don't run at night. Don't login in while it's running. Anyway,
+mkdir a new spot in DATA for the files. cp the scraper there and run it. Make sure it works.
+Check on it eventually, it'll go past how far we want it to, just make sure it gets the newest
+semester. Then divide the files into advice and evaluation files using new directories.
+
+Open up the parser, go to the parse_dir function and modify the directory to point
+to one of the two sections you've made. Run it on both. This should enter all the
+evaluation and advice data.

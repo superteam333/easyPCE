@@ -1,0 +1,19 @@
+John Whelchel
+June 6 2013
+Explanation of Registrar Parsing files:
+
+Todo: incorporate scrapers and figure out how to ignore cancelled classes...
+
+BACKUP DB Before modifying
+
+To update a semester, first one must obtain the registrar JSON data files.
+Copy the basic registrar scraper into a new directory within the DATA
+section with an appropriate name. Run it with the selected semester(s).
+
+When finished, open up the regis_parser.py file and modify the DIR at the top
+to point to the location of the new files. Run it on that directory.
+
+Second, one must update the distribution areas and PDF information. This is 
+done using the DA scraper and the PDF scraper. See their appropriate headers
+for more information. This should conclude updating the database with the appropriate
+info.

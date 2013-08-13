@@ -24,12 +24,11 @@ DATABASES = {
         'TEST_CHARSET':'utf8',
     }
 }
-# Default cache hold is 1 month
+# Memcached cache
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 2592000,
-        'OPTIONS': { 'MAX_ENTRIES': 10 }
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211'
     }
 }
 
