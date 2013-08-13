@@ -26,15 +26,15 @@ def check_login(request, redirect):
         return HttpResponseRedirect(login_url)
 
 def professor(request, netid):
-    if not settings.DEBUG:
-    	try:
-    		n = request.session['netid']  
-    		if request.session['netid'] is None:
-    			return check_login(request, "/profs/%s" % netid)
-    	except:
-    		return check_login(request, "/profs/%s" % netid)
-    else:
-        n = 'dev'
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']  
+			if request.session['netid'] is None:
+				return check_login(request, "/profs/%s" % netid)
+		except:
+			return check_login(request, "/profs/%s" % netid)
+	else:
+		n = 'dev'
 	try:
 		thisprofessor = Professor.objects.get(netid=netid)
 	except Professor.DoesNotExist:
