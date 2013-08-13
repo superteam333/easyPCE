@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 import pce.views
+import bayesian.views
 from django.conf import settings
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -24,7 +25,7 @@ urlpatterns = patterns('',
                        url(r'^getfavorites', pce.views.getfavorites),
                        url(r'^autotest', pce.views.autotest),
                        url(r'^pop', pce.views.pop),
-                       url(r'^dev/', include('dev.urls')),
+                       url(r'^rankings/?', bayesian.views.ranking),
                        url(r'^maintenance/?', pce.views.maintenance),
 #                       url(r'^profiler/?', include('profiler.urls')),
                        # Uncomment the admin/doc line below to enable admin documentation:

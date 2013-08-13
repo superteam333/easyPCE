@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.template import loader
 from django.template import Context
 from pce.models import Department as Department
@@ -39,13 +40,16 @@ def check_login(request, redirect):
 def dephome(request, dept):
 	global REGIS_PREFIX
 	# Need to fix login
-	try:
-		n = request.session['netid']  
-		if request.session['netid'] is None:
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']  
+			if request.session['netid'] is None:
+				return check_login(request, '/depts/dept')
+		except:
 			return check_login(request, '/depts/dept')
-	except:
-		return check_login(request, '/depts/dept')
-	netid = request.session['netid']
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
 	try:
 	    user= User.objects.get(netid=netid)
 	except:

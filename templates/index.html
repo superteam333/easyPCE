@@ -9,10 +9,16 @@
 
 <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 	{% include "importfiles.html" %}
+
+  <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
+<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+
 </head>
 {% autoescape off %}
 <body>
 {% include "navbar.html" %}
+
+<div class="mainbody" style="height:auto">
 <div class="hero-unit" style="margin-top:90px;">
   <h1 style="font-size:500%;font-family: 'Special Elite', cursive;">easy<span style="color:#0A1F61">PCE</span> </h1>
         <h2> <span style="color:#0A1F61">P</span>rinceton <span style="color:#0A1F61">C</span>ourse <span style="color:#0A1F61">E</span>valuations</h2>
@@ -22,79 +28,23 @@
 	  <button type="submit" class="btn">Search</button>
 	</form>
 <!--	<p> How to Search: Type your query in one of the following ways </p>-->
-      </div>
 
-<br/><br/><br/><br/><br/></br></br>
-<div style="text-align:center;font-size:130%;" id="more"><a href="#more"><p><i class="icon-arrow-down"></i>More<i class="icon-arrow-down"></i></p></a></div><br/><br/><br/>
-
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="well" style="margin:10px;">
-	<h2 style="">Department Pages</h2>
-	<div class="span1">
-	  {% if depts %}
-
-          <ul>
-            {% for dept in depts%}
-            <li><a href="./depts/{{dept.dept}}">{{dept.dept}}</a></li>
-            {% if forloop.counter|divisibleby:"9" %}
-	</div>
-	</ul>
-	<div class="span1">
-	
-	
-	  <ul>
-	    {% endif %}
-	    {% endfor %}
-	  </ul>
-	</div>
-        {% endif %}
-	
-      </div>
-      </div>
-    </div>
-  <div class="row-fluid">
-      <div class="well" style="margin:10px;">
-	<div class="span12">
-	  {% if bayes %}
-	  <h2 style="" style="text-align:center;">Princeton's Best Courses</h2>
-	  <h4 style="text-align:center"><em> Best courses calculated using Bayesian ranking that is determined not only by average score out of five, but also by number of people taking each course. More coming soon.</em></h4>
-	  <div class="span3" style="text-align:left;">
-	  
-            <ul>
-              {% for b, bcn in bayes %}
-	      <li><a href="/courses/{{bcn.dept.dept}}{{bcn.number}}">{{forloop.counter}}. {{bcn.dept.dept}} {{bcn.number}}: {{b.title}}</a></li>
-              {% if forloop.counter|divisibleby:"9" %}
-	      {% ifequal forloop.counter 18 %}
-
-	      </div>
-	  </ul>
-	  <div class="span3" style="text-align:left;">
-
-
-          <ul>
-{% else %}
-
-        </div>
-        </ul>
-        <div class="span5" style="text-align:left;">
-	  
-	  
-          <ul>
-	    {% endifequal %}
-            {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-	
-      </div>
-    </div>
+  <div class="helptext">
+    <a href="#helpModal" data-toggle="modal" aria-labelledby="About" aria-hidden="true">About</a>
   </div>
-
+  <div id="helpModal" class="modal hide fade" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 style="text-align:center" id="myModalLabel">About</h3>
+  </div>
+  <div style="text-align:left" class="modal-body">
+    <h4>How to search</h4><p class="tab"> Our smart search bar is very powerful and allows you to search for varying combinations of courses. Typing in any text will prompt it to immediately try and auto-correct, filling in whatever Professor, Course, or Department it thinks you are looking for. Begin your search with a quotation mark, <span style="font-weight:bold">"...</span>, to begin the keyword search, allowing you to look for words or phrases within the advice students gave for different courses. For example, the phrase<span style="font-weight:bold">"easy" in QR</span> will look for classes that students somehow marked as "easy" in the QR distribution area. This also works for all departments.</p><br>
+    <h4>About easyPCE</h4><p class="tab">easyPCE was originally a project for COS 333 (Spring 2013) that morphed into a more serious project to help the Princeton community. It was written and developed by Matt Haake, Yacob Yonas, and John Whelchel, and we hope you find better courses for the rest of your Princeton experience with the help of our tool!</p> 
+  </div>
 </div>
-<br/><br/>
+
+      </div>
+    </div>
 </body>
 
 {% endautoescape %}

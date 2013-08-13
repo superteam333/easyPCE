@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 import os
 from django.template import Context, loader, RequestContext
 from django.template.loader import get_template
@@ -18,7 +19,7 @@ def pop(request):
 def getBayes():
 	bayes = []
 	bayesCN = []
-	f = open("/srv/www/myapp/pce/25ratings.txt", "r")
+	f = open(os.path.join(os.path.dirname(__file__), "25ratings.txt"), "r")
 	for l in f:
 		w = l.split()
 		d = Department.objects.get(dept=w[0])
@@ -31,7 +32,6 @@ def getBayes():
 
 # Adapted from Luke Paulsen's code.
 def check_login(request, redirect):
-
 	cas_url = "https://fed.princeton.edu/cas/"
 	service_url = 'http://' + urllib.quote(request.META['HTTP_HOST'] + request.META['PATH_INFO'])
 	service_url = re.sub(r'ticket=[^&]*&?', '', service_url)
@@ -55,7 +55,6 @@ def autotest(request):
 
 def login_page(request):
 	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 1 of 2
-
 		if request.session['netid'] is None:
 			return check_login(request, '/')
 	except:
@@ -71,19 +70,22 @@ def hello(request):
 	return HttpResponse("hello world")
 
 def induce(request):
-	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2            
-                n = request.session['netid']
-                if request.session['netid'] is None:
-                        return check_login(request, '/')
-        except:
-                return check_login(request, '/')
-        netid = request.session['netid']
-        alldepts=Department.objects.all().order_by('dept')
-        try:
-                user= User.objects.get(netid=netid)
-        except:
-                user=User(netid=netid)
-                user.save()
+	if not settings.DEBUG:
+		try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2            
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
+	alldepts=Department.objects.all().order_by('dept')
+	try:
+		user= User.objects.get(netid=netid)
+	except:
+		user=User(netid=netid)
+		user.save()
 	t = get_template("induce.html")
 	depts = Department.objects.all().order_by('dept')
 	c = Context({'depts':depts, 'user':user, 'alldepts':alldepts})
@@ -103,7 +105,22 @@ def editfavorites(request):
 	except:
 		user=User(netid=query['user'])
 		user.save()
-	nums=Course.objects.filter(regNum=regNum).order_by('-year', '-semester')
+
+	"""
+	here we made a messy fix. basically in some palces the row ids weren't the registrar
+	number and I didn't pass an extra thing to the contexts. So instead in those cases, for regnum, 
+	I put in the title of the class. if the query with that regnum comes up empty then 
+	I search for the first course with that the course dept and number
+	"""
+	try:
+		nums=Course.objects.filter(regNum=regNum).order_by('-year', '-semester')
+	except:
+		##course num parsing
+		department = regNum[:3]
+		number = int(regNum[3:])
+		num = CourseNum.objects.get(dept__dept=department, number=number)
+		nums=Course.objects.filter(coursenum__id=num.id).order_by('-year', '-semester')
+
 	add=int(query['add'])
 	#favorite a coursenum not a course
 	if add is 1:
@@ -129,14 +146,23 @@ def editfavorites(request):
 	return HttpResponse("haha")
 		
 def getfavorites(request):
-	if request.method == 'GET':
-		netid=request.session['netid']
-	
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
 	try:
 	    user= User.objects.get(netid=netid)
 	except:
-	    user=User(netid=netid)
-	    user.save()
+		user=User(netid=netid)
+		user.save()
+
 	try:
 		favorites=Favorite.objects.filter(user=user)
 	except:
@@ -179,13 +205,23 @@ def getfavorites(request):
 	return HttpResponse(json, mimetype='application/json')
 	 
 def favorites(request):
-	try:
-		if request.session['netid'] is None:
-			return check_login(request, '/favorites')
-	
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
 		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
+	try:
+	    user= User.objects.get(netid=netid)
 	except:
-                return check_login(request, '/')
+		user=User(netid=netid)
+		user.save()
+
 	alldepts=Department.objects.all().order_by('dept')
 	user=None
 	try:
@@ -255,33 +291,37 @@ def timeline(request):
 	con = Context({})
 	return HttpResponse(c.render(con))
 
-
+# Use this view with the accompanying URL to take the site down for maintenance.
 def maintenance(request):
 	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2                                                                                                                 
-                n = request.session['netid']
-                if request.session['netid'] is None:
-                        return check_login(request, '/')
-        except:
-                return check_login(request, '/')
-        netid = request.session['netid']
-        alldepts=Department.objects.all().order_by('dept')
-        try:
-                user= User.objects.get(netid=netid)
-        except:
-                user=User(netid=netid)
-                user.save()
-	template = loader.get_template("maintenance.html")
-	c = Context({})
-	return HttpResponse(template.render(c))
-
-def index(request):
-	try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2
 		n = request.session['netid']
 		if request.session['netid'] is None:
 			return check_login(request, '/')
 	except:
 		return check_login(request, '/')
 	netid = request.session['netid']
+	alldepts=Department.objects.all().order_by('dept')
+	try:
+		user= User.objects.get(netid=netid)
+	except:
+		user=User(netid=netid)
+		user.save()
+
+	template = loader.get_template("maintenance.html")
+	c = Context({})
+	return HttpResponse(template.render(c))
+
+def index(request):
+	if not settings.DEBUG:
+		try: # ADDED TRY HERE... ORIGINAL IN WHAT IS GOING ON... SEEMED TO FIX IT. 2 of 2
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
 	alldepts=Department.objects.all().order_by('dept')
 	try:
 		user= User.objects.get(netid=netid)
@@ -295,14 +335,17 @@ def index(request):
 	return HttpResponse(template.render(c))
 	
 def search(request):
-	try:
-		n = request.session['netid']
-		if request.session['netid'] is None:
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
 			return check_login(request, '/')
-	except:
-		return check_login(request, '/')
-	
-	netid = request.session['netid']
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
 	try:
 	    user= User.objects.get(netid=netid)
 	except:

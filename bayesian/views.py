@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
+from django.conf import settings
 from django.template import Context, loader
 from django.template.loader import get_template
 from pce.models import *
@@ -25,13 +26,16 @@ def check_login(request, redirect):
                 return HttpResponseRedirect(login_url)
 
 def ranking(request):
-    try:
-        n = request.session['netid']
-        if request.session['netid'] is None:
+    if not settings.DEBUG:
+        try:
+            n = request.session['netid']
+            if request.session['netid'] is None:
+                return check_login(request, '/')
+        except:
             return check_login(request, '/')
-    except:
-        return check_login(request, '/')
-    netid = request.session['netid']
+        netid = request.session['netid']
+    else:
+        netid = 'dev'
     try:
         user= User.objects.get(netid=netid)
     except:
@@ -50,16 +54,14 @@ def ranking(request):
         pass
 
     cns = cache.get("BAYES_CNS")
-    poop = "lol"
     if not cns:
-	    poop = "poop"
-	    cns = CourseNum.objects.exclude(bayes__isnull=True).order_by('-bayes')
+	    cns = CourseNum.objects.exclude(bayes__isnull=True).order_by('-bayes')[:500]
 	    cache.set("BAYES_CNS", cns)
     cs = cache.get("BAYES_COURSES")
     if not cs:
 	    cs = []
 	    for cn in cns:
-		    c = Course.objects.filter(coursenum=cn).order_by('-year', '-semester').only("regNum", "pdf", "nopdf", "da", "title")
+		    c = Course.objects.filter(coursenum=cn).order_by('-year', '-semester').only("regNum", "pdf", "nopdf", "da", "title")[:500]
 		    cs.append(c[0])
 	    cache.set("BAYES_COURSES", cs)
     regNums=[]
@@ -67,6 +69,6 @@ def ranking(request):
     for i in range(len(favs)):
         regNums.append(favs[i].course.regNum)
     bayeszip = zip(cns, cs)
-    c = Context({'poop':poop, 'user':user, 'alldepts':alldepts, 'favorites':favorites, 'bayes':bayeszip, 'regNums':regNums})
-    t = get_template("dev/rankings.html")
+    c = Context({'user':user, 'alldepts':alldepts, 'favorites':favorites, 'bayes':bayeszip, 'regNums':regNums})
+    t = get_template("rankings.html")
     return HttpResponse(t.render(c))
