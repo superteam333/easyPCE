@@ -313,6 +313,7 @@ input.filter {
 }
 
 .question {
-  height:28px;
-  width:28px;
+  height:15px;
+  width:15px;
+  vertical-align: 2px;
 }
