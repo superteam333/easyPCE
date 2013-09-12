@@ -1,0 +1,71 @@
+{% if courses %}
+	{% for c, link, stars, profs, dayTimes, advice in courses %}
+		<li class="result">
+			{{link|safe}}
+			<div class="info">
+				<div class="topInfo">
+					<span class="rating">
+					{% for r in stars %}
+						{% if forloop.last %}
+							({{r}})
+						{% else %}
+							{% if r == 2 %}
+								<img class="ratingStar" src="{{STATIC_URL}}/img/star.png"/>
+							{% endif %}
+							{% if r == 1 %}
+								<img class="ratingStar" src="{{STATIC_URL}}/img/halfstar.png"/>
+							{% endif %}
+							{% if r == 0 %}
+								<img class="ratingStar" src="{{STATIC_URL}}/img/emptystar.png"/>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+					</span>
+					{% if dayTimes|length > 0 %}
+						{% if dayTimes|length > 1 %}
+							<span class="tip time" data-title="{% for d,t in dayTimes %}{{d}} {{t.0}}-{{t.1}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}">{{dayTimes.0.0}} {{dayTimes.0.1.0}}-{{dayTimes.0.1.1}}...</span>
+						{% else %}
+							<span class="time">{{dayTimes.0.0}} {{dayTimes.0.1.0}}-{{dayTimes.0.1.1}}</span>
+						{% endif %}
+					{% endif %}
+					{% if profs|length > 0 %}
+						{% if profs|length > 1 %}
+							<span class="tip cprof" data-title="{% for p in profs %}{{d}} {{p}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}">{{profs.0|safe}}...</span>
+						{% else %}
+							<span class="cprof">{{profs.0|safe}}</span>
+						{% endif %}
+					{% else %}
+						<span class="cprof">TBA</span>
+					{% endif %}
+					
+					<span class="da">({{c.da}})</span>
+				</div>
+				<p class="desc">{{c.description|truncatechars:325}}</p>
+				{% if advice %}
+				<p class="adviceHeader">Advice matching: {{advice.count}}</p>
+				<ul class="advice">
+					{% for a in advice %}
+						{% if forloop.counter0 < 3%}
+						<li>{{a.text|safe}}</li>
+						{% endif %}
+					{% endfor %}
+
+					<div id="demo{{forloop.counter0}}" class="accordion-body collapse out" style="margin-left:0px; padding-left:0px;">
+					<div class="" style="margin-left:0px; padding-left:0px;">
+					{% for a in advice %}
+						{% if forloop.counter0 >= 3 %}
+						<li>{{a.text|safe}}</li>
+						{% endif %}
+						{% if forloop.last %}
+						{% endif %}
+					{% endfor %}
+					</div></div>
+				</ul>
+				{% if advice|length > 3 %}
+					<a onclick="toggleMore(this)" class="more" data-toggle="collapse" data-parent="#accordion2" href="#demo{{forloop.counter0}}">more</a>
+				{% endif %}
+			{% endif %}
+			</div>
+		</li>
+	{% endfor %}
+{% endif %}

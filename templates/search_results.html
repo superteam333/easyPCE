@@ -3,6 +3,7 @@
 	<title>PCE: Search Results</title>
 	<link rel="icon" type="image/ico"href="/{{ STATIC_URL }}favicon/favicon.ico">
 	{% include "importfiles.html"%}
+	<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-tooltip.js"></script>
 	<style>
 		@-moz-document url-prefix() {
             body { 
@@ -23,6 +24,7 @@
 			padding: 11px;
 			font-size: 16px;
 		}
+
 		#back {
             min-height: calc(100% - 50px);
             min-height: -webkit-calc(100% - 50px);
@@ -35,25 +37,54 @@
 			padding-bottom: 25px;
 			margin-top: -15px;
 		}
+
 		.ex {
 			font-weight: bold;
 		}
+
 		#box p {
 			margin: 0px;
 			padding: 0px;
 		}
+
 		#box hr {
 			margin: 2px 0px;
 			padding: 0px;
 		}
+
 		#left {
-			background-color:blue;
-			width:120px;
+			width:127px;
 			float: left;
 			display: inline;
 			margin: 0;
 			padding: 0;
 		}
+
+			#adQuery {
+				margin: 15px 0px 0px 15px;
+			}
+
+			.adSec {
+				margin-bottom: 15px;
+			}
+
+			.adTitle {
+				font-weight: bold;
+				color: #555;
+			}
+
+			.adItem:before{ 
+				content:"-"; 
+				position:relative; 
+				left:-5px;
+			}
+
+			.adItem {
+				color: #888;
+				text-indent:-5px;
+				margin-left: -3px
+			}
+
 		#links {
 			position: fixed;
 			left: 50px;
@@ -61,24 +92,153 @@
 			padding: 0px;
 			margin: 0px;
 		}
+
 			#links li {
 				margin: 5px 0px;
 			}
+
 		#results {
-			margin-left: 115px;
+			margin-left: 127px;
 			border-left:thin solid #ccc;
 		}
-			#results ul p {
-				margin-left: 25px;
+			.result {
 				margin-bottom: 15px;
 			}
+
+			.info {
+				margin-left: 25px;
+			}
+
+			.courseTitle {
+				color: #08c;
+			}
+
+			.rating, .time, .da, .cprof {
+				margin-right: 10px;
+				display: inline-block;
+			}
+
+			.rating {
+				width: 120px;
+			}
+
+			/*.time {
+				width: 200px;
+				text-align: center;
+			}*/
+
+			.ratingStar {
+				margin: -6px 0px 0px -3px;
+				width: 15px;
+			}
+
+			.adviceHeader {
+				border-top: 1px solid #ccc;
+				margin-top: 3px;
+				text-align: center;
+			}
+
+			.highlight {
+				background-color: yellow;
+				background: -webkit-linear-gradient(#ddeefe, #bfe0f1);
+				background: -moz-linear-gradient(#ddeefe, #bfe0f1);
+				background: linear-gradient(#ddeefe, #bfe0f1);
+				box-shadow: 0 0px 4px #888;
+				-webkit-box-shadow: 0 0px 2px #888;
+				-moz-box-shadow: 0 0px 0px #888;
+				border-radius: 4px;
+				padding: 1px;
+			}
+
+			.more {
+				display: block;
+				margin: -2px 0px -10px 0px;
+				margin-left: auto;
+				margin-right: auto;
+				text-align: center;
+				padding: 0px;
+			}
+
+			.advice li {
+				margin-left: 15px;
+				text-indent: -5px;
+				padding-right: 20px;
+			}
+
+			.advice li:before {
+				content:"-"; 
+				position:relative; 
+				left:-5px;
+			}
+
 		.secHead {
 			margin: 0px;
 			margin-left: 3px;
 			padding-top: 40px; 
 			margin-top: -40px;
 		}
+
+		.tip:hover {
+			cursor: pointer;
+		}
 	</style>
+	<script type="text/javascript">
+  		$(document).ready(function() {
+
+  			if ($('#left').height() > $('#results').height()) {
+  				$('#results').height($('#left').height())
+  			}
+
+  			$('.tip').tooltip({html: 'true', placement: 'bottom'})
+
+  			var pn = 2;
+
+  			$.urlParam = function(name){
+  				var url = decodeURIComponent(window.location.href)
+  				var nameEscaped = name.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+  				var re = new RegExp('[\\?&]' + nameEscaped + '=([^&#]*)', 'g');
+  				var results = url.match(re)
+
+  				if (results == null)
+  					return null;
+
+  				var pre = nameEscaped + '='
+  				for (var i = 0; i < results.length; i++) {
+  					var s = results[i]
+  					results[i] = s.substr(s.indexOf(pre)+pre.length)
+  				}
+			    
+			    return results;
+			}
+
+			var urlObj = {
+				depts : $.urlParam('depts[]'),
+				advice : $.urlParam('advice[]'),
+				profs : $.urlParam('profs[]'),
+				dist : $.urlParam('dist[]'),
+				days : $.urlParam('days[]'),
+				pg : pn
+			}
+			$.urlParam('depts[]')
+
+			function ajaxLoad(data) {
+				// console.log(pn)
+				// console.log(data)
+				if (data !== "") {
+					$("#courseList").append(data)
+					pn = pn + 1;
+					urlObj["pg"] = pn
+					$.get('/search/', urlObj, function(d) {
+						ajaxLoad(d)
+					})
+				}
+			}
+
+			$.get('/search/', urlObj, function(data) {
+				ajaxLoad(data)
+			})
+  		});
+  	</script>
 </head>
 
 <body class="gradient">
@@ -87,50 +247,149 @@
 	<div id="back" class="Headercontainer gradient" style="margin-top:-15px;"> 
 		<div id="box">
 			<div id="left">
+				{% if query.simple %}
 				<ul id="links">
-					<li><a href="#courses">Courses &rArr;</a></li>
+					<li><a href="#courseHeader">Courses &rArr;</a></li>
 					<hr />
 					<li><a href="#profs">Professors &rArr;</a></li>
 					<hr />
 					<li><a href="#depts">Departments &rArr;</a></li>
 				</ul>
+				{% else %}
+				<ul id="adQuery">
+					{% if query.adv %}
+						{% for cat in query.adv %}
+						<li class="adSec">
+							<p class="adTitle">{{cat.title}}</p>
+							<ul>
+								{% for sel in cat.items %}
+								<li class="adItem">{{sel.lower|truncatechars:8}}</li>
+								{% endfor %}
+							</ul>
+						</li>
+						{% endfor %}
+					{% endif %}
+				</ul>
+				{% endif %}
 			</div>
 			<div id="results">
-			<p style="text-align: center">Search results for: <strong>{{query}}</strong></p>
-			<hr />
-			{% if courses %}
-				<h3 id="courses" class="secHead">Courses</h3>
-				<ul>
-				{% for c, link in courses %}
-					<li>{{link|safe}}</li>
-					<p>{{c.description|truncatechars:325}}</p>
-				{% endfor %}
-				</ul>
-				{% if profs or depts %}
-					<hr />
+				<p style="text-align: center">
+					{% if query.simple %}
+						Search results for: <strong>{{query.simple}}</strong>
+					{% else %}
+						<strong>Advanced Search</strong>
+					{% endif %}
+				</p>
+				<hr />
+				{% if courses %}
+					<h3 id="courseHeader" class="secHead">Courses</h3>
+					<ul id="courseList">
+					{% for c, link, stars, profs, dayTimes, advice in courses %}
+						<li class="result">
+							{{link|safe}}
+							<div class="info">
+								<div class="topInfo">
+									<span class="rating">
+									{% for r in stars %}
+										{% if forloop.last %}
+											({{r}})
+										{% else %}
+											{% if r == 2 %}
+												<img class="ratingStar" src="{{STATIC_URL}}/img/star.png"/>
+											{% endif %}
+											{% if r == 1 %}
+												<img class="ratingStar" src="{{STATIC_URL}}/img/halfstar.png"/>
+											{% endif %}
+											{% if r == 0 %}
+												<img class="ratingStar" src="{{STATIC_URL}}/img/emptystar.png"/>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									</span>
+									{% if dayTimes|length > 0 %}
+										{% if dayTimes|length > 1 %}
+											<span class="tip time" data-title="{% for d,t in dayTimes %}{{d}} {{t.0}}-{{t.1}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}">{{dayTimes.0.0}} {{dayTimes.0.1.0}}-{{dayTimes.0.1.1}}...</span>
+										{% else %}
+											<span class="time">{{dayTimes.0.0}} {{dayTimes.0.1.0}}-{{dayTimes.0.1.1}}</span>
+										{% endif %}
+									{% endif %}
+									{% if profs|length > 0 %}
+										{% if profs|length > 1 %}
+											<span class="tip cprof" data-title="{% for p in profs %}{{d}} {{p}}{% if not forloop.last %}<br/>{% endif %}{% endfor %}">{{profs.0|safe}}...</span>
+										{% else %}
+											<span class="cprof">{{profs.0|safe}}</span>
+										{% endif %}
+									{% else %}
+										<span class="cprof">TBA</span>
+									{% endif %}
+									
+									<span class="da">({{c.da}})</span>
+								</div>
+								<p class="desc">{{c.description|truncatechars:325}}</p>
+								{% if advice %}
+								<p class="adviceHeader">Advice matching: <strong>{{advice.count}}</strong></p>
+								<ul class="advice">
+									{% for a in advice %}
+										{% if forloop.counter0 < 3%}
+										<li>{{a.text|safe}}</li>
+										{% endif %}
+									{% endfor %}
+
+									<div id="demo{{forloop.counter0}}" class="accordion-body collapse out" style="margin-left:0px; padding-left:0px;">
+									<div class="" style="margin-left:0px; padding-left:0px;">
+									{% for a in advice %}
+										{% if forloop.counter0 >= 3 %}
+										<li>{{a.text|safe}}</li>
+										{% endif %}
+										{% if forloop.last %}
+										{% endif %}
+									{% endfor %}
+									</div></div>
+								</ul>
+								{% if advice|length > 3 %}
+									<a onclick="toggleMore(this)" class="more" data-toggle="collapse" data-parent="#accordion2" href="#demo{{forloop.counter0}}">more</a>
+								{% endif %}
+							{% endif %}
+							</div>
+						</li>
+					{% endfor %}
+					</ul>
+					{% if profs or depts %}
+						<hr />
+					{% endif %}
 				{% endif %}
-			{% endif %}
-			{% if profs %}
-				<h3 id="profs" class="secHead"> Professors </h3>
-				<ul>
-				{% for p, link in profs %}
-					<li>{{link|safe}}</li>
-				{% endfor %}
-				</ul>
+				{% if profs %}
+					<h3 id="profs" class="secHead"> Professors </h3>
+					<ul>
+					{% for p, link in profs %}
+						<li>{{link|safe}}</li>
+					{% endfor %}
+					</ul>
+					{% if depts %}
+						<hr />
+					{% endif %}
+				{% endif %}
 				{% if depts %}
-					<hr />
+					<h3 id="depts" class="secHead"> Departments </h3>
+					<ul>
+					{% for d, link in depts %}
+						<li>{{link|safe}}</li>
+					{% endfor %}
+					</ul>
 				{% endif %}
-			{% endif %}
-			{% if depts %}
-				<h3 id="depts" class="secHead"> Departments </h3>
-				<ul>
-				{% for d, link in depts %}
-					<li>{{link|safe}}</li>
-				{% endfor %}
-				</ul>
-			{% endif %}
-		</div>
+				{% if not courses and not profs and not depts %}
+					<p style="text-align:center;">Your search did not match any results.</p>
+				{% endif %}
+			</div>
 		</div>
 	</div>
+	<script>
+		function toggleMore(a) {
+			if (a.innerHTML === "more")
+				a.innerHTML = "less";
+			else
+				a.innerHTML = "more";
+		}
+	</script>
 </body>
 </html>

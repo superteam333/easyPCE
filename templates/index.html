@@ -7,12 +7,28 @@
  {% include "importfiles.html" %}
 <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
 <script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
-
+<style type="text/css">
+  #timeGroup .btn {
+    padding: 4px 7px;
+  }
+</style>
 <script type="text/javascript">
   $(document).ready(function() {
 
     $(".btnCheck").click(function() {
       $(this).toggleClass("active");
+    });
+
+    $(".btnRadio").click(function() {
+      $(this).toggleClass("active");
+      $(this).siblings('.active').toggleClass('active');
+    });
+
+    $(".btnSwitch").click(function() {
+      if ($(this).html() === 'current')
+        $(this).html('all')
+      else
+        $(this).html('current')
     });
 
     function openAdvanced() {
@@ -43,9 +59,10 @@
     });
 
     $("#addDept").click(function() {
-      var newDiv = '<div class="deptRow">\n\t<select name="depts">';
+      var newDiv = '<div class="deptRow">\n\t<select name="depts[]">';
+      newDiv += '\n\t\t<option value="">Select</option>';
       {% for d in alldepts %}
-        newDiv += '\n\t\t<option>{{d.dept}}: {{d.name}}</option>';
+        newDiv += '\n\t\t<option value="{{d.dept}}">{{d.dept}}: {{d.name}}</option>';
       {% endfor %}
       newDiv += '\n\t</select>'
       newDiv += '\n\t<a class="delButton">&times</a>';
@@ -58,8 +75,15 @@
         $container.children(":first").find(".delButton").css("display", "inline");
     });
 
+    $('.deptSel').change(function() {
+      if (this.value)
+        $('#addDept').show()
+      else
+        $('#addDept').hide()
+    });
+
     $("#addProf").click(function() {
-      var newDiv = '<div class="profRow">\n\t<input type="text" name="profs" />';
+      var newDiv = '<div class="profRow">\n\t<input type="text" name="profs[]" class="profIn" />';
       newDiv += '\n\t<a class="delButton">&times</a>';
       newDiv += '\n</div>';
 
@@ -68,10 +92,19 @@
 
       if ($container.children().length == 2)
         $container.children(":first").find(".delButton").css("display", "inline");
+
+      $(this).hide()
+    });
+
+    $(document.body).on("keyup", ".profIn", function() {
+      if (this.value)
+        $('#addProf').show()
+      else
+        $('#addProf').hide()
     });
 
     $("#addAdvice").click(function() {
-      var newDiv = '<div class="adviceRow">\n\t<input type="text" name="advice" />';
+      var newDiv = '<div class="adviceRow">\n\t<input type="text" name="advice[]" />';
       newDiv += '\n\t<a class="delButton">&times</a>';
       newDiv += '\n</div>';
 
@@ -80,6 +113,15 @@
 
       if ($container.children().length == 2)
         $container.children(":first").find(".delButton").css("display", "inline");
+
+      $(this).hide()
+    });
+
+    $('.advIn').keyup(function() {
+      if (this.value)
+        $('#addAdvice').show()
+      else
+        $('#addAdvice').hide()
     });
 
 
@@ -112,10 +154,14 @@
     })
 
     $("#advancedSearch").submit(function(e) {
+
+      // remove old from back
+      $('input:hidden').remove()
+
       // add the selected distirbution areas to the form
       var $dist = $("#distGroup button.active")
       for (var i = 0; i < $dist.length; i++)
-        $(this).append("<input type='hidden' name='dist' value='"+$dist[i].innerHTML+"' />")
+        $(this).append("<input type='hidden' name='dist[]' value='"+$dist[i].innerHTML+"' />")
 
       // add the selected days to the form
       var $days = $("#dayGroup button.active")
@@ -133,8 +179,36 @@
         else 
           val = "F";
 
-        $(this).append("<input type='hidden' name='days' value='"+val+"' />")
+        $(this).append("<input type='hidden' name='days[]' value='"+val+"' />")
       }
+
+      // add the selected days to the form
+      var $times = $("#timeGroup button.active")
+      for (var i = 0; i < $times.length; i++) {
+        var time = $times[i].innerHTML;
+        var val = time.match(/[0-9]*/)[0]
+        $(this).append("<input type='hidden' name='times[]' value='"+val+"' />")
+      }
+
+      // add pdf to the form
+      var $pdfs = $("#pdfGroup button.active")
+      for (var i = 0; i < $pdfs.length; i++) {
+        var pdf = $pdfs[i].innerHTML;
+        var val = 1;
+        if (pdf === "no pdf")
+          val = 0;
+        else if (pdf === "can pdf")
+          val = 1;
+        else if (pdf === "only pdf")
+          val = 2;
+
+        $(this).append("<input type='hidden' name='pdf[]' value='"+val+"' />")
+      }
+
+      // check for prev semesters
+      var $sem = $("#semGroup button.btnSwitch")
+      if ($sem.html() === 'all')
+        $(this).append("<input type='hidden' name='sem' value='a' />")
         
     });
 
@@ -163,10 +237,10 @@
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Departments:</h3></div>
           <div id="deptRowsContainer">
             <div class="deptRow">
-              <select name="depts">
+              <select name="depts[]" class="deptSel">
                 <option value="">All Departments</option>
                 {% for d in alldepts %}
-                <option>{{d.dept}}: {{d.name}}</option>
+                <option value="{{d.dept}}">{{d.dept}}: {{d.name}}</option>
                 {% endfor %}
               </select>
               <a class="delButton" style="display: none;">&times</a>
@@ -183,6 +257,7 @@
             <button type="button" class="btn btnCheck">HA</button>
             <button type="button" class="btn btnCheck">LA</button>
             <button type="button" class="btn btnCheck">QR</button>
+            <button type="button" class="btn btnCheck">SA</button>
             <button type="button" class="btn btnCheck">STL</button>
             <button type="button" class="btn btnCheck">STN</button>
           </div>
@@ -199,35 +274,29 @@
           </div>
         </div>
         
-        <!-- <div class="searchOption">
-          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Times:</h3></div>
-          <div class="timeRow">
-            <div class="startTime">
-              <label>Start:
-                <select>
-                  <option>all</option>
-                  <option>9:00 am</option>
-                </select>
-              </label>
-            </div>
-            <div class="endTime">
-              <label>End:
-                <select>
-                  <option>all</option>
-                  <option>9:00 am</option>
-                  <option>...</option>
-                </select>
-              </label>
-            </div>
+        <div class="searchOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Start Times:</h3></div>
+          <div class="btn-group" id="timeGroup">
+            <button type="button" class="btn btnCheck">8am</button>
+            <button type="button" class="btn btnCheck">9am</button>
+            <button type="button" class="btn btnCheck">10am</button>
+            <button type="button" class="btn btnCheck">11am</button>
+            <button type="button" class="btn btnCheck">12pm</button>
+            <button type="button" class="btn btnCheck">1pm</button>
+            <button type="button" class="btn btnCheck">2pm</button>
+            <button type="button" class="btn btnCheck">3pm</button>
+            <button type="button" class="btn btnCheck">4pm</button>
+            <button type="button" class="btn btnCheck">5pm</button>
+            <button type="button" class="btn btnCheck">6pm</button>
+            <button type="button" class="btn btnCheck">7pm</button>
           </div>
-          <a class="addButton">+</a>
-        </div> -->
+        </div>
 
         <div class="searchOption" id="profContainer">
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Professors:</h3></div>
           <div id="profRowsContainer">
             <div class="profRow">
-              <input type="text" name="profs" />
+              <input type="text" name="profs[]" class="profIn" />
               <a class="delButton" style="display: none;">&times</a>
             </div>
           </div>
@@ -238,11 +307,28 @@
           <div class="optionHeader"><h3><a class="toggleInclude">Include</a> Advice:</h3></div>
           <div id="adviceRowsContainer">
             <div class="adviceRow">
-              <input type="text" name="advice" />
+              <input type="text" name="advice[]" class="advIn" />
               <a class="delButton" style="display: none;">&times</a>
             </div>
           </div>
           <a class="addButton" id="addAdvice">+</a>
+        </div>
+
+        <div class="searchOption" id="pdfOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Which</a> PDF Option:</h3></div>
+          <div class="btn-group" id="pdfGroup">
+            <button type="button" class="btn btnRadio">no pdf</button>
+            <button type="button" class="btn btnRadio">can pdf</button>
+            <button type="button" class="btn btnRadio">only pdf</button>
+          </div>
+        </div>
+
+        <div class="searchOption" id="semOption">
+          <div class="optionHeader"><h3><a class="toggleInclude">Which</a> Semesters:</h3></div>
+          <div class="btn-group" id="semGroup">
+            <button type="button" class="btn btnRadio active">current</button>
+            <button type="button" class="btn btnRadio">all</button>
+          </div>
         </div>
 
         <input type="submit" class="btn btn-primary" id="advancedSubmit" value="Search" />
