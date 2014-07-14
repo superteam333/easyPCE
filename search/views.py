@@ -5,13 +5,13 @@ from django.template import Context, loader, RequestContext
 from django.template.loader import get_template
 import re
 from pce.models import *
-from sets import Set
 from django.views.decorators.csrf import csrf_exempt
 from django.http import QueryDict
 import simplejson
 import _ssl;_ssl.PROTOCOL_SSLv23 = _ssl.PROTOCOL_SSLv3
 import urllib, re
 import time
+import itertools
 
 class SortType:
 	RANK = 0
@@ -19,100 +19,73 @@ class SortType:
 	ADVICE = 2
 
 def onlyMostRecent(course_set):
+	# get all courses instances that corresponded to the given regNums
 	regNums = [c.regNum for c in course_set]
-	ids = []
 	course_set = Course.objects.filter(regNum__in=regNums).order_by('regNum', '-year', '-semester')
+	
+	# get the id of only the most recent of each regNum in the set
+	ids = []
 	prevRegNum = None
 	for c in course_set:
 		if (c.regNum != prevRegNum):
 			ids.append(c.id)
 			prevRegNum = c.regNum
 
+	# return only the most recent courses
 	return course_set.distinct().filter(id__in=ids)
 
 def onlyThisSemester(course_set):
-	# if not course_set:
-	# 	course_set = Course.objects
-
 	try:
 		return course_set.filter(year='2013-2014', semester__iexact='fall')
 	except Exception as inst:
-		return HttpResponse("F***%s | %s" % (type(inst), inst))
+		return HttpResponse("%s | %s" % (type(inst), inst))
 
 	return None
 
 def coursesByDepartment(depts, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		return course_set.filter(coursenum__dept__dept__in=depts)
 	except Exception as inst:
-		return HttpResponse("F***%s | %s" % (type(inst), inst))
+		return HttpResponse("%s | %s" % (type(inst), inst))
 
 	return None
 
 def coursesByDistribution(das, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		return course_set.filter(da__in=das)
 	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
+		return HttpResponse("%s %s" % (type(inst), inst))
 
 	return None
 
 def coursesByProfessor(profs, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		return course_set.filter(profs__in=profs)
 	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
-
-	return None
-
-def coursesByDay(days, course_set):
-	if not course_set:
-		course_set = Course.objects
-
-	try:
-		return course_set.filter(lectureTime__icontains=days)
-	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
+		return HttpResponse("%s %s" % (type(inst), inst))
 
 	return None
 
 def coursesByTime(times, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		return course_set.filter(lectureTime__regex=times)
 	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
+		return HttpResponse("%s %s" % (type(inst), inst))
 
 	return None
 
 def coursesByAdvice(advice, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		result = course_set.filter(advice__text__icontains=advice[0])
 		for a in advice[1:]:
 			result = result | course_set.filter(advice__text__icontains=a)
 		return result
 	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
-		#pass
+		return HttpResponse("%s %s" % (type(inst), inst))
+
+	return None
 
 def coursesByPdf(pdf, course_set):
-	if not course_set:
-		course_set = Course.objects
-
 	try:
 		if pdf == '0':
 			return course_set.filter(nopdf=1)
@@ -123,39 +96,39 @@ def coursesByPdf(pdf, course_set):
 		else:
 			return course_set;
 	except Exception as inst:
-		return HttpResponse("F***%s %s" % (type(inst), inst))
+		return HttpResponse("%s %s" % (type(inst), inst))
 
 	return None
 
-def search(request):
-	now = time.time()
-	if not settings.DEBUG:
-		try:
-			n = request.session['netid']
-			if request.session['netid'] is None:
-				return check_login(request, '/')
-		except:
-			return check_login(request, '/')
-		netid = request.session['netid']
-	else:
-		netid = 'dev'
+def isAdvanced(request):
+	if request.GET.getlist("advice[]"):
+		return True
+	if request.GET.getlist("depts[]"):
+		return True
+	if request.GET.getlist("profs[]"):
+		return True
+	if request.GET.getlist("dist[]"):
+		return True
+	if request.GET.getlist("days[]"):
+		return True
+	if request.GET.getlist("times[]"):
+		return True
+	if request.GET.getlist("pdf[]"):
+		return True
+	if request.GET.getlist("sem"):
+		return True
 
-	try:
-	    user= User.objects.get(netid=netid)
-	except:
-		user=User(netid=netid)
-		user.save()
+	if not request.GET.get("q"):
+		return True
 
+	return False
+	
 
+def advancedSearch(request, user):
 	all_depts = Department.objects.all().order_by('dept')
-
-	html = "<ul>"
+	courses = Course.objects.all()
 
 	czipped = []
-	pzipped = []
-	dzipped = []
-
-	courses = Course.objects.all()
 
 	query = {}
 	query['adv'] = []
@@ -196,20 +169,22 @@ def search(request):
 			qs = Professor.objects.filter(lastname__icontains=words[-1])				
 			for i in range(1, len(words)-1):
 				qs = qs.filter(firstname__icontains=words[i])
-			set = Set([])
+			pSet = set()
 			for p in qs:
-				if p not in set:
-					set.add(p)
+				if p not in pSet:
+					pSet.add(p)
 					profs.append(p)
 			qs = Professor.objects.filter(firstname__icontains=words[-1])
 			for i in range(1, len(words)-1):
 				qs = qs.filter(lastname__icontains=words[i])
 			for p in qs:
-				if p not in set:
-					set.add(p)
+				if p not in pSet:
+					pSet.add(p)
 					profs.append(p)
 		if profs:
 			courses = coursesByProfessor(profs, courses)
+		else:
+			courses = Course.objects.none()
 
 		query['adv'].append({'title':'Professor', 'items':[p.split()[-1] for p in qProfs]})
 
@@ -223,24 +198,34 @@ def search(request):
 
 		query['adv'].append({'title':'Distribution', 'items':das})
 
-	# Days
+	# Day and Time search
+	dayCombs = []
+	timeREs = []
 	if qDays and qDays[0]:
-		days = qDays[0]
-		for d in qDays[1:]:
-			days = days + " " + d
+		dayCombs = []
+		for i in range(len(qDays)):
+			for c in itertools.combinations(qDays, i+1):
+				dayCombs.append(" ".join(d for d in c))
 
-		courses = coursesByDay(days, courses)
+		dayString = " ".join(d for d in qDays)
+		query['adv'].append({'title':'Day', 'items':[dayString]})
 
-		query['adv'].append({'title':'Day', 'items':[days]})
-
-	# Time
 	if qTimes and qTimes[0]:
-		res = [';'+x+':[0-9]{2} '+('am' if int(x)>8 and int(x)<12 else 'pm')+','  for x in qTimes]
-		times = '(' + res[0] + ''.join('|'+x for x in res[1:]) + ')'
-
-		courses = coursesByTime(times, courses)
-
+		timeREs = [';'+x+':[0-9]{2} '+('am' if int(x)>8 and int(x)<12 else 'pm')+','  for x in qTimes]
 		query['adv'].append({'title':'Time', 'items':[x+':00 '+('am' if int(x)>8 and int(x)<12 else 'pm') for x in qTimes]})
+
+	if dayCombs and timeREs:
+		dayTimes = []
+		for d in dayCombs:
+			dayTimes.extend([d + " " + r for r in res])
+		times = '(' +'|'.join(x for x in dayTimes) + ')' 
+		courses = coursesByTime(times, courses)
+	elif dayCombs:
+		times = '(' + '|'.join(x for x in dayCombs) + ')'
+		courses = coursesByTime(times, courses) 
+	elif timeREs:
+		times = '(' +'|'.join(x for x in timeREs) + ')' 
+		courses = coursesByTime(times, courses)
 
 	# PDF
 	if qPdf and qPdf[0]:
@@ -267,7 +252,6 @@ def search(request):
 		courses = onlyMostRecent(cba)
 		if not usePrev:
 			courses = onlyThisSemester(courses)
-			
 
 		cba = cba.order_by('regNum')
 		prev_r = -1
@@ -284,11 +268,9 @@ def search(request):
 	done = time.time()
 
 	# display the results
-	#courses = onlyThisSemester(courses)
 	if not courses:
-		# return HttpResponse("") #should display an error page
 		t = get_template('search_results.html')
-		html = t.render(Context({'courses':None, 'profs':None, 'depts':None, 'query':query, 'user':user, 'alldepts':all_depts}))
+		html = t.render(Context({'query':query, 'user':user, 'alldepts':all_depts}))
 		return HttpResponse(html)
 
 	sort = request.GET.get('sort')
@@ -306,9 +288,7 @@ def search(request):
 	elif sort == SortType.RANK:
 		courses = courses.order_by('-coursenum__bayes').distinct()
 	elif sort == SortType.ADVICE and isAdvice:
-		#return HttpResponse(str(courses))
 		counts = [Advice.objects.filter(instance__id__in=adviceInstances[x.regNum], text__icontains=qAdvice[0]).count() for x in courses]
-		#return HttpResponse(counts[0])
 		courses = zip(*sorted(zip(courses, counts), key=lambda t: -t[1]))[0]
 
 
@@ -322,6 +302,7 @@ def search(request):
 	if start > len(courses):
 		return HttpResponse("")
 
+	# prepare info for displaying results
 	links = []
 	rating = []
 	dayTimes = []
@@ -378,20 +359,23 @@ def search(request):
 			dayTimes.append(zip(d,t))
 
 		if adviceInstances:
-			adText = qAdvice[0]
 			if c.regNum in adviceInstances:
 				adv = Advice.objects.filter(instance__id__in=adviceInstances[c.regNum], text__icontains=qAdvice[0])
+				for qAdv in qAdvice[1:]:
+					adv = adv | Advice.objects.filter(instance__id__in=adviceInstances[c.regNum], text__icontains=qAdv)
 				for a in adv:
-					f = a.text.lower().find(adText.lower())
-					a.text = '%s<span class="highlight">%s</span>%s' % (a.text[0:f], a.text[f:f+len(adText)], a.text[f+len(adText):])
+					for adText in qAdvice:
+						f = a.text.lower().find(adText.lower())
+						if f == -1:
+							continue
+						a.text = '%s<span class="highlight">%s</span>%s' % (a.text[0:f], a.text[f:f+len(adText)], a.text[f+len(adText):])
 				advice.append(adv)
-
-	# v = int([])
 
 	if isAdvice:
 		czipped = zip(courses[start:end], links, rating, profs, dayTimes, advice)
 	else:
 		czipped = zip(courses[start:end], links, rating, profs, dayTimes)
+
 	if request.is_ajax():
 		if czipped:
 			t = get_template('searchResultsCourseList.html')
@@ -401,14 +385,340 @@ def search(request):
 			return HttpResponse("")
 
 	bef = time.time()
-	# return HttpResponse(str(bef-now))
-
-	if (czipped):
-		t = get_template('search_results.html')
-		html = t.render(Context({'courses':czipped, 'profs':pzipped, 'depts':dzipped, 'query':query, 'user':user, 'alldepts':all_depts}))
-		return HttpResponse(html)	
-
-	list = qDepts
 	
+	t = get_template('search_results.html')
+	html = t.render(Context({'courses':czipped,'query':query, 'user':user, 'alldepts':all_depts}))
+	return HttpResponse(html)	
+
+def search(request):
+	now = time.time()
+	if not settings.DEBUG:
+		try:
+			if request.session['netid'] is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
+
+	try:
+	    user= User.objects.get(netid=netid)
+	except:
+		user=User(netid=netid)
+		user.save()
+
+
+	if request.GET.get('q'):
+		return basicSearch(request, user)
+	elif isAdvanced(request):
+		return advancedSearch(request, user)
+	
+	t = get_template('search_results.html')
+	html = t.render(Context({'query':'', 'user':user, 'alldepts':all_depts}))
+	return HttpResponse(html)	
+
+# this is the old search function
+# could probably be cleaned up
+def basicSearch(request, user):
+	query = {}
+	query['simple'] = ''
+	if 'q' in request.GET and request.GET['q']:
+		q = request.GET['q']
+		query['simple'] = q
+		words = q.split()
+		errors = "Errors:\n"
+
+		czipped = []
+		pzipped = []
+		dzipped = []
+		
+		# Check for "text search" in something
+		if re.search('^\".*\"', q) is not None:
+			text = re.search('^\".*\"', q).group(0)
+			text = text[1:-1]
+			after = q[len(text)+2:]
+			inIndex = after.find('in ')
+			if inIndex != -1:
+				after = after[inIndex+3:]
+			if re.search("^[a-zA-Z]{2,3}", after) is not None:
+				# text search in a distribution area
+				try:
+					courseList = []
+					adviceList = []
+					instances = Course.objects.filter(da=after).order_by('regNum', '-year', '-semester')
+					if instances is not None and len(instances) > 0:
+						i = 0
+						while i < len(instances):
+							a = []
+							prev_r = instances[i].regNum
+							courseList.append(instances[i])
+							while (i < len(instances) and instances[i].regNum == prev_r ):
+								advice = Advice.objects.filter(instance=instances[i], text__icontains=text).exclude(text__icontains=("not")) # can sort on length filed here, saves srting ~10 lines later???
+								if advice is not None:
+									for ad in advice:
+										a.append(ad)
+								i = i+1	
+							if len(a) != 0:
+								adviceList.append(a)
+							else:
+								courseList.pop()
+							i = i+1
+						sorted = zip(courseList, adviceList)
+						sorted.sort(key = lambda t: -len(t[1]))
+						
+						links = []
+						for c, al in sorted:
+							ccnums = c.coursenum_set.all().order_by("dept__dept")
+							numString = '<a href="/courses/%s%s">%s' % (ccnums[0].dept.dept, ccnums[0].number, ccnums[0])
+							for li in range(1, len(ccnums)):
+								numString = "%s / %s" % (numString, ccnums[li])
+							numString = "%s: %s</a>" % (numString, c.title)
+							links.append(numString)
+							for a in al:
+								f = a.text.lower().find(text.lower())
+								a.text = '%s<span id="highlight">%s</span>%s' % (a.text[0:f], a.text[f:f+len(text)], a.text[f+len(text):])
+						courseList, adviceList = zip(*sorted)
+						res = zip(links,adviceList,courseList)
+						t = get_template('textsearch.html')
+						ds = Department.objects.all().order_by('dept')
+						html = t.render(Context({'results':res,'query':query, 'user':user, 'alldepts':ds}))
+						return HttpResponse(html)
+				except Exception as inst:
+					#return HttpResponse("***%s %s" % (type(inst), inst))
+					pass
+				
+				# text search in a department
+				try:
+					d = Department.objects.get(dept=after)
+					cnums = CourseNum.objects.filter(dept=d)
+					courseList = []
+					adviceList = []
+					if cnums is not None:
+						for n in cnums:
+							instances = Course.objects.filter(coursenum__id=n.id).order_by('-year', '-semester')
+							if instances is not None:
+								a = []
+								for i in range (0, len(instances)):
+									if i == 0:
+										courseList.append(instances[i]) # change from i to zero (John 5/7/13 3 AM)?
+									advice = Advice.objects.filter(instance=instances[i], text__icontains=text).exclude(text__icontains=("not")) # can sort on length filed here, saves srting ~10 lines later???
+									if advice is not None:
+										for ad in advice:
+											a.append(ad)
+								if len(a) != 0:
+									adviceList.append(a)
+								else:
+									courseList.pop()
+						sorted = zip(courseList, adviceList)
+						sorted.sort(key = lambda t: -len(t[1]))
+						
+						links = []
+						for c, al in sorted:
+							ccnums = c.coursenum_set.all().order_by("dept__dept")
+							numString = '<a href="/courses/%s%s">%s' % (ccnums[0].dept.dept, ccnums[0].number, ccnums[0])
+							for li in range(1, len(ccnums)):
+								numString = "%s / %s" % (numString, ccnums[li])
+							numString = "%s: %s</a>" % (numString, c.title)
+							links.append(numString)
+							for a in al:
+								f = a.text.lower().find(text.lower())
+								a.text = '%s<span id="highlight">%s</span>%s' % (a.text[0:f], a.text[f:f+len(text)], a.text[f+len(text):])
+						courseList, adviceList = zip(*sorted)
+						res = zip(links,adviceList,courseList)
+						t = get_template('textsearch.html')
+						html = t.render(Context({'results':res,'query':query, 'user':user, 'alldepts':Department.objects.all().order_by('dept')}))
+						return HttpResponse(html)
+				except Exception as inst:
+					#return HttpResponse("%s %s" % (type(inst), inst))
+					pass
+						
+		# Check for only department abbreviation
+		if len(words) == 1 and re.search("^[a-zA-Z]{3}$", words[0]) is not None:
+			try:
+				d = Department.objects.get(dept=words[0])
+				return HttpResponseRedirect("/depts/%s" % d.dept)
+			except Exception as inst:
+				errors = errors + "\nDepartment exception: %s %s" % (type(inst), inst)
+		
+		# Check for DEP123				
+		if (len(words) == 1 and re.search("^[a-zA-Z]{3}[0-9]+.*$", words[0]) is not None):
+			dept = re.search("^[a-zA-Z]{3}", words[0]).group(0)
+			num = re.search("[0-9]+.*$", words[0]).group(0)
+			try:
+				courses = Course.objects.filter(
+					coursenum__dept=Department.objects.get(dept=dept),
+					coursenum__number=num)
+				if courses.count() != 0:
+					course = courses[0]
+					return HttpResponseRedirect("/courses/%s%s" % (dept,num))
+			except Exception as inst:
+				errors = errors + "\nABC123 error: %s %s" % (type(inst), inst)
+				
+		# Check for DEP 123		
+		if (len(words) == 2 and re.search("^[a-zA-Z]{3}$", words[0]) is not None
+			and re.search("[0-9]+.*", words[1]) is not None):
+			try:
+				courses = Course.objects.filter(
+					coursenum__dept=Department.objects.get(dept=words[0]),
+					coursenum__number=words[1])
+				if courses.count() != 0:
+					course = courses[0]
+					return HttpResponseRedirect("/courses/%s%s" % (words[0], words[1]))
+			except Exception as inst:
+				#errors = errors + "\Course not found: %s %s" % (words[0], words[1])
+				errors = errors + "\nABC 123 error: %s %s" % (type(inst), inst)
+		
+		# Check for professor netid
+		#if (len(words) == 1):
+		#	try:
+		#		p = Professor.objects.get(netid=words[0])
+		#		return HttpResponseRedirect("/profs/%s" % p.netid)
+		#	except Exception as inst:
+		#		errors = errors + "\nProf netid error: %s %s" % (type(inst), inst)
+		
+		# Check for Department name
+		try:
+			d = Department.objects.get(name=q)
+			return HttpResponseRedirect("/depts/%s" % d.dept)
+		except Exception as inst:
+			errors = errors + "\nDept name error: %s %s" % (type(inst), inst)
+		
+		# Check for an exact course title
+		try:
+			courses = Course.objects.filter(title=q)
+			if len(courses) > 0:
+				c = courses[0]
+				num = c.coursenum_set.all()[0]
+				return HttpResponseRedirect("/courses/%s%s" % (num.dept.dept, num.number)) 
+		except:
+			pass
+		
+		# Check for course name
+		# in order to make this better, need to enable fulltext search by changing database engine to MYISAM
+		try:
+			courses = Course.objects.filter(title__icontains=words[0])
+			for i in range(1, len(words)):
+				courses = courses.filter(title__icontains=words[i])
+			
+			if len(courses) > 0:
+				cSet = set()
+				unique = []
+				numStrings = []
+				results = ""
+				for c in courses:
+					nums = c.coursenum_set.all().order_by('dept__dept')
+					numString = "%s" % nums[0]
+					for a in range(1, len(nums)):
+						numString = "%s / %s" % (numString, nums[a])
+					if numString not in cSet:
+						cSet.add(numString)
+						unique.append(c)					
+						numStrings.append(numString)
+						
+				# result entry may not display latest info. should fix eventually.
+				links = []
+				for i in range(0, len(unique)):
+					c = unique[i]
+					cnum = c.coursenum_set.all()[0]
+					dept = cnum.dept.dept
+					n = cnum.number         
+					a = '<a href="/courses/%s%s">%s: %s</a>' % (dept, n, numStrings[i], c.title)
+					links.append(a)
+				results = results + "</ul>"
+				czipped = zip(unique, links)
+		except Exception as inst:
+			errors = errors + "\nCourse title error: %s %s" % (type(inst), inst)
+		
+		# Exact Professor
+		try:
+			first = words[0]
+			for i in range(1, len(words)-1):
+				first = first + " " + words[i]
+			profs = Professor.objects.filter(firstname=first, lastname=words[-1])
+			if profs.count() > 0:
+				return HttpResponseRedirect("/profs/%s" % profs[0].netid)
+			else:
+				errors = errors + "\nNo match for first: %s, last: %s" % (first, words[-1])
+		except Exception as inst:
+			errors = errors + "\nProf first last error: %s %s" % (type(inst), inst)
+			
+		# Professor options
+		try:
+			qs = Professor.objects.filter(lastname__icontains=words[-1])
+			profs = []					
+			for i in range(1, len(words)-1):
+				qs = qs.filter(firstname__icontains=words[i])
+			qSet = set()
+			for p in qs:
+				if p not in qSet:
+					qSet.add(p)
+					profs.append(p)
+			qs = Professor.objects.filter(firstname__icontains=words[-1])
+			for i in range(1, len(words)-1):
+				qs = qs.filter(lastname__icontains=words[i])
+			for p in qs:
+				if p not in qSet:
+					qSet.add(p)
+					profs.append(p)
+			print len(profs)
+			if len(profs) > 0:
+				pl = []
+				for p in profs:
+					a = '<a href="/profs/%s">%s %s</a>' % (p.netid, p.firstname, p.lastname)
+					pl.append(a)
+				pzipped = zip(profs, pl)
+			else:
+				errors = errors + "\nNo match for first: %s, last: %s" % (first, words[-1])
+		except Exception as inst:
+			errors = errors + "\nProf first last error: %s %s" % (type(inst), inst)
+		
+		# Department options
+		try:
+			qs = Department.objects.filter(name__icontains=words[0])
+			for i in range(1, len(words)):
+				qs = qs.filter(name__icontains=words[i])
+			
+			if len(qs) > 0:
+				depts = []
+				dl = []
+				for d in qs:
+					depts.append(d)
+					a = '<a href="/depts/%s">%s</a>' % (d.dept, d.name)
+					dl.append(a)
+				dzipped = zip(depts, dl)
+			else:
+				errors = errors + "I don't feel like explaining"
+		except Exception as inst:
+			errors = errors + "\nDepartment options error: %s %s" % (type(inst), inst)
+		
+		if len(czipped) + len(pzipped) + len(dzipped) == 1:
+			if len(czipped) == 1:
+				c = czipped[0][0]
+				cn = c.coursenum_set.all().order_by('dept__dept')[0]
+				return HttpResponseRedirect("/courses/%s%s" % (cn.dept.dept, cn.number))
+			
+			if len(pzipped) == 1:
+				p = pzipped[0][0]
+				return HttpResponseRedirect("/profs/%s" % (p.netid))
+			
+			if len(dzipped) == 1:
+				d = dzipped[0][0]
+				return HttpResponseRedirect("/depts/%s" % (d.dept))
+		
+		all_depts = Department.objects.all().order_by('dept')
+
+		if (czipped or pzipped or dzipped):
+			t = get_template('search_results.html')
+			html = t.render(Context({'courses':czipped, 'profs':pzipped, 'depts':dzipped, 'query':query, 'user':user, 'alldepts':all_depts}))
+			return HttpResponse(html)			
+				
+		#errors = "Sorry we're not sure what you meant by: %s\n\n" % q + errors
+		#return HttpResponse(errors)
+		return HttpResponse(errors)
+		t = get_template('search_empty.html')
+		return HttpResponse(t.render(Context({'user':user, 'q':q, 'alldepts':all_depts})))
+	
+	all_depts = Department.objects.all().order_by('dept')			
 	t = get_template('search_empty.html')
-	return HttpResponse(t.render(Context({'user':user, 'q':"query", 'alldepts':all_depts})))
+	return HttpResponse(t.render(Context({'user':user, 'q':'', 'alldepts':all_depts})))

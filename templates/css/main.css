@@ -170,6 +170,24 @@ a{ /* is this right?*/
     padding: 1px 0 0 1px;
   }*/
 
+  .infoIcon, .infoIcon:hover, .infoIcon:visited, .infoIcon:link, .infoIcon:active {
+    position: absolute;
+    bottom:0px;
+    right: 5px;
+    text-decoration: none;
+    color: black !important;
+    font-family: Monotype Corsiva;
+    width: 15px;
+  }
+
+    .infoIcon {
+      opacity: .2;
+    }
+
+    .infoIcon:hover {
+      opacity: .5;
+    }
+
   .addButton, .addButton:hover, .addButton:visited, .addButton:link, .addButton:active {
     position: absolute;
     bottom:5px;

@@ -1,4 +1,4 @@
-<html style="overflow:auto !important;">
+<html>
 <head profile="http://www.w3.org/2005/10/profile">
 	<title>PCE: Search Results</title>
 	<link rel="icon" type="image/ico"href="/{{ STATIC_URL }}favicon/favicon.ico">
@@ -30,7 +30,7 @@
             min-height: -webkit-calc(100% - 50px);
             height: -moz-calc(100% - 50px);
 			background: linear-gradient(#FD8A45, #FCCAAB);
-			background: o-linear-gradient(#FD8A45, #FCCAAB);
+			background: -o-linear-gradient(#FD8A45, #FCCAAB);
 			background: -webkit-linear-gradient(#FD8A45, #FCCAAB);
 			background: -moz-linear-gradient(#FD8A45, #FCCAAB);
 			background: -ms-linear-gradient(#FD8A45, #FCCAAB);
@@ -82,7 +82,9 @@
 			.adItem {
 				color: #888;
 				text-indent:-5px;
-				margin-left: -3px
+				margin-left: -3px;
+				width: 90px;
+				text-overflow: ellipsis;
 			}
 
 		#links {
@@ -234,9 +236,11 @@
 				}
 			}
 
+			{% if not query.simple %}
 			$.get('/search/', urlObj, function(data) {
 				ajaxLoad(data)
 			})
+			{% endif %}
   		});
   	</script>
 </head>
@@ -263,7 +267,9 @@
 							<p class="adTitle">{{cat.title}}</p>
 							<ul>
 								{% for sel in cat.items %}
-								<li class="adItem">{{sel.lower|truncatechars:8}}</li>
+									{% if sel %}
+									<li class="adItem">{{sel}}</li>
+									{% endif %}
 								{% endfor %}
 							</ul>
 						</li>

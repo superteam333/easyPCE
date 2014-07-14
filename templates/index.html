@@ -7,6 +7,7 @@
  {% include "importfiles.html" %}
 <script type="text/javascript" src="/{{ STATIC_URL }}bootstrap/js/bootstrap-transition.js"></script>
 <script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/{{ STATIC_URL}}bootstrap/js/bootstrap-tooltip.js"></script>
 <style type="text/css">
   #timeGroup .btn {
     padding: 4px 7px;
@@ -14,6 +15,8 @@
 </style>
 <script type="text/javascript">
   $(document).ready(function() {
+
+    $('.tip').tooltip({html: 'true', placement: 'right'})
 
     $(".btnCheck").click(function() {
       $(this).toggleClass("active");
@@ -97,14 +100,22 @@
     });
 
     $(document.body).on("keyup", ".profIn", function() {
-      if (this.value)
+      var $profs = $(".profIn");
+      var allSet = true;
+      for (var i = 0; i < $profs.length; i++) {
+        if (!$profs[i].value) {
+          allSet = false;
+          break;
+        }
+      }
+      if (allSet)
         $('#addProf').show()
       else
         $('#addProf').hide()
     });
 
     $("#addAdvice").click(function() {
-      var newDiv = '<div class="adviceRow">\n\t<input type="text" name="advice[]" />';
+      var newDiv = '<div class="adviceRow">\n\t<input type="text" name="advice[]" class="advIn"/>';
       newDiv += '\n\t<a class="delButton">&times</a>';
       newDiv += '\n</div>';
 
@@ -117,8 +128,16 @@
       $(this).hide()
     });
 
-    $('.advIn').keyup(function() {
-      if (this.value)
+    $(document.body).on("keyup", ".advIn", function() {
+      var $adv = $(".advIn");
+      var allSet = true;
+      for (var i = 0; i < $adv.length; i++) {
+        if (!$adv[i].value) {
+          allSet = false;
+          break;
+        }
+      }
+      if (allSet)
         $('#addAdvice').show()
       else
         $('#addAdvice').hide()
@@ -209,7 +228,30 @@
       var $sem = $("#semGroup button.btnSwitch")
       if ($sem.html() === 'all')
         $(this).append("<input type='hidden' name='sem' value='a' />")
-        
+      
+      // remove empty professor fields
+      var $profs = $(".profIn");
+      for (var i = 0; i < $profs.length; i++) {
+        if (!$profs[i].value) {
+          $profs[i].removeAttribute("name");
+        }
+      }
+
+      // remove empty advice fields
+      var $profs = $(".advIn");
+      for (var i = 0; i < $profs.length; i++) {
+        if (!$profs[i].value) {
+          $profs[i].removeAttribute("name");
+        }
+      }
+
+      // remove empty departments field
+      var $depts = $(".deptSel");
+      for (var i = 0; i < $depts.length; i++) {
+        if (!$depts[i].value) {
+          $depts[i].removeAttribute("name");
+        }
+      }
     });
 
   });
@@ -290,6 +332,7 @@
             <button type="button" class="btn btnCheck">6pm</button>
             <button type="button" class="btn btnCheck">7pm</button>
           </div>
+          <a class="tip infoIcon" data-title="Start time within the hour">i</a>
         </div>
 
         <div class="searchOption" id="profContainer">
