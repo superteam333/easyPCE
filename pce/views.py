@@ -130,8 +130,16 @@ def editfavorites(request):
 	return HttpResponse("haha")
 		
 def getfavorites(request):
-	if request.method == 'GET':
-		netid=request.session['netid']
+	if not settings.DEBUG:
+		try:
+			n = request.session['netid']
+			if n is None:
+				return check_login(request, '/')
+		except:
+			return check_login(request, '/')
+		netid = request.session['netid']
+	else:
+		netid = 'dev'
 	
 	try:
 	    user= User.objects.get(netid=netid)
