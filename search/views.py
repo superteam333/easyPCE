@@ -18,11 +18,11 @@ class SortType:
 	TITLE = 1
 	ADVICE = 2
 
-def onlyMostRecent(course_set):
+def getLastOffered(course_set):
 	# get all courses instances that corresponded to the given regNums
 	regNums = [c.regNum for c in course_set]
 	course_set = Course.objects.filter(regNum__in=regNums).order_by('regNum', '-year', '-semester')
-	
+	course_set = course_set.order_by('regNum', '-year', '-semester')
 	# get the id of only the most recent of each regNum in the set
 	ids = []
 	prevRegNum = None
@@ -32,7 +32,23 @@ def onlyMostRecent(course_set):
 			prevRegNum = c.regNum
 
 	# return only the most recent courses
-	return course_set.distinct().filter(id__in=ids)
+	return course_set.filter(id__in=ids)
+
+def onlyMostRecent(course_set):
+	# get all courses instances that corresponded to the given regNums
+	# regNums = [c.regNum for c in course_set]
+	# course_set = Course.objects.filter(regNum__in=regNums).order_by('regNum', '-year', '-semester')
+	course_set = course_set.order_by('regNum', '-year', '-semester')
+	# get the id of only the most recent of each regNum in the set
+	ids = []
+	prevRegNum = None
+	for c in course_set:
+		if (c.regNum != prevRegNum):
+			ids.append(c.id)
+			prevRegNum = c.regNum
+
+	# return only the most recent courses
+	return course_set.filter(id__in=ids)
 
 def onlyThisSemester(course_set):
 	try:
@@ -145,12 +161,8 @@ def advancedSearch(request, user):
 	isAdvice = qAdvice and qAdvice[0]
 	usePrev = qSem == 'a'
 
-	if not isAdvice:
-		if usePrev:
-			course = onlyMostRecent(courses)
-		else:
-			courses = onlyThisSemester(courses)
-
+	if not isAdvice and not usePrev:
+		courses = onlyThisSemester(courses)
 
 	# Departments
 	if qDepts and qDepts[0]:
@@ -181,6 +193,7 @@ def advancedSearch(request, user):
 				if p not in pSet:
 					pSet.add(p)
 					profs.append(p)
+
 		if profs:
 			courses = coursesByProfessor(profs, courses)
 		else:
@@ -217,7 +230,7 @@ def advancedSearch(request, user):
 	if dayCombs and timeREs:
 		dayTimes = []
 		for d in dayCombs:
-			dayTimes.extend([d + " " + r for r in res])
+			dayTimes.extend([d + " " + r for r in timeREs])
 		times = '(' +'|'.join(x for x in dayTimes) + ')' 
 		courses = coursesByTime(times, courses)
 	elif dayCombs:
@@ -249,7 +262,7 @@ def advancedSearch(request, user):
 	adviceInstances = {}
 	if isAdvice:
 		cba = coursesByAdvice(qAdvice, courses)
-		courses = onlyMostRecent(cba)
+		courses = getLastOffered(cba)
 		if not usePrev:
 			courses = onlyThisSemester(courses)
 
@@ -267,7 +280,12 @@ def advancedSearch(request, user):
 
 	done = time.time()
 
+	if usePrev:
+		courses = onlyMostRecent(courses)
+
 	# display the results
+	if request.is_ajax() and not courses:
+		return HttpResponse("")
 	if not courses:
 		t = get_template('search_results.html')
 		html = t.render(Context({'query':query, 'user':user, 'alldepts':all_depts}))
@@ -284,9 +302,9 @@ def advancedSearch(request, user):
 
 	
 	if sort == SortType.TITLE:
-		courses = courses.order_by('coursenum__dept__dept', 'coursenum__number', 'title').distinct()
+		courses = courses.order_by('coursenum__dept__dept', 'coursenum__number', 'title')
 	elif sort == SortType.RANK:
-		courses = courses.order_by('-coursenum__bayes').distinct()
+		courses = courses.order_by('-coursenum__bayes')
 	elif sort == SortType.ADVICE and isAdvice:
 		counts = [Advice.objects.filter(instance__id__in=adviceInstances[x.regNum], text__icontains=qAdvice[0]).count() for x in courses]
 		courses = zip(*sorted(zip(courses, counts), key=lambda t: -t[1]))[0]
@@ -299,7 +317,7 @@ def advancedSearch(request, user):
 		start = int(pn) * pageSize
 	end = min(start + pageSize, len(courses))
 
-	if start > len(courses):
+	if request.is_ajax() and start >= len(courses):
 		return HttpResponse("")
 
 	# prepare info for displaying results
@@ -661,7 +679,6 @@ def basicSearch(request, user):
 				if p not in qSet:
 					qSet.add(p)
 					profs.append(p)
-			print len(profs)
 			if len(profs) > 0:
 				pl = []
 				for p in profs:

@@ -224,10 +224,9 @@
 			$.urlParam('depts[]')
 
 			function ajaxLoad(data) {
-				// console.log(pn)
-				// console.log(data)
 				if (data !== "") {
-					$("#courseList").append(data)
+					console.log(data);
+					$("#courseList").append(data);
 					pn = pn + 1;
 					urlObj["pg"] = pn
 					$.get('/search/', urlObj, function(d) {

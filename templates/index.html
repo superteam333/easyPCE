@@ -27,12 +27,12 @@
       $(this).siblings('.active').toggleClass('active');
     });
 
-    $(".btnSwitch").click(function() {
-      if ($(this).html() === 'current')
-        $(this).html('all')
-      else
-        $(this).html('current')
-    });
+    // $(".btnSwitch").click(function() {
+    //   if ($(this).html() === 'current')
+    //     $(this).html('all')
+    //   else
+    //     $(this).html('current')
+    // });
 
     function openAdvanced() {
       $("#advancedWrapper").slideDown(300);
@@ -225,9 +225,11 @@
       }
 
       // check for prev semesters
-      var $sem = $("#semGroup button.btnSwitch")
-      if ($sem.html() === 'all')
-        $(this).append("<input type='hidden' name='sem' value='a' />")
+      var $sems = $("#semGroup button.active");
+      for (var i = 0; i < $sems.length; i++) {
+        if ($sems[i].innerHTML === 'all')
+          $(this).append("<input type='hidden' name='sem' value='a' />")
+      }
       
       // remove empty professor fields
       var $profs = $(".profIn");
