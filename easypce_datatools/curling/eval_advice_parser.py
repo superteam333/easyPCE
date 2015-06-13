@@ -257,7 +257,7 @@ class Parser:
         # "." means the current directory
 
         #files = filter(os.path.isfile, os.listdir('../../../curling/database_Load_Test'))
-        path = '/home/ubuntu/curling/DATA/DATA_SPRING_2013/ADVICE/'
+        path = '/srv/www/myapp/easypce_datatools/curling/DATA/DATA_2013-2014/EVAL/'
         #path = '/home/ubuntu/test/'
         files = os.listdir(path)
         for i, file in enumerate(files):

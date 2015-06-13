@@ -142,8 +142,12 @@ def course(request, subj, num):
 	advice=[]
 	evaluation=[]
 	profs=[]
-	for i in range(0, len(courses)):
-		if courses[i].year == '2013-2014':
+	for i in range(0, len(courses)-1):
+		if ((courses[i].year == '2013-2014') and (courses[i].semester == 'Spring')):
+			courses.pop(i)
+			
+	for i in range(0, len(courses)-1):
+		if courses[i].year == '2014-2015':
 			courses.pop(i)
 			break
 	if courses is not None:

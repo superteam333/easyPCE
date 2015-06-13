@@ -77,7 +77,7 @@ def professor(request, netid):
                     for cors in uc:
                         
                         if (int(year[:4]) < int(cors.year[:4])) or ((sem == 'Fall') and (cors.semester == 'Spring') and (int(year[:4]) == int(cors.year[:4]))):
-                            if (int(cors.year[:4]) != 2013):
+                            if (int(cors.year[:4]) != 2013): # Spring 2013-2014 Note. Must change to include Fall 2013.
                                 
                                 advice.insert(i, Advice.objects.filter(instance=cors).order_by('length').reverse())
                                 evaluation.insert(i, Evaluation.objects.filter(instance=cors))

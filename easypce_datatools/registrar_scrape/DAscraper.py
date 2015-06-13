@@ -49,18 +49,18 @@ termss = dict()
 #termss['Fall_2011-2012']=1122
 #termss['Fall_2012-2013']=1132
 #termss['Fall_2013-2014']=1142
-#termss['Fall_2014-2015']=1152
+termss['Fall_2014-2015']=1152
 #termss['Spring_2006-2007']=1074
 #termss['Spring_2007-2008']=1084
 #termss['Spring_2008-2009']=1094
 #termss['Spring_2009-2010']=1104
 #termss['Spring_2010-2011']=1114
 #termss['Spring_2011-2012']=1124
-termss['Spring_2012-2013']=1134
+#termss['Spring_2012-2013']=1134
 #termss['Spring_2013-2014']=1144
 
 
-TERM_CODE = 'Fall_2008-2009'
+TERM_CODE = 'Fall_2014-2015'
 URL_PREFIX = "http://registrar.princeton.edu/course-offerings/"
 LIST_URL = URL_PREFIX + "search_results.xml?term={term}"
 COURSE_URL = URL_PREFIX + "course_details.xml?courseid={courseid}&term={term}"
@@ -93,6 +93,7 @@ def get_DAs(search_page):
         course.da=da
         course.save()
       except:
+        print courseNum
         print "YO GETTING COURSE FAILED."
     except Department.DoesNotExist:
       print "dept fail"

@@ -57,7 +57,7 @@ No course {{sub}} {{coursenum}} exists
 <p class="description"> <strong> Overall rating</strong> (average):<span class="average"><br><br>{% if cn.avg %} {{cn.avg}}<span style="font-size:40%;">/5</span> {% else %} NA {% endif %}</span></p>
 {% if course %}<p class="description"> <strong>&nbsp;&nbsp;&nbsp;Available </strong>next fall?
   {% ifequal course.0.semester "Fall"%}
-    {% ifequal course.0.year "2013-2014" %}
+    {% ifequal course.0.year "2014-2015" %}
     <img class="check" src="/{{ STATIC_URL }}img/check.png" style="max-height:80%; margin-bottom:13px;" media="screen" /></p>
     <p class="description"> <strong> Will be taught by </strong><br/> {% for p in course.0.profs.all %} {% if not forloop.first %}<br/><a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a> {% else %}<a href="../../profs/{{p.netid}}/" style="color:#2554C7">{{p}}</a> {% endif %} {% empty %} TBA{% endfor %}</p>
     {% else %}

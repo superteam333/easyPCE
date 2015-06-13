@@ -259,7 +259,7 @@ def favorites(request):
 			
 			matches = Course.objects.filter(id=favorites[i].course.id).order_by('-year', '-semester')
 			try:
-				if matches[0].year=='2013-2014' and matches[0].semester=='Fall':
+				if matches[0].year=='2013-2014' and matches[0].semester=='Spring':
 					nextSemester.append(1)
 				else:
 					nextSemester.append(0)

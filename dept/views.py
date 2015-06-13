@@ -83,7 +83,7 @@ def dephome(request, dept):
 			for c in precourses:
 				sems = Course.objects.filter(coursenum__id=c.id).order_by('-year', '-semester')
 				if sems:
-					if sems[0].year=="2013-2014" and sems[0].semester=="Fall":
+					if sems[0].year=="2013-2014" and sems[0].semester=="Spring":
 						courses.append(c)
 					else:
 						oldCourses.append(c)

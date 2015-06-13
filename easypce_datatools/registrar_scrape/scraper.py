@@ -44,7 +44,7 @@ termss['Spring_2012-2013']=1134
 termss['Spring_2013-2014']=1144
 
 
-TERM_CODE = 'Fall_2006-2007'
+TERM_CODE = 'Fall_2014-2015'
 URL_PREFIX = "http://registrar.princeton.edu/course-offerings/"
 LIST_URL = URL_PREFIX + "search_results.xml?term={term}"
 COURSE_URL = URL_PREFIX + "course_details.xml?courseid={courseid}&term={term}"
@@ -66,9 +66,9 @@ def clean(str):
 
 def get_course_details(soup):
   "Returns a dict of {courseid, area, title, descrip, prereqs}."
-#  match = re.match(r'\(([A-Z]+)\)', clean(soup('strong')[1].findNext(text=True)))
-#  if match == None:
-#    print match
+  match = re.match(r'\(([A-Z]+)\)', clean(soup('strong')[1].findNext(text=True)))
+  if match == None:
+     print match
   print "Look here!" +  str(clean(soup('strong')[1].findNext(text=True)))
   pretitle = soup.find(text="Prerequisites and Restrictions:")
   descrdiv = soup.find('div', id='descr')
@@ -167,14 +167,14 @@ if __name__ == "__main__":
   for course in scrape_all():
     if(os.path.exists('/home/ubuntu/registrar_scrape/FULL_DATA/' + getfilename(course))):
       continue
-#    f = open(getfilename(course), 'w')
+    f = open(getfilename(course), 'w')
     print course['listings']
     #if first:
       #first = False
       #print '['
     #else:
       #print ','
-#    f.write("[")
-#    json.dump(course, f)
-#    f.write("]")
+    f.write("[")
+    json.dump(course, f)
+    f.write("]")
     #print ']'

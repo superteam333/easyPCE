@@ -10,7 +10,7 @@ from django.core.management import setup_environ
 setup_environ(settings)
 from pce.models import *
 
-DIR_PATH = '/home/ubuntu/registrar_scrape/DATA/DATA_SPRING_2012_2013/'
+DIR_PATH = '/srv/www/myapp/easypce_datatools/registrar_scrape/DATA/DATA_FALL_2014_2015/'
 VERBOSE = True
 FILECOUNT = 0
 

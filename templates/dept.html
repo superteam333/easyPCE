@@ -49,6 +49,8 @@
 		    	</thead>
 		    	<!-- we need to pass more info including instances of most recent teachers -->
 				{% for course, instance in titles %}
+			        {% ifequal instance.semester "Fall"%}
+                                {% ifequal instance.year "2014-2015" %}
 		    	<tr id="row{{instance.regNum}}">
 		    		<td>  
 					
@@ -70,18 +72,45 @@
 		    		<td> {% for prof in instance.profs.all %} <a href='/profs/{{prof.netid}}/'>{{prof}}</a> {% if not forloop.last %} / {% endif %} {% endfor %}</td>
 		    		<td> 
 		    		<!-- hardcoded parameters for next semester-->
-		    			{% ifequal instance.semester "Fall"%}
-		    			 {% ifequal instance.year "2013-2014" %}
+		    		
 		    			<img class="check" src="/{{ STATIC_URL }}img/check.png" media="screen" />
-		    			{% else %} 
-		    			<img class="check" src="/{{ STATIC_URL }}img/ex.png" media="screen" />
-						{% endifequal %}
-		    			{% else %}
-		    			<img class="check" src="/{{ STATIC_URL }}img/ex.png" media="screen" />
-		    			{% endifequal %}
+		    		
 		    		</td>
 		    	</tr>
+			{% endifequal %}
+			{% endifequal %}
 		    	{% endfor %}
+			{% for course, instance in titles %}
+			{% ifnotequal instance.semester "Fall"%}
+                        {% ifnotequal instance.year "2014-2015" %}
+                        <tr id="row{{instance.regNum}}">
+                                <td>
+
+                                {% if instance.regNum in regNums %}
+                                <a class="btn btn-inFavorites favButton" href="#"><i class="icon-star starInFav"></i></a>
+                                {% else %}
+                                <a class="btn btn-notInFavorites favButton" href="#"><i class="icon-star starNotInFav"></i></a>
+                                        {% endif %}
+                                <!--                                                                                                                                                     
+                                        <form action="addfav" method="post">                                                                                                             
+                                                <input class="hidden" name="dept" value="{{url.upper}}" />                                                                               
+                                                <input class="hidden" name="number" value="{{course.number}}" />                                                                         
+                                                <input class="hidden" name="userid" value="{{user.netid}}" />                                                                            
+                                                <input type="checkbox" checked="checked" onclick="this.form.submit();">Single Toggle</button>                                            
+                                        </form>-->
+                                </td>
+                                <td> <a href='/courses/{{url.upper}}{{course.number}}'>{{url.upper}} {{course.number}}</a> </td>
+                                <td> <a href='/courses/{{url.upper}}{{course.number}}'>{{instance.title}}</a>  </td>
+                                <td> {% for prof in instance.profs.all %} <a href='/profs/{{prof.netid}}/'>{{prof}}</a> {% if not forloop.last %} / {% endif %} {% endfor %}</td>
+                                <td>
+                                <!-- hardcoded parameters for next semester-->
+                                
+                                        <img class="check" src="/{{ STATIC_URL }}img/ex.png" media="screen" />
+                                                                </td>
+                        </tr>
+			{% endifnotequal %}
+			{% endifnotequal %}
+                        {% endfor %}
 		    </table>
 		    {% endif %}
 		</div>
